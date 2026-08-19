@@ -2,426 +2,1846 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Digital Business Vocab Game - เรียนรู้และทดสอบคำศัพท์ภาษาอังกฤษสำหรับธุรกิจดิจิทัล เทคโนโลยี และสตาร์ทอัพ ผ่านมินิเกมสุดมันส์">
-  <title>Digital Business Vocab Game | เกมคำศัพท์ธุรกิจดิจิทัล</title>
-  
-  <!-- Google Fonts: Inter & Prompt -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Cyber Spellcaster: Vocab Quest - 2D Educational Action Game for Learning Computer Technology Terminology">
+  <title>Cyber Spellcaster: Vocab Quest | มหาเวทไซเบอร์ พิชิตศัพท์คอมพิวเตอร์</title>
+
+  <!-- Google Fonts: Orbitron, Prompt, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;800;900&family=Prompt:wght@300;400;500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+
   <!-- Canvas Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       CYBERPUNK ARCADE DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --bg-dark: #070913;
+      --bg-panel: rgba(13, 19, 38, 0.85);
+      --bg-panel-solid: #0d1326;
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff007f;
+      --neon-yellow: #ffe600;
+      --neon-green: #00ff66;
+      --neon-purple: #9d4edd;
+      --neon-orange: #ff6b00;
+      --text-main: #f0f6fc;
+      --text-muted: #8b9bb4;
+      --border-cyan: rgba(0, 240, 255, 0.4);
+      --font-cyber: 'Orbitron', monospace, sans-serif;
+      --font-thai: 'Prompt', 'Inter', -apple-system, sans-serif;
+      --font-pixel: 'VT323', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-thai);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Animated Cyber Grid Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 50% 30%, rgba(157, 78, 221, 0.15), transparent 70%);
+      background-size: 40px 40px, 40px 40px, 100% 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Main Container */
+    #game-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1280px;
+      max-height: 760px;
+      background: var(--bg-panel-solid);
+      border: 2px solid var(--border-cyan);
+      border-radius: 12px;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 30px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       TOP HUD (STATUS BAR)
+       ========================================================================== */
+    .top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 1.2rem;
+      background: rgba(8, 12, 24, 0.95);
+      border-bottom: 2px solid var(--border-cyan);
+      font-family: var(--font-cyber);
+      z-index: 20;
+    }
+
+    .hud-player-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hud-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--border-cyan);
+      border-radius: 4px;
+      color: var(--neon-cyan);
+    }
+
+    .stat-bars {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .bar-container {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .bar-track {
+      width: 120px;
+      height: 12px;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 100%;
+      transition: width 0.25s ease-out;
+    }
+
+    .hp-fill { background: linear-gradient(90deg, #ff0055, #ff5500); box-shadow: 0 0 8px #ff0055; }
+    .mana-fill { background: linear-gradient(90deg, #00f0ff, #0088ff); box-shadow: 0 0 8px #00f0ff; }
+    .shield-fill { background: linear-gradient(90deg, #ffe600, #ffaa00); box-shadow: 0 0 8px #ffe600; }
+
+    .hud-game-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .hud-score-box {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.5);
+    }
+
+    .hud-combo-box {
+      font-size: 0.95rem;
+      color: var(--neon-magenta);
+      font-weight: 800;
+      text-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
+    }
+
+    .hud-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .hud-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-cyan);
+      color: var(--neon-cyan);
+      padding: 0.35rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-cyber);
+      font-size: 0.8rem;
+      transition: all 0.15s ease;
+    }
+
+    .hud-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* ==========================================================================
+       CANVAS 2D BATTLEFIELD
+       ========================================================================== */
+    .battlefield-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      background: linear-gradient(180deg, #070a14 0%, #0d152a 70%, #152244 100%);
+      overflow: hidden;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Critical Banner & Overlays */
+    #critical-banner {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-family: var(--font-cyber);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 20px #ff0055, 0 0 40px #ffe600;
+      pointer-events: none;
+      z-index: 50;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #critical-banner.show {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* ==========================================================================
+       POWER-UP DOCK (5 ITEMS)
+       ========================================================================== */
+    .powerup-dock {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.4rem 1rem;
+      background: rgba(10, 15, 30, 0.9);
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      z-index: 20;
+    }
+
+    .powerup-slot {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.8rem;
+    }
+
+    .powerup-slot.ready {
+      border-color: var(--slot-color, var(--neon-cyan));
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 10px var(--slot-glow, rgba(0, 240, 255, 0.4));
+    }
+
+    .powerup-slot.ready:hover {
+      transform: translateY(-2px);
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    .powerup-slot.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(0.8);
+    }
+
+    .powerup-key {
+      font-family: var(--font-cyber);
+      font-size: 0.7rem;
+      background: #000;
+      border: 1px solid #555;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      color: #aaa;
+    }
+
+    .powerup-name {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .powerup-count {
+      font-family: var(--font-cyber);
+      font-weight: 800;
+      color: var(--neon-yellow);
+    }
+
+    /* ==========================================================================
+       SPELL CASTING INTERFACE (CHOICE / TYPE)
+       ========================================================================== */
+    .spellcasting-panel {
+      padding: 0.85rem 1.5rem;
+      background: rgba(6, 9, 20, 0.98);
+      border-top: 2px solid var(--border-cyan);
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .target-hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(0, 240, 255, 0.05);
+      border-left: 3px solid var(--neon-cyan);
+      border-radius: 4px;
+    }
+
+    .target-definition {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #ffffff;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .target-category-badge {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.5rem;
+      background: rgba(157, 78, 221, 0.3);
+      border: 1px solid var(--neon-purple);
+      border-radius: 3px;
+      color: #e0aaff;
+      margin-left: 0.8rem;
+    }
+
+    /* Choice Mode */
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.65rem;
+    }
+
+    .choice-btn {
+      background: rgba(18, 26, 51, 0.9);
+      border: 1.5px solid var(--border-cyan);
+      color: var(--text-main);
+      padding: 0.75rem 0.5rem;
+      border-radius: 6px;
+      font-family: var(--font-cyber);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: rgba(0, 240, 255, 0.18);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .choice-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .choice-btn.correct {
+      background: rgba(0, 255, 102, 0.25) !important;
+      border-color: var(--neon-green) !important;
+      color: var(--neon-green) !important;
+      box-shadow: 0 0 20px var(--neon-green) !important;
+    }
+
+    .choice-btn.wrong {
+      background: rgba(255, 0, 85, 0.25) !important;
+      border-color: var(--neon-magenta) !important;
+      color: var(--neon-magenta) !important;
+      box-shadow: 0 0 20px var(--neon-magenta) !important;
+    }
+
+    .choice-btn.faded {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .choice-key {
+      font-size: 0.72rem;
+      color: var(--neon-cyan);
+      opacity: 0.7;
+    }
+
+    /* Type Mode */
+    .typing-input-wrap {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .typing-input {
+      flex: 1;
+      background: rgba(18, 26, 51, 0.9);
+      border: 2px solid var(--border-cyan);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      color: var(--neon-cyan);
+      font-family: var(--font-cyber);
+      font-size: 1.1rem;
+      font-weight: 700;
+      outline: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .typing-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ==========================================================================
+       MODALS & OVERLAYS (LOGIN, GAME OVER, LEADERBOARD)
+       ========================================================================== */
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(4, 7, 18, 0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-card {
+      background: #0d1428;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.8);
+      width: 90%;
+      max-width: 520px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-title {
+      font-family: var(--font-cyber);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-cyan);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: var(--font-thai);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .form-select option {
+      background: #0d1428;
+      color: #fff;
+    }
+
+    .start-btn {
+      width: 100%;
+      margin-top: 1.2rem;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, #0088ff 100%);
+      border: none;
+      border-radius: 6px;
+      color: #030814;
+      font-family: var(--font-cyber);
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+    }
+
+    /* Leaderboard Table */
+    .leaderboard-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 1rem 0;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    .leaderboard-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+    }
+
+    .leaderboard-row:nth-child(1) { color: var(--neon-yellow); font-weight: 800; }
+    .leaderboard-row:nth-child(2) { color: #e2e8f0; font-weight: 700; }
+    .leaderboard-row:nth-child(3) { color: #cd7f32; font-weight: 700; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Screen Shake */
+    .shake {
+      animation: shakeAnim 0.3s ease-in-out;
+    }
+
+    @keyframes shakeAnim {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-6px, 4px); }
+      40% { transform: translate(6px, -4px); }
+      60% { transform: translate(-4px, -2px); }
+      80% { transform: translate(4px, 2px); }
+    }
+
+    @media (max-width: 768px) {
+      .choices-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .powerup-name {
+        display: none;
+      }
+      .stat-bars {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <canvas id="confetti-canvas"></canvas>
+  <div id="game-wrapper">
+    <!-- TOP HUD -->
+    <header class="top-hud">
+      <div class="hud-player-info">
+        <div class="hud-tag">
+          <span>🧙‍♂️</span>
+          <span id="hud-player-name">Player</span>
+        </div>
 
-  <div class="app-container">
-    <!-- Header -->
-    <header class="main-header">
-      <div class="brand-logo" onclick="App.showView('home')">
-        <div class="brand-icon">⚡</div>
-        <div class="brand-text">
-          <h1>Digital Business Vocab</h1>
-          <p>Master English for Tech & Business</p>
+        <div class="stat-bars">
+          <!-- HP Bar -->
+          <div class="bar-container">
+            <span style="color: #ff0055;">HP</span>
+            <div class="bar-track">
+              <div class="bar-fill hp-fill" id="hp-bar" style="width: 100%;"></div>
+            </div>
+            <span id="hp-text">100/100</span>
+          </div>
+
+          <!-- Mana Bar -->
+          <div class="bar-container">
+            <span style="color: var(--neon-cyan);">MP</span>
+            <div class="bar-track">
+              <div class="bar-fill mana-fill" id="mana-bar" style="width: 100%;"></div>
+            </div>
+            <span id="mana-text">100/100</span>
+          </div>
+
+          <!-- Shield Bar -->
+          <div class="bar-container" id="shield-hud-box" style="display: none;">
+            <span style="color: var(--neon-yellow);">🛡️</span>
+            <div class="bar-track" style="width: 60px;">
+              <div class="bar-fill shield-fill" id="shield-bar" style="width: 100%;"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="header-actions">
-        <div class="stat-pill xp-pill" title="ค่าประสบการณ์ (XP)">
-          <span>⭐</span>
-          <span id="header-xp">0</span> XP
+      <div class="hud-game-stats">
+        <div class="hud-combo-box">
+          🔥 <span id="hud-combo">0</span> COMBO
         </div>
-        <div class="stat-pill level-pill" title="ระดับผู้เล่น">
-          <span>🏆</span>
-          <span id="header-level">Novice</span>
+        <div class="hud-score-box">
+          SCORE: <span id="hud-score">0</span>
         </div>
-        <button class="icon-btn" id="sound-toggle-btn" title="เปิด/ปิดเสียง" onclick="App.toggleSound()">
-          🔊
-        </button>
+      </div>
+
+      <div class="hud-controls">
+        <button class="hud-btn" id="btn-sound-toggle" onclick="AudioEngine.toggleMute()">🔊 BGM</button>
+        <button class="hud-btn" onclick="Game.togglePause()">⏸️</button>
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="nav-tabs">
-      <button class="nav-tab active" id="tab-home" onclick="App.showView('home')">
-        <span>🏠</span> หน้าแรก
-      </button>
-      <button class="nav-tab" id="tab-quiz" onclick="App.startQuiz()">
-        <span>⚡</span> Speed Quiz
-      </button>
-      <button class="nav-tab" id="tab-memory" onclick="App.startMemory()">
-        <span>🎴</span> Memory Match
-      </button>
-      <button class="nav-tab" id="tab-scramble" onclick="App.startScramble()">
-        <span>🧩</span> Word Scramble
-      </button>
-      <button class="nav-tab" id="tab-flashcards" onclick="App.startFlashcards()">
-        <span>📖</span> Flashcards
-      </button>
-      <button class="nav-tab" id="tab-glossary" onclick="App.showGlossary()">
-        <span>📚</span> พจนานุกรม
-      </button>
-    </nav>
-
-    <!-- VIEW 1: HOME / DASHBOARD -->
-    <main id="view-home" class="view-panel active">
-      <section class="hero-banner">
-        <div class="hero-content">
-          <div class="badge-tag">🚀 Interactive Learning Experience</div>
-          <h2 class="hero-title">เก่งศัพท์ธุรกิจดิจิทัล<br>เล่นสนุก จำแม่น ใช้ได้จริง!</h2>
-          <p class="hero-subtitle">
-            รวบรวมคำศัพท์สำคัญกว่า 50+ คำจากวงการ E-Commerce, FinTech, Data & AI, Startup และ Cybersecurity พร้อมระบบฝึกออกเสียงและมินิเกมหลากหลายรูปแบบ
-          </p>
-          <div class="hero-btn-group">
-            <button class="btn btn-primary" onclick="App.startQuiz()">
-              🎮 เริ่มเล่น Speed Quiz
-            </button>
-            <button class="btn btn-secondary" onclick="App.startFlashcards()">
-              📖 ฝึกการ์ดคำศัพท์
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Game Modes -->
-      <section>
-        <div class="section-title">
-          <span>🎯 เลือกโหมดการเรียนรู้</span>
-        </div>
-        <div class="game-modes-grid">
-          <!-- Mode 1 -->
-          <div class="mode-card" style="--card-accent: #00f2fe; --card-glow: rgba(0, 242, 254, 0.3);" onclick="App.startQuiz()">
-            <div>
-              <div class="mode-card-header">
-                <div class="mode-icon">⚡</div>
-                <span class="mode-badge">ยอดนิยม</span>
-              </div>
-              <h3>Speed Quiz</h3>
-              <p>ควิซจับเวลา 15 วินาที พร้อมคอมโบสตรีคและตัวช่วย 50:50</p>
-            </div>
-            <div class="mode-card-footer">
-              <span>เริ่มทำควิซ &rarr;</span>
-              <span>10 ข้อ</span>
-            </div>
-          </div>
-
-          <!-- Mode 2 -->
-          <div class="mode-card" style="--card-accent: #a855f7; --card-glow: rgba(168, 85, 247, 0.3);" onclick="App.startMemory()">
-            <div>
-              <div class="mode-card-header">
-                <div class="mode-icon">🎴</div>
-                <span class="mode-badge">ฝึกความจำ</span>
-              </div>
-              <h3>Memory Match</h3>
-              <p>เปิดการ์ดจับคู่ศัพท์ภาษาอังกฤษกับความหมายภาษาไทย</p>
-            </div>
-            <div class="mode-card-footer">
-              <span>เล่นเกมจับคู่ &rarr;</span>
-              <span>12 การ์ด</span>
-            </div>
-          </div>
-
-          <!-- Mode 3 -->
-          <div class="mode-card" style="--card-accent: #f59e0b; --card-glow: rgba(245, 158, 11, 0.3);" onclick="App.startScramble()">
-            <div>
-              <div class="mode-card-header">
-                <div class="mode-icon">🧩</div>
-                <span class="mode-badge">ฝึกสะกดคำ</span>
-              </div>
-              <h3>Word Scramble</h3>
-              <p>เรียงตัวอักษรภาษาอังกฤษที่สลับตำแหน่งให้เป็นคำศัพท์ที่ถูกต้อง</p>
-            </div>
-            <div class="mode-card-footer">
-              <span>เริ่มทายคำ &rarr;</span>
-              <span>มีคำใบ้</span>
-            </div>
-          </div>
-
-          <!-- Mode 4 -->
-          <div class="mode-card" style="--card-accent: #10b981; --card-glow: rgba(168, 85, 247, 0.3);" onclick="App.startFlashcards()">
-            <div>
-              <div class="mode-card-header">
-                <div class="mode-icon">📖</div>
-                <span class="mode-badge">ทบทวนบทเรียน</span>
-              </div>
-              <h3>Flashcards</h3>
-              <p>แฟลชการ์ด 3 มิติ พร้อมระบบเสียงอ่าน Native และประโยคตัวอย่าง</p>
-            </div>
-            <div class="mode-card-footer">
-              <span>เปิดคลังการ์ด &rarr;</span>
-              <span>50+ คำศัพท์</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Categories -->
-      <section>
-        <div class="section-title">
-          <span>📂 หมวดหมู่คำศัพท์</span>
-        </div>
-        <div class="categories-grid" id="home-categories-list">
-          <!-- Dynamically Rendered -->
-        </div>
-      </section>
+    <!-- 2D BATTLEFIELD CANVAS -->
+    <main class="battlefield-container">
+      <canvas id="gameCanvas"></canvas>
+      <div id="critical-banner">CRITICAL CAST! 💥</div>
     </main>
 
-    <!-- VIEW 2: SPEED QUIZ -->
-    <main id="view-quiz" class="view-panel">
-      <div class="game-play-area">
-        <div class="quiz-top-bar">
-          <div style="font-weight: 700;">
-            ข้อที่ <span id="quiz-current-num">1</span>/<span id="quiz-total-num">10</span>
-          </div>
-
-          <div class="quiz-progress-wrap">
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" id="quiz-progress-fill"></div>
-            </div>
-          </div>
-
-          <div class="streak-indicator">
-            🔥 <span id="quiz-streak">0</span> คอมโบ
-          </div>
-
-          <div class="timer-circle" id="quiz-timer">
-            15
-          </div>
-        </div>
-
-        <div class="quiz-card">
-          <div class="quiz-category-tag" id="quiz-category-tag">
-            📈 E-Commerce & Marketing
-          </div>
-          <div class="quiz-question-term">
-            <span id="quiz-term-text">Conversion Rate</span>
-            <button class="speak-btn" id="quiz-speak-btn" title="ฟังการออกเสียง">
-              🔊
-            </button>
-          </div>
-          <div class="quiz-phonetic" id="quiz-phonetic-text">/kənˈvɜːr.ʒən reɪt/</div>
-          <div class="quiz-instruction">เลือกความหมายภาษาไทยที่ถูกต้องที่สุด:</div>
-
-          <div class="quiz-options-grid" id="quiz-options-container">
-            <!-- Options dynamically injected -->
-          </div>
-
-          <div class="explanation-box" id="quiz-explanation-box">
-            <h4>💡 คำอธิบาย:</h4>
-            <p id="quiz-explanation-text"></p>
-            <div class="example-text" id="quiz-example-text"></div>
-          </div>
-
-          <div class="quiz-lifelines">
-            <button class="lifeline-btn" id="btn-lifeline-5050" onclick="App.useLifeline5050()">
-              ✂️ ตัด 2 ช้อยส์ (50:50)
-            </button>
-            <button class="lifeline-btn" id="btn-lifeline-time" onclick="App.useLifelineTime()">
-              ⏱️ เพิ่มเวลา +10s
-            </button>
-          </div>
-        </div>
-
-        <div style="text-align: right;">
-          <button class="btn btn-primary" id="quiz-next-btn" style="display: none;" onclick="App.nextQuizQuestion()">
-            ข้อถัดไป &rarr;
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- VIEW 3: MEMORY MATCH -->
-    <main id="view-memory" class="view-panel">
-      <div class="game-play-area">
-        <div class="memory-status-bar">
-          <div>🎮 จำนวนครั้งที่เปิด: <strong id="memory-moves">0</strong></div>
-          <div>⏱️ เวลา: <strong id="memory-timer">00:00</strong></div>
-          <div>✨ จับคู่สำเร็จ: <strong id="memory-matches">0</strong>/6 คู่</div>
-          <button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="App.startMemory()">
-            🔄 เริ่มใหม่
-          </button>
-        </div>
-
-        <div class="memory-grid" id="memory-grid-container">
-          <!-- Memory Cards Dynamically Rendered -->
-        </div>
-      </div>
-    </main>
-
-    <!-- VIEW 4: WORD SCRAMBLE -->
-    <main id="view-scramble" class="view-panel">
-      <div class="game-play-area">
-        <div class="scramble-box">
-          <div class="badge-tag" id="scramble-category-tag">หมวดหมู่</div>
-          <h2 style="margin-bottom: 1.5rem; font-size: 1.6rem;">🧩 เรียงตัวอักษรให้ถูกต้อง</h2>
-          
-          <div class="scramble-hint-card">
-            <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">คำใบ้ความหมาย:</div>
-            <div id="scramble-definition-th" style="color: var(--text-main); font-size: 1rem;"></div>
-          </div>
-
-          <!-- Answer Slots -->
-          <div class="scramble-slots" id="scramble-slots-container"></div>
-
-          <!-- Letter Pool -->
-          <div class="scramble-pool" id="scramble-letters-container"></div>
-
-          <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
-            <button class="btn btn-secondary" onclick="App.resetScrambleCurrent()">
-              ↩️ ล้างคำตอบ
-            </button>
-            <button class="btn btn-secondary" onclick="App.scrambleGiveHint()">
-              💡 ขอตัวช่วยแรก
-            </button>
-            <button class="btn btn-primary" id="scramble-next-btn" style="display: none;" onclick="App.nextScramble()">
-              ข้อต่อไป &rarr;
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- VIEW 5: FLASHCARDS -->
-    <main id="view-flashcards" class="view-panel">
-      <div class="flashcard-wrapper">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-          <select class="category-select" id="flashcard-category-select" onchange="App.filterFlashcards()">
-            <option value="all">📁 ทุกหมวดหมู่ (50+ คำ)</option>
-            <option value="marketing">📈 E-Commerce & Marketing</option>
-            <option value="fintech">💳 FinTech & Payments</option>
-            <option value="data_ai">🤖 Data & AI Analytics</option>
-            <option value="startup">🚀 Startup & Strategy</option>
-            <option value="security">🔒 Cybersecurity & Cloud</option>
-          </select>
-
-          <div style="font-weight: 700; color: var(--text-muted);">
-            การ์ดที่ <span id="fc-current-idx">1</span>/<span id="fc-total-count">50</span>
-          </div>
-        </div>
-
-        <div class="flashcard-container" id="main-flashcard" onclick="App.flipFlashcard()">
-          <!-- Front Face -->
-          <div class="flashcard-face flashcard-front">
-            <div class="badge-tag" id="fc-category-badge">หมวดหมู่</div>
-            <div>
-              <div class="flashcard-term" id="fc-term">Conversion Rate</div>
-              <div class="quiz-phonetic" id="fc-phonetic">/kənˈvɜːr.ʒən reɪt/</div>
-            </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <button class="speak-btn" onclick="event.stopPropagation(); App.speakCurrentFlashcard();" title="ฟังการออกเสียง">
-                🔊
-              </button>
-              <span style="font-size: 0.8rem; color: var(--text-dim);">แตะเพื่อดูความหมาย & 3D Flip</span>
-            </div>
-          </div>
-
-          <!-- Back Face -->
-          <div class="flashcard-face flashcard-back">
-            <div>
-              <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-bottom: 0.4rem;">ความหมายภาษาไทย:</div>
-              <p style="font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.2rem; color: #fff;" id="fc-def-th"></p>
-              
-              <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.4rem;">English Definition:</div>
-              <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.2rem; color: #94a3b8;" id="fc-def-en"></p>
-
-              <div class="vocab-example" id="fc-example"></div>
-            </div>
-            <div style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
-              แตะเพื่อพลิกกลับ
-            </div>
-          </div>
-        </div>
-
-        <div class="flashcard-controls">
-          <button class="btn btn-secondary" onclick="App.prevFlashcard()">
-            &larr; ก่อนหน้า
-          </button>
-          <button class="btn btn-secondary" onclick="App.speakCurrentFlashcard()">
-            🔊 ออกเสียง
-          </button>
-          <button class="btn btn-primary" onclick="App.nextFlashcard()">
-            ถัดไป &rarr;
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- VIEW 6: GLOSSARY / DICTIONARY -->
-    <main id="view-glossary" class="view-panel">
-      <div class="glossary-filters">
-        <div class="search-input-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="glossary-search" class="search-input" placeholder="ค้นหาคำศัพท์ภาษาอังกฤษ หรือความหมายภาษาไทย..." oninput="App.renderGlossary()">
-        </div>
-        <select class="category-select" id="glossary-category-filter" onchange="App.renderGlossary()">
-          <option value="all">📂 ทุกหมวดหมู่</option>
-          <option value="marketing">📈 E-Commerce & Marketing</option>
-          <option value="fintech">💳 FinTech & Payments</option>
-          <option value="data_ai">🤖 Data & AI Analytics</option>
-          <option value="startup">🚀 Startup & Strategy</option>
-          <option value="security">🔒 Cybersecurity & Cloud</option>
-        </select>
+    <!-- POWER-UP SYSTEM (5 ITEMS) -->
+    <section class="powerup-dock">
+      <!-- 1. Freeze -->
+      <div class="powerup-slot disabled" id="pu-freeze" style="--slot-color: #00f0ff; --slot-glow: rgba(0,240,255,0.4);" onclick="Game.activatePowerup('freeze')">
+        <span class="powerup-key">Q</span>
+        <span>⏱️</span>
+        <span class="powerup-name">Freeze (แช่แข็ง)</span>
+        <span class="powerup-count" id="count-freeze">0</span>
       </div>
 
-      <div class="glossary-list" id="glossary-cards-container">
-        <!-- Rendered dynamically -->
+      <!-- 2. Nuke -->
+      <div class="powerup-slot disabled" id="pu-nuke" style="--slot-color: #ff0055; --slot-glow: rgba(255,0,85,0.4);" onclick="Game.activatePowerup('nuke')">
+        <span class="powerup-key">W</span>
+        <span>💣</span>
+        <span class="powerup-name">Nuke (ล้างจอ)</span>
+        <span class="powerup-count" id="count-nuke">0</span>
       </div>
-    </main>
 
-    <!-- VIEW 7: RESULTS MODAL / SUMMARY -->
-    <main id="view-results" class="view-panel">
-      <div class="results-modal">
-        <div class="results-trophy" id="results-icon">🏆</div>
-        <h2 id="results-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">ยอดเยี่ยมมาก!</h2>
-        <p id="results-subtitle" style="color: var(--text-muted); margin-bottom: 1.5rem;">คุณทำคะแนนได้ในระดับยอดฝีมือ</p>
-
-        <div class="score-display">
-          <span id="results-score">0</span>
-          <span style="font-size: 1.2rem; color: var(--text-muted); font-weight: 500;">คะแนน</span>
-        </div>
-
-        <div class="results-stats-grid">
-          <div class="result-stat-box">
-            <span>ความแม่นยำ</span>
-            <strong id="results-accuracy">100%</strong>
-          </div>
-          <div class="result-stat-box">
-            <span>คอมโบสูงสุด</span>
-            <strong id="results-max-streak">5 🔥</strong>
-          </div>
-          <div class="result-stat-box">
-            <span>XP ที่ได้รับ</span>
-            <strong id="results-earned-xp">+150 ⭐</strong>
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: center; gap: 1rem;">
-          <button class="btn btn-primary" onclick="App.showView('home')">
-            🏠 กลับหน้าหลัก
-          </button>
-          <button class="btn btn-secondary" onclick="App.replayCurrentGame()">
-            🔄 เล่นใหม่อีกครั้ง
-          </button>
-        </div>
+      <!-- 3. Hint -->
+      <div class="powerup-slot disabled" id="pu-hint" style="--slot-color: #ffe600; --slot-glow: rgba(255,230,0,0.4);" onclick="Game.activatePowerup('hint')">
+        <span class="powerup-key">E</span>
+        <span>💡</span>
+        <span class="powerup-name">Auto-Hint</span>
+        <span class="powerup-count" id="count-hint">0</span>
       </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-      <p>© 2026 Digital Business Vocabulary Game | Interactive English Learning Web Application</p>
-      <p style="margin-top: 0.4rem; font-size: 0.78rem;">Built with Vanilla HTML, CSS & JavaScript • Ready for GitHub Pages</p>
+      <!-- 4. Shield -->
+      <div class="powerup-slot disabled" id="pu-shield" style="--slot-color: #9d4edd; --slot-glow: rgba(157,78,221,0.4);" onclick="Game.activatePowerup('shield')">
+        <span class="powerup-key">R</span>
+        <span>🛡️</span>
+        <span class="powerup-name">Mana Shield</span>
+        <span class="powerup-count" id="count-shield">0</span>
+      </div>
+
+      <!-- 5. 2x Score -->
+      <div class="powerup-slot disabled" id="pu-double" style="--slot-color: #00ff66; --slot-glow: rgba(0,255,102,0.4);" onclick="Game.activatePowerup('double')">
+        <span class="powerup-key">T</span>
+        <span>⚡</span>
+        <span class="powerup-name">2x Score</span>
+        <span class="powerup-count" id="count-double">0</span>
+      </div>
+    </section>
+
+    <!-- SPELL CASTING INTERFACE -->
+    <footer class="spellcasting-panel">
+      <div class="target-hud">
+        <span style="font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700; margin-right: 0.5rem;">TARGET DEF:</span>
+        <div class="target-definition" id="active-target-def">กำลังสแกนหาเป้าหมายไวรัสในระบบ...</div>
+        <div class="target-category-badge" id="active-target-cat">CATEGORY</div>
+      </div>
+
+      <!-- Choice Mode Container -->
+      <div class="choices-grid" id="choices-container">
+        <!-- 4 choices injected dynamically -->
+      </div>
+
+      <!-- Type Mode Container -->
+      <div class="typing-input-wrap" id="typing-container" style="display: none;">
+        <input type="text" id="type-input" class="typing-input" placeholder="พิมพ์คำศัพท์ภาษาอังกฤษที่นี่แล้วกด ENTER..." autocomplete="off">
+      </div>
     </footer>
+
+    <!-- MODAL 1: REGISTRATION / LOGIN SCREEN -->
+    <div class="modal-overlay" id="modal-login">
+      <div class="modal-card">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧙‍♂️⚡</div>
+        <h1 class="modal-title">CYBER SPELLCASTER</h1>
+        <p class="modal-subtitle">VOCAB QUEST: มหาเวทไซเบอร์ พิชิตศัพท์คอมพิวเตอร์</p>
+
+        <div class="form-group">
+          <label class="form-label">รหัสผู้เรียน (Student ID)</label>
+          <input type="text" id="input-student-id" class="form-input" placeholder="เช่น 6601001234" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ชื่อ - นามสกุล (Student Name)</label>
+          <input type="text" id="input-student-name" class="form-input" placeholder="เช่น สมชาย สายโค้ด" required>
+        </div>
+
+        <div class="form-group" style="display: flex; gap: 0.8rem;">
+          <div style="flex: 1;">
+            <label class="form-label">หมวดหมู่คำศัพท์</label>
+            <select id="select-category" class="form-select">
+              <option value="all">📁 ทุกหมวดหมู่ (40 คำศัพท์)</option>
+              <option value="1">1. Web Code & Styling</option>
+              <option value="2">2. Hosting, Server & UI/UX</option>
+              <option value="3">3. Database & Security</option>
+              <option value="4">4. SEO & Digital Tech</option>
+            </select>
+          </div>
+
+          <div style="flex: 1;">
+            <label class="form-label">โหมดการเล่น</label>
+            <select id="select-mode" class="form-select">
+              <option value="choice">🎯 Choice Mode (กดช้อยส์ 1-4)</option>
+              <option value="type">⌨️ Type Mode (พิมพ์คำศัพท์)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="Game.submitLoginAndStart()">
+          🚀 เริ่มการต่อสู้ (START GAME)
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 2: GAME OVER / VICTORY / RESULTS -->
+    <div class="modal-overlay" id="modal-results" style="display: none;">
+      <div class="modal-card">
+        <div id="results-icon" style="font-size: 3.5rem; margin-bottom: 0.5rem;">🏆</div>
+        <h2 class="modal-title" id="results-title">MISSION COMPLETE!</h2>
+        <p class="modal-subtitle" id="results-subtitle">คุณปกป้องเซิร์ฟเวอร์จากไวรัสได้สำเร็จ</p>
+
+        <div style="display: flex; justify-content: space-around; margin: 1rem 0; padding: 0.8rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">SCORE</div>
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-yellow);" id="res-score">0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">ACCURACY</div>
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-green);" id="res-accuracy">100%</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">MAX STREAK</div>
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-magenta);" id="res-streak">0 🔥</div>
+          </div>
+        </div>
+
+        <div id="sheet-sync-status" style="font-size: 0.8rem; color: var(--neon-cyan); margin-bottom: 0.5rem;">
+          📡 กำลังบันทึกคะแนนไปยัง Google Sheet...
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-top: 1rem; text-align: left;">
+          🏆 TOP 5 LEADERBOARD
+        </div>
+        <div class="leaderboard-list" id="leaderboard-entries">
+          <!-- Leaderboard Rows -->
+        </div>
+
+        <button class="start-btn" onclick="Game.restartGame()">
+          🔄 เล่นใหม่อีกครั้ง (REPLAY)
+        </button>
+      </div>
+    </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="vocab-data.js"></script>
-  <script src="sound.js"></script>
-  <script src="app.js"></script>
+  <!-- ==========================================================================
+       JAVASCRIPT GAME ENGINE & VOCAB DATABASE
+       ========================================================================== -->
+  <script>
+    /**
+     * Google Apps Script Web App Integration URL
+     * Put your deployed Google Sheet Web App URL here.
+     */
+    const webAppUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
+    /* ==========================================================================
+       1. 40 COMPUTER TECHNOLOGY VOCABULARY TERMS (4 CATEGORIES)
+       ========================================================================== */
+    const VOCAB_DATABASE = [
+      // Category 1: Web Structure, Code & Styling
+      { id: 1, category: 1, catName: "Web & Styling", term: "HTML", def: "ภาษาโครงสร้างหลักที่ใช้กำหนดองค์ประกอบและเนื้อหาบนเว็บเพจ" },
+      { id: 2, category: 1, catName: "Web & Styling", term: "CSS", def: "ภาษาที่ใช้จัดตกแต่งรูปแบบ สไตล์ สีสัน และเค้าโครงของเว็บเพจ" },
+      { id: 3, category: 1, catName: "Web & Styling", term: "JavaScript", def: "ภาษาโปรแกรมสำหรับใส่ความฟังก์ชัน Interactive และการตอบสนองบนเว็บ" },
+      { id: 4, category: 1, catName: "Web & Styling", term: "DOM", def: "โครงสร้างต้นไม้ที่เบราว์เซอร์ใช้จัดระเบียบองค์ประกอบ HTML" },
+      { id: 5, category: 1, catName: "Web & Styling", term: "Tag", def: "สัญลักษณ์คุมข้อความใน HTML เพื่อบอกประเภทเนื้อหา" },
+      { id: 6, category: 1, catName: "Web & Styling", term: "Attribute", def: "คุณลักษณะเสริมที่ใส่ใน Tag เพื่อกำหนดค่าเพิ่มเติม" },
+      { id: 7, category: 1, catName: "Web & Styling", term: "Flexbox", def: "ระบบจัดเค้าโครง CSS แบบ 1 มิติที่ช่วยจัดวาง Element ให้ยืดหยุ่น" },
+      { id: 8, category: 1, catName: "Web & Styling", term: "Grid", def: "ระบบจัดเค้าโครง CSS แบบ 2 มิติสำหรับเลย์เอาต์ซับซ้อน" },
+      { id: 9, category: 1, catName: "Web & Styling", term: "Responsive Design", def: "การออกแบบเว็บให้รองรับการแสดงผลทุกขนาดหน้าจอ" },
+      { id: 10, category: 1, catName: "Web & Styling", term: "Framework", def: "ชุดโค้ดและเครื่องมือสำเร็จรูปที่ช่วยให้เขียนโปรแกรมได้เร็วขึ้น" },
+
+      // Category 2: Systems, Hosting, Domain & Design
+      { id: 11, category: 2, catName: "Systems & Hosting", term: "Web Server", def: "เครื่องคอมพิวเตอร์ที่ทำหน้าที่จัดเก็บและส่งมอบไฟล์เว็บไซต์" },
+      { id: 12, category: 2, catName: "Systems & Hosting", term: "Hosting", def: "บริการให้เช่าพื้นที่บน Web Server เพื่อรับฝากเว็บไซต์" },
+      { id: 13, category: 2, catName: "Systems & Hosting", term: "Domain Name", def: "ชื่อที่ใช้ระบุตัวตนของเว็บไซต์บนอินเทอร์เน็ตแทน IP Address" },
+      { id: 14, category: 2, catName: "Systems & Hosting", term: "DNS", def: "ระบบแปลงชื่อ Domain Name ให้เป็นหมายเลข IP Address" },
+      { id: 15, category: 2, catName: "Systems & Hosting", term: "IP Address", def: "หมายเลขประจำเครื่องคอมพิวเตอร์ที่เชื่อมต่ออยู่ในเครือข่าย" },
+      { id: 16, category: 2, catName: "Systems & Hosting", term: "UI", def: "ส่วนต่อประสานผู้ใช้ หน้าตา สัญลักษณ์ และการจัดวางปุ่มบนหน้าจอ" },
+      { id: 17, category: 2, catName: "Systems & Hosting", term: "UX", def: "ประสบการณ์และความพึงพอใจโดยรวมของผู้ใช้เมื่อใช้งานระบบ" },
+      { id: 18, category: 2, catName: "Systems & Hosting", term: "Wireframe", def: "แบบโครงร่างขาวดำจำลองหน้าตาเว็บก่อนเริ่มออกแบบจริง" },
+      { id: 19, category: 2, catName: "Systems & Hosting", term: "Prototype", def: "ตัวอย่างแบบจำลองโต้ตอบได้ ใช้ทดสอบการทำงานของเว็บก่อนพัฒนาจริง" },
+      { id: 20, category: 2, catName: "Systems & Hosting", term: "Client-Side", def: "การประมวลผลข้อมูลที่เกิดขึ้นในฝั่งของเว็บเบราว์เซอร์ผู้ใช้" },
+
+      // Category 3: Data Storage, Security & CMS
+      { id: 21, category: 3, catName: "Data & Security", term: "Database", def: "ระบบจัดเก็บข้อมูลอย่างเป็นระเบียบเพื่อให้ค้นหาและจัดการได้ง่าย" },
+      { id: 22, category: 3, catName: "Data & Security", term: "SQL", def: "ภาษามาตรฐานที่ใช้ในการบริหารจัดการและคิวรีฐานข้อมูล" },
+      { id: 23, category: 3, catName: "Data & Security", term: "CMS", def: "ระบบช่วยสร้างและจัดการเนื้อหาบนเว็บโดยไม่ต้องเขียนโค้ดทั้งหมด" },
+      { id: 24, category: 3, catName: "Data & Security", term: "SSL/TLS", def: "โพรโทคอลความปลอดภัยที่ใช้เข้ารหัสข้อมูลระหว่างเบราว์เซอร์กับเซิร์ฟเวอร์" },
+      { id: 25, category: 3, catName: "Data & Security", term: "HTTPS", def: "โปรโตคอลการสื่อสารเว็บแบบปลอดภัยที่มีการเข้ารหัสข้อมูล" },
+      { id: 26, category: 3, catName: "Data & Security", term: "Authentication", def: "กระบวนการยืนยันตัวตนของผู้ใช้ เช่น การล็อกอินด้วยรหัสผ่าน" },
+      { id: 27, category: 3, catName: "Data & Security", term: "Authorization", def: "กระบวนการตรวจสอบสิทธิ์การเข้าถึงข้อมูลของผู้ใช้" },
+      { id: 28, category: 3, catName: "Data & Security", term: "Encryption", def: "การเข้ารหัสข้อมูลเปลี่ยนข้อความธรรมดาให้กลายเป็นรหัสลับ" },
+      { id: 29, category: 3, catName: "Data & Security", term: "Backup", def: "การสำรองข้อมูลไว้ในอีกแหล่งเพื่อป้องกันข้อมูลสูญหาย" },
+      { id: 30, category: 3, catName: "Data & Security", term: "CRUD", def: "ปฏิบัติการพื้นฐานฐานข้อมูล Create Read Update Delete" },
+
+      // Category 4: SEO, Payment & Digital Security
+      { id: 31, category: 4, catName: "SEO & Digital Tech", term: "SEO", def: "การปรับแต่งเว็บให้ติดอันดับต้นๆ บนการค้นหาของ Search Engine" },
+      { id: 32, category: 4, catName: "SEO & Digital Tech", term: "Keyword", def: "คำหรือวลีค้นหาที่ผู้ใช้พิมพ์ใน Search Engine" },
+      { id: 33, category: 4, catName: "SEO & Digital Tech", term: "Backlink", def: "ลิงก์จากเว็บไซต์อื่นที่เชื่อมโยงกลับมายังเว็บไซต์ของเรา" },
+      { id: 34, category: 4, catName: "SEO & Digital Tech", term: "Payment Gateway", def: "ระบบตัวกลางที่ทำหน้าที่เชื่อมต่อและประมวลผลการชำระเงินออนไลน์" },
+      { id: 35, category: 4, catName: "SEO & Digital Tech", term: "PCI-DSS", def: "มาตรฐานความปลอดภัยสากลสำหรับระบบการจัดการข้อมูลบัตรเครดิต" },
+      { id: 36, category: 4, catName: "SEO & Digital Tech", term: "Firewall", def: "ระบบความปลอดภัยคอยกรองและป้องกันการเข้าถึงเครือข่ายที่ไม่ได้รับอนุญาต" },
+      { id: 37, category: 4, catName: "SEO & Digital Tech", term: "2FA", def: "การยืนยันตัวตนแบบ 2 ขั้นตอนเพื่อเพิ่มความปลอดภัย" },
+      { id: 38, category: 4, catName: "SEO & Digital Tech", term: "Phishing", def: "การหลอกลวงทางออนไลน์เพื่อขโมยข้อมูลสำคัญด้วยหน้าเว็บปลอม" },
+      { id: 39, category: 4, catName: "SEO & Digital Tech", term: "Cybersecurity", def: "การปกป้องระบบ เครือข่าย และข้อมูลจากภัยคุกคามทางดิจิทัล" },
+      { id: 40, category: 4, catName: "SEO & Digital Tech", term: "Meta Tag", def: "ข้อมูลอธิบายเนื้อหาเว็บเพจที่ใส่ไว้ในโค้ดเพื่อให้ Search Engine ทำความเข้าใจ" }
+    ];
+
+    /* ==========================================================================
+       2. WEB AUDIO API SYNTHESIZER (PROCEDURAL SFX & SYNTHWAVE BGM)
+       ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+        this.bgmTimer = null;
+        this.bgmStep = 0;
+        this.bgmPlaying = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        const btn = document.getElementById('btn-sound-toggle');
+        if (btn) btn.textContent = this.muted ? '🔇 MUTED' : '🔊 BGM';
+        if (this.muted && this.bgmPlaying) {
+          this.stopBGM();
+        } else if (!this.muted && !this.bgmPlaying) {
+          this.startBGM();
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1, timeOffset = 0) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const now = this.ctx.currentTime + timeOffset;
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(gainVal, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch (e) {}
+      }
+
+      playLaser() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const now = this.ctx.currentTime;
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.18);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } catch (e) {}
+      }
+
+      playExplosion() {
+        this.playTone(150, 'sawtooth', 0.25, 0.25, 0);
+        this.playTone(80, 'triangle', 0.35, 0.3, 0.05);
+      }
+
+      playError() {
+        this.playTone(220, 'sawtooth', 0.15, 0.15, 0);
+        this.playTone(180, 'sawtooth', 0.25, 0.2, 0.1);
+      }
+
+      playCombo() {
+        this.playTone(523.25, 'sine', 0.1, 0.12, 0);
+        this.playTone(659.25, 'sine', 0.1, 0.12, 0.06);
+        this.playTone(783.99, 'triangle', 0.2, 0.18, 0.12);
+      }
+
+      playCritical() {
+        this.playTone(587.33, 'triangle', 0.12, 0.2, 0);
+        this.playTone(880.00, 'triangle', 0.12, 0.2, 0.08);
+        this.playTone(1174.66, 'sine', 0.3, 0.25, 0.16);
+      }
+
+      playPowerup() {
+        this.playTone(440, 'triangle', 0.1, 0.15, 0);
+        this.playTone(554.37, 'triangle', 0.1, 0.15, 0.08);
+        this.playTone(659.25, 'triangle', 0.1, 0.15, 0.16);
+        this.playTone(880, 'sine', 0.25, 0.2, 0.24);
+      }
+
+      startBGM() {
+        if (this.bgmPlaying || this.muted) return;
+        this.init();
+        this.bgmPlaying = true;
+        const bassNotes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
+        const leadNotes = [440, 523.25, 659.25, 523.25, 587.33, 659.25, 783.99, 659.25];
+
+        this.bgmTimer = setInterval(() => {
+          if (this.muted) return;
+          const bass = bassNotes[this.bgmStep % bassNotes.length];
+          const lead = leadNotes[this.bgmStep % leadNotes.length];
+          this.playTone(bass, 'sawtooth', 0.12, 0.04, 0);
+          if (this.bgmStep % 2 === 0) {
+            this.playTone(lead, 'sine', 0.1, 0.03, 0.05);
+          }
+          this.bgmStep++;
+        }, 180);
+      }
+
+      stopBGM() {
+        clearInterval(this.bgmTimer);
+        this.bgmPlaying = false;
+      }
+    }
+
+    const AudioEngine = new SoundEngine();
+
+    /* ==========================================================================
+       3. 2D CANVAS GAME ENGINE (CYBER SPELLCASTER)
+       ========================================================================== */
+    class CyberSpellcasterGame {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        // Game State
+        this.isRunning = false;
+        this.isPaused = false;
+        this.studentId = "";
+        this.studentName = "";
+        this.gameMode = "choice"; // "choice" or "type"
+        this.categoryFilter = "all";
+
+        this.hp = 100;
+        this.maxHp = 100;
+        this.mana = 100;
+        this.maxMana = 100;
+        this.shield = 0;
+        this.score = 0;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.totalAnswers = 0;
+        this.correctAnswers = 0;
+        this.startTime = 0;
+
+        // Powerup Inventory
+        this.powerups = {
+          freeze: 0,
+          nuke: 0,
+          hint: 0,
+          shield: 0,
+          double: 0
+        };
+
+        // Active Buffs
+        this.freezeTimer = 0;
+        this.doubleScoreTimer = 0;
+
+        // Game Entities
+        this.player = { x: 80, y: 0, size: 50, frame: 0 };
+        this.enemies = [];
+        this.projectiles = [];
+        this.particles = [];
+        this.floatingTexts = [];
+
+        // Question Tracking
+        this.targetEnemy = null;
+        this.currentChoices = [];
+        this.spawnTimer = 0;
+        this.spawnInterval = 320; // frames
+        this.targetWordStartTime = 0;
+
+        this.initCanvasSize();
+        this.bindEvents();
+      }
+
+      initCanvasSize() {
+        const resize = () => {
+          const rect = this.canvas.parentElement.getBoundingClientRect();
+          this.canvas.width = rect.width;
+          this.canvas.height = rect.height;
+          this.player.y = this.canvas.height / 2;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+      }
+
+      bindEvents() {
+        // Keyboard Shortcuts (1-4 for choices, Q-T for powerups, Enter for typing)
+        window.addEventListener('keydown', (e) => {
+          if (!this.isRunning || this.isPaused) return;
+
+          // Choice Mode keys 1-4
+          if (this.gameMode === "choice" && ['1', '2', '3', '4'].includes(e.key)) {
+            const idx = parseInt(e.key, 10) - 1;
+            this.handleChoiceClick(idx);
+          }
+
+          // Powerup shortcuts
+          const key = e.key.toUpperCase();
+          if (key === 'Q') this.activatePowerup('freeze');
+          if (key === 'W') this.activatePowerup('nuke');
+          if (key === 'E') this.activatePowerup('hint');
+          if (key === 'R') this.activatePowerup('shield');
+          if (key === 'T') this.activatePowerup('double');
+        });
+
+        // Typing input
+        const typeInput = document.getElementById('type-input');
+        if (typeInput) {
+          typeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              this.handleTypeSubmit();
+            }
+          });
+        }
+      }
+
+      submitLoginAndStart() {
+        const idInput = document.getElementById('input-student-id');
+        const nameInput = document.getElementById('input-student-name');
+        const catSelect = document.getElementById('select-category');
+        const modeSelect = document.getElementById('select-mode');
+
+        if (!idInput.value.trim() || !nameInput.value.trim()) {
+          alert('กรุณากรอกรหัสผู้เรียน และชื่อ-นามสกุล ก่อนเริ่มเกม');
+          return;
+        }
+
+        this.studentId = idInput.value.trim();
+        this.studentName = nameInput.value.trim();
+        this.categoryFilter = catSelect.value;
+        this.gameMode = modeSelect.value;
+
+        document.getElementById('hud-player-name').textContent = this.studentName;
+        document.getElementById('modal-login').style.display = 'none';
+
+        // Toggle UI Mode
+        const choicesGrid = document.getElementById('choices-container');
+        const typingWrap = document.getElementById('typing-container');
+        if (this.gameMode === "choice") {
+          choicesGrid.style.display = 'grid';
+          typingWrap.style.display = 'none';
+        } else {
+          choicesGrid.style.display = 'none';
+          typingWrap.style.display = 'flex';
+          setTimeout(() => document.getElementById('type-input').focus(), 300);
+        }
+
+        AudioEngine.startBGM();
+        this.start();
+      }
+
+      start() {
+        this.isRunning = true;
+        this.isPaused = false;
+        this.hp = 100;
+        this.mana = 100;
+        this.shield = 0;
+        this.score = 0;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.totalAnswers = 0;
+        this.correctAnswers = 0;
+        this.startTime = Date.now();
+        this.enemies = [];
+        this.projectiles = [];
+        this.particles = [];
+        this.floatingTexts = [];
+        this.powerups = { freeze: 1, nuke: 1, hint: 2, shield: 1, double: 1 };
+        this.updateHUD();
+        this.updatePowerupDock();
+
+        // Spawn first enemy immediately
+        this.spawnEnemy();
+        this.loop();
+      }
+
+      getFilteredVocab() {
+        if (this.categoryFilter === 'all') return VOCAB_DATABASE;
+        const catNum = parseInt(this.categoryFilter, 10);
+        return VOCAB_DATABASE.filter(v => v.category === catNum);
+      }
+
+      spawnEnemy() {
+        const pool = this.getFilteredVocab();
+        const vocab = pool[Math.floor(Math.random() * pool.length)];
+
+        const types = ['virus', 'bug', 'trojan', 'glitch'];
+        const enemyType = types[Math.floor(Math.random() * types.length)];
+
+        const enemy = {
+          vocab: vocab,
+          type: enemyType,
+          x: this.canvas.width + 40,
+          y: Math.random() * (this.canvas.height - 180) + 90,
+          speed: 0.65 + Math.random() * 0.45,
+          hp: 1,
+          maxHp: 1,
+          size: 42,
+          color: enemyType === 'virus' ? '#ff0055' : enemyType === 'bug' ? '#ffe600' : enemyType === 'trojan' ? '#9d4edd' : '#00ff66'
+        };
+
+        this.enemies.push(enemy);
+
+        if (!this.targetEnemy) {
+          this.setTargetEnemy(enemy);
+        }
+      }
+
+      setTargetEnemy(enemy) {
+        this.targetEnemy = enemy;
+        this.targetWordStartTime = Date.now();
+
+        // Update Target Definition HUD
+        const defEl = document.getElementById('active-target-def');
+        const catEl = document.getElementById('active-target-cat');
+        if (defEl) defEl.textContent = enemy.vocab.def;
+        if (catEl) catEl.textContent = enemy.vocab.catName;
+
+        // Populate Choice Buttons
+        if (this.gameMode === "choice") {
+          const pool = this.getFilteredVocab();
+          const wrongOptions = pool
+            .filter(v => v.id !== enemy.vocab.id)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 3)
+            .map(v => v.term);
+
+          this.currentChoices = [
+            { term: enemy.vocab.term, correct: true },
+            ...wrongOptions.map(t => ({ term: t, correct: false }))
+          ].sort(() => 0.5 - Math.random());
+
+          const container = document.getElementById('choices-container');
+          if (container) {
+            container.innerHTML = this.currentChoices.map((opt, i) => `
+              <button class="choice-btn" data-idx="${i}" onclick="Game.handleChoiceClick(${i})">
+                <span class="choice-key">[${i + 1}]</span>
+                <span>${opt.term}</span>
+              </button>
+            `).join('');
+          }
+        }
+      }
+
+      handleChoiceClick(idx) {
+        if (!this.targetEnemy || !this.currentChoices[idx]) return;
+        const choice = this.currentChoices[idx];
+        const buttons = document.querySelectorAll('.choice-btn');
+
+        this.totalAnswers++;
+
+        if (choice.correct) {
+          if (buttons[idx]) buttons[idx].classList.add('correct');
+          this.castSpellOnTarget(true);
+        } else {
+          if (buttons[idx]) buttons[idx].classList.add('wrong');
+          this.castSpellOnTarget(false);
+        }
+      }
+
+      handleTypeSubmit() {
+        const input = document.getElementById('type-input');
+        if (!input || !this.targetEnemy) return;
+
+        const val = input.value.trim().toUpperCase();
+        const targetVal = this.targetEnemy.vocab.term.toUpperCase();
+
+        this.totalAnswers++;
+
+        if (val === targetVal) {
+          this.castSpellOnTarget(true);
+          input.value = "";
+        } else {
+          this.castSpellOnTarget(false);
+          input.value = "";
+        }
+      }
+
+      castSpellOnTarget(isCorrect) {
+        if (isCorrect) {
+          this.correctAnswers++;
+          this.combo++;
+          if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+
+          // Check Critical (Answered < 3.2s)
+          const timeTaken = (Date.now() - this.targetWordStartTime) / 1000;
+          const isCritical = timeTaken < 3.2;
+
+          if (isCritical) {
+            AudioEngine.playCritical();
+            this.showCriticalBanner();
+          } else {
+            AudioEngine.playLaser();
+          }
+
+          // Launch Spell Projectile
+          this.projectiles.push({
+            x: this.player.x + 30,
+            y: this.player.y,
+            target: this.targetEnemy,
+            speed: 16,
+            isCritical: isCritical,
+            color: isCritical ? '#ffe600' : '#00f0ff'
+          });
+
+          // Score Calculation
+          let points = isCritical ? 250 : 100;
+          points += this.combo * 15;
+          if (this.doubleScoreTimer > 0) points *= 2;
+          this.score += points;
+
+          // Mana Regeneration
+          this.mana = Math.min(this.maxMana, this.mana + 5);
+
+          // Check Powerup Unlock on Streaks
+          if (this.combo === 3) this.grantPowerup('hint');
+          if (this.combo === 5) this.grantPowerup('freeze');
+          if (this.combo === 8) this.grantPowerup('nuke');
+          if (this.combo === 10) this.grantPowerup('double');
+
+          this.createFloatingText(`+${points}`, this.player.x + 40, this.player.y - 20, isCritical ? '#ffe600' : '#00ff66');
+          AudioEngine.playCombo();
+        } else {
+          // Wrong Answer Penalty
+          AudioEngine.playError();
+          this.combo = 0;
+          this.mana = Math.max(0, this.mana - 15);
+          this.createFloatingText("SPELL FIZZLE! ✗", this.player.x + 40, this.player.y - 20, '#ff0055');
+          this.triggerScreenShake();
+        }
+
+        this.updateHUD();
+      }
+
+      showCriticalBanner() {
+        const banner = document.getElementById('critical-banner');
+        if (banner) {
+          banner.classList.add('show');
+          setTimeout(() => banner.classList.remove('show'), 800);
+        }
+      }
+
+      grantPowerup(type) {
+        this.powerups[type]++;
+        this.updatePowerupDock();
+        AudioEngine.playPowerup();
+        this.createFloatingText(`+1 ${type.toUpperCase()}! 🎁`, this.player.x + 50, this.player.y - 40, '#ffe600');
+      }
+
+      activatePowerup(type) {
+        if (this.powerups[type] <= 0 || !this.isRunning || this.isPaused) return;
+
+        this.powerups[type]--;
+        AudioEngine.playPowerup();
+
+        if (type === 'freeze') {
+          this.freezeTimer = 300; // 5 seconds at 60fps
+          this.createFloatingText("TIME FROZEN! ⏱️", this.canvas.width / 2, 100, '#00f0ff');
+        } else if (type === 'nuke') {
+          this.enemies.forEach(e => {
+            this.createExplosion(e.x, e.y, '#ff0055', 40);
+          });
+          this.score += this.enemies.length * 150;
+          this.enemies = [];
+          this.targetEnemy = null;
+          this.createFloatingText("CYBER NUKE! 💣", this.canvas.width / 2, 100, '#ff0055');
+          AudioEngine.playExplosion();
+          this.triggerScreenShake();
+          setTimeout(() => this.spawnEnemy(), 600);
+        } else if (type === 'hint') {
+          if (this.gameMode === "choice") {
+            const wrongBtns = Array.from(document.querySelectorAll('.choice-btn'))
+              .filter((btn, i) => !this.currentChoices[i].correct);
+            wrongBtns.slice(0, 2).forEach(b => b.classList.add('faded'));
+          } else {
+            const input = document.getElementById('type-input');
+            if (input && this.targetEnemy) {
+              input.value = this.targetEnemy.vocab.term.substring(0, 3);
+            }
+          }
+        } else if (type === 'shield') {
+          this.shield = Math.min(2, this.shield + 1);
+          this.createFloatingText("MANA SHIELD ON! 🛡️", this.player.x + 40, this.player.y - 20, '#9d4edd');
+        } else if (type === 'double') {
+          this.doubleScoreTimer = 600; // 10 seconds at 60fps
+          this.createFloatingText("2X SCORE BOOST! ⚡", this.canvas.width / 2, 100, '#00ff66');
+        }
+
+        this.updateHUD();
+        this.updatePowerupDock();
+      }
+
+      updatePowerupDock() {
+        Object.keys(this.powerups).forEach(type => {
+          const slot = document.getElementById(`pu-${type}`);
+          const count = document.getElementById(`count-${type}`);
+          if (slot && count) {
+            count.textContent = this.powerups[type];
+            if (this.powerups[type] > 0) {
+              slot.className = 'powerup-slot ready';
+            } else {
+              slot.className = 'powerup-slot disabled';
+            }
+          }
+        });
+      }
+
+      updateHUD() {
+        // HP & Mana Bars
+        const hpBar = document.getElementById('hp-bar');
+        const hpText = document.getElementById('hp-text');
+        const manaBar = document.getElementById('mana-bar');
+        const manaText = document.getElementById('mana-text');
+        const scoreEl = document.getElementById('hud-score');
+        const comboEl = document.getElementById('hud-combo');
+        const shieldBox = document.getElementById('shield-hud-box');
+        const shieldBar = document.getElementById('shield-bar');
+
+        if (hpBar) hpBar.style.width = `${(this.hp / this.maxHp) * 100}%`;
+        if (hpText) hpText.textContent = `${this.hp}/${this.maxHp}`;
+        if (manaBar) manaBar.style.width = `${(this.mana / this.maxMana) * 100}%`;
+        if (manaText) manaText.textContent = `${this.mana}/${this.maxMana}`;
+        if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
+        if (comboEl) comboEl.textContent = this.combo;
+
+        if (shieldBox && shieldBar) {
+          if (this.shield > 0) {
+            shieldBox.style.display = 'flex';
+            shieldBar.style.width = `${(this.shield / 2) * 100}%`;
+          } else {
+            shieldBox.style.display = 'none';
+          }
+        }
+      }
+
+      triggerScreenShake() {
+        const wrapper = document.getElementById('game-wrapper');
+        if (wrapper) {
+          wrapper.classList.add('shake');
+          setTimeout(() => wrapper.classList.remove('shake'), 300);
+        }
+      }
+
+      createExplosion(x, y, color, count = 25) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: Math.random() * 4 + 2,
+            color: color,
+            alpha: 1,
+            decay: Math.random() * 0.03 + 0.02
+          });
+        }
+      }
+
+      createFloatingText(text, x, y, color) {
+        this.floatingTexts.push({
+          text, x, y, color, alpha: 1, vy: -1.5
+        });
+      }
+
+      // --- MAIN ANIMATION / GAME LOOP (60 FPS) ---
+      loop() {
+        if (!this.isRunning) return;
+
+        if (!this.isPaused) {
+          this.update();
+          this.render();
+        }
+
+        requestAnimationFrame(() => this.loop());
+      }
+
+      update() {
+        // Timers
+        if (this.freezeTimer > 0) this.freezeTimer--;
+        if (this.doubleScoreTimer > 0) this.doubleScoreTimer--;
+
+        // Spawn logic
+        this.spawnTimer++;
+        if (this.spawnTimer >= this.spawnInterval) {
+          this.spawnTimer = 0;
+          if (this.enemies.length < 4) {
+            this.spawnEnemy();
+          }
+        }
+
+        // Update Projectiles
+        for (let i = this.projectiles.length - 1; i >= 0; i--) {
+          const p = this.projectiles[i];
+          if (!p.target || !this.enemies.includes(p.target)) {
+            this.projectiles.splice(i, 1);
+            continue;
+          }
+
+          const dx = p.target.x - p.x;
+          const dy = p.target.y - p.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < p.speed) {
+            // Hit Target!
+            AudioEngine.playExplosion();
+            this.createExplosion(p.target.x, p.target.y, p.color, 30);
+
+            const enemyIdx = this.enemies.indexOf(p.target);
+            if (enemyIdx !== -1) {
+              this.enemies.splice(enemyIdx, 1);
+            }
+
+            this.projectiles.splice(i, 1);
+
+            // Set next target
+            if (this.enemies.length > 0) {
+              this.setTargetEnemy(this.enemies[0]);
+            } else {
+              this.targetEnemy = null;
+              document.getElementById('active-target-def').textContent = "กำลังสแกนหาเป้าหมายไวรัสในระบบ...";
+              setTimeout(() => { if (this.isRunning) this.spawnEnemy(); }, 400);
+            }
+          } else {
+            p.x += (dx / dist) * p.speed;
+            p.y += (dy / dist) * p.speed;
+          }
+        }
+
+        // Update Enemies
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+          const enemy = this.enemies[i];
+
+          // If frozen, don't move
+          if (this.freezeTimer <= 0) {
+            enemy.x -= enemy.speed;
+          }
+
+          // Enemy reaches player
+          if (enemy.x <= this.player.x + 20) {
+            if (this.shield > 0) {
+              this.shield--;
+              this.createFloatingText("SHIELD BLOCKED! 🛡️", this.player.x + 30, this.player.y, '#ffe600');
+            } else {
+              this.hp = Math.max(0, this.hp - 20);
+              this.combo = 0;
+              this.triggerScreenShake();
+              AudioEngine.playError();
+              this.createFloatingText("-20 HP! 💥", this.player.x + 30, this.player.y, '#ff0055');
+            }
+
+            this.createExplosion(enemy.x, enemy.y, '#ff0055', 20);
+            this.enemies.splice(i, 1);
+
+            if (this.targetEnemy === enemy) {
+              this.targetEnemy = this.enemies[0] || null;
+              if (this.targetEnemy) this.setTargetEnemy(this.targetEnemy);
+            }
+
+            this.updateHUD();
+
+            if (this.hp <= 0) {
+              this.gameOver();
+              return;
+            }
+          }
+        }
+
+        // Update Particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const pt = this.particles[i];
+          pt.x += pt.vx;
+          pt.y += pt.vy;
+          pt.alpha -= pt.decay;
+          if (pt.alpha <= 0) this.particles.splice(i, 1);
+        }
+
+        // Update Floating Texts
+        for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = this.floatingTexts[i];
+          ft.y += ft.vy;
+          ft.alpha -= 0.02;
+          if (ft.alpha <= 0) this.floatingTexts.splice(i, 1);
+        }
+      }
+
+      render() {
+        const { ctx, canvas } = this;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Player (Code Wizard)
+        this.renderWizard(this.player.x, this.player.y);
+
+        // Draw Enemies
+        this.enemies.forEach(enemy => {
+          this.renderEnemy(enemy);
+        });
+
+        // Draw Projectiles
+        this.projectiles.forEach(p => {
+          ctx.save();
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 15;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.isCritical ? 8 : 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        // Draw Particles
+        this.particles.forEach(pt => {
+          ctx.save();
+          ctx.globalAlpha = pt.alpha;
+          ctx.fillStyle = pt.color;
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        // Draw Floating Texts
+        this.floatingTexts.forEach(ft => {
+          ctx.save();
+          ctx.globalAlpha = ft.alpha;
+          ctx.font = "bold 16px 'Orbitron', sans-serif";
+          ctx.fillStyle = ft.color;
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+        });
+      }
+
+      renderWizard(x, y) {
+        const { ctx } = this;
+        ctx.save();
+
+        // Glowing Aura
+        ctx.shadowColor = 'rgba(0, 240, 255, 0.6)';
+        ctx.shadowBlur = 20;
+
+        // Robe Body
+        ctx.fillStyle = '#0d2149';
+        ctx.beginPath();
+        ctx.moveTo(x, y - 25);
+        ctx.lineTo(x + 22, y + 25);
+        ctx.lineTo(x - 22, y + 25);
+        ctx.closePath();
+        ctx.fill();
+
+        // Robe Neon Accent
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Wizard Hat
+        ctx.fillStyle = '#152e66';
+        ctx.beginPath();
+        ctx.moveTo(x - 25, y - 18);
+        ctx.lineTo(x + 25, y - 18);
+        ctx.lineTo(x - 5, y - 48);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Wizard Staff
+        ctx.strokeStyle = '#ffe600';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x + 24, y + 28);
+        ctx.lineTo(x + 28, y - 35);
+        ctx.stroke();
+
+        // Staff Crystal Glow
+        ctx.fillStyle = '#00f0ff';
+        ctx.beginPath();
+        ctx.arc(x + 28, y - 35, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      renderEnemy(enemy) {
+        const { ctx } = this;
+        ctx.save();
+
+        const isTarget = this.targetEnemy === enemy;
+
+        // Draw Target Indicator
+        if (isTarget) {
+          ctx.strokeStyle = '#ffe600';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.arc(enemy.x, enemy.y, enemy.size / 2 + 10, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        // Enemy Body (Bug / Virus shape)
+        ctx.shadowColor = enemy.color;
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = enemy.color;
+
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, enemy.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cyber Eyes
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(enemy.x - 6, enemy.y - 4, 3, 0, Math.PI * 2);
+        ctx.arc(enemy.x + 6, enemy.y - 4, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Floating Definition Banner above enemy head
+        const termPreview = enemy.vocab.term;
+        ctx.font = "bold 12px 'Orbitron', sans-serif";
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.fillText(termPreview, enemy.x, enemy.y - 30);
+
+        ctx.restore();
+      }
+
+      togglePause() {
+        this.isPaused = !this.isPaused;
+      }
+
+      gameOver() {
+        this.isRunning = false;
+        AudioEngine.stopBGM();
+        AudioEngine.playExplosion();
+
+        const accuracy = this.totalAnswers > 0 
+          ? Math.round((this.correctAnswers / this.totalAnswers) * 100) 
+          : 100;
+        const timeUsed = Math.round((Date.now() - this.startTime) / 1000);
+
+        // Show Modal
+        document.getElementById('modal-results').style.display = 'flex';
+        document.getElementById('results-icon').textContent = this.score > 1000 ? '🏆' : '💀';
+        document.getElementById('results-title').textContent = this.score > 1000 ? 'MISSION ACCOMPLISHED!' : 'SYSTEM BREACHED!';
+        document.getElementById('res-score').textContent = this.score.toLocaleString();
+        document.getElementById('res-accuracy').textContent = `${accuracy}%`;
+        document.getElementById('res-streak').textContent = `${this.maxCombo} 🔥`;
+
+        if (this.score > 1000 && typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+        }
+
+        // Save & Render Leaderboard
+        this.saveScoreToLeaderboard({
+          studentId: this.studentId,
+          studentName: this.studentName,
+          score: this.score,
+          accuracy: `${accuracy}%`,
+          date: new Date().toLocaleDateString('th-TH')
+        });
+
+        // Submit to Google Sheet API
+        this.syncScoreToGoogleSheet({
+          studentId: this.studentId,
+          studentName: this.studentName,
+          category: this.categoryFilter,
+          score: this.score,
+          timeUsed: `${timeUsed}s`,
+          accuracy: `${accuracy}%`
+        });
+      }
+
+      saveScoreToLeaderboard(entry) {
+        let scores = JSON.parse(localStorage.getItem('cyber_spellcaster_leaderboard') || '[]');
+        scores.push(entry);
+        scores.sort((a, b) => b.score - a.score);
+        scores = scores.slice(0, 5);
+        localStorage.setItem('cyber_spellcaster_leaderboard', JSON.stringify(scores));
+
+        const container = document.getElementById('leaderboard-entries');
+        if (container) {
+          container.innerHTML = scores.map((s, idx) => `
+            <div class="leaderboard-row">
+              <span>#${idx + 1} ${s.studentName} (${s.studentId})</span>
+              <span>${s.score.toLocaleString()} PTS (${s.accuracy})</span>
+            </div>
+          `).join('');
+        }
+      }
+
+      async syncScoreToGoogleSheet(payload) {
+        const statusEl = document.getElementById('sheet-sync-status');
+        if (webAppUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+          if (statusEl) statusEl.textContent = "ℹ️ คะแนนถูกบันทึกลงเครื่องแล้ว (เชื่อมต่อ Google Sheet ได้โดยใส่ Web App URL)";
+          return;
+        }
+
+        try {
+          if (statusEl) statusEl.textContent = "📡 กำลังส่งข้อมูลคะแนนไปยัง Google Sheet...";
+          await fetch(webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (statusEl) statusEl.textContent = "✅ บันทึกคะแนนลง Google Sheet สำเร็จเรียบร้อย!";
+        } catch (e) {
+          if (statusEl) statusEl.textContent = "⚠️ ไม่สามารถเชื่อมต่อ Google Sheet ได้ บันทึกไว้ในเครื่องเรียบร้อย";
+        }
+      }
+
+      restartGame() {
+        document.getElementById('modal-results').style.display = 'none';
+        this.start();
+        AudioEngine.startBGM();
+      }
+    }
+
+    // Initialize Game Instance
+    const Game = new CyberSpellcasterGame();
+
+    /* ==========================================================================
+       GOOGLE APPS SCRIPT DEPLOYMENT GUIDE (FOR GOOGLE SHEETS SYNC)
+       ==========================================================================
+       Copy the following code into Extensions > Apps Script in your Google Sheet:
+
+       function doPost(e) {
+         try {
+           var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+           var data = JSON.parse(e.postData.contents);
+           
+           // Ensure headers exist
+           if (sheet.getLastRow() === 0) {
+             sheet.appendRow(["Timestamp", "Student ID", "Student Name", "Category", "Score", "Time Used", "Accuracy"]);
+           }
+           
+           sheet.appendRow([
+             new Date(),
+             data.studentId,
+             data.studentName,
+             data.category,
+             data.score,
+             data.timeUsed,
+             data.accuracy
+           ]);
+           
+           return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
+             .setMimeType(ContentService.MimeType.JSON);
+         } catch (error) {
+           return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
+             .setMimeType(ContentService.MimeType.JSON);
+         }
+       }
+       ========================================================================== */
+  </script>
 </body>
 </html>

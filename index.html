@@ -317,13 +317,16 @@
        QUESTION BANNER & SPELL CASTING INTERFACE (FONT SIZE >= 20PX)
        ========================================================================== */
     .question-deck-panel {
-      padding: 0.9rem 1.6rem;
+      padding: 0.85rem 1.4rem;
       background: rgba(9, 14, 30, 0.98);
       border-top: 3px solid var(--blox-cyan);
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
-      z-index: 20;
+      gap: 0.65rem;
+      position: relative;
+      z-index: 30;
+      flex-shrink: 0;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7);
     }
 
     /* High-contrast Large Question Banner (>= 20px) */
@@ -331,11 +334,13 @@
       background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%), #141c38;
       border: 2px solid var(--blox-yellow);
       border-radius: 12px;
-      padding: 0.75rem 1.25rem;
+      padding: 0.7rem 1.2rem;
       display: flex;
       align-items: center;
       gap: 0.8rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 32;
     }
 
     .scenario-icon {
@@ -361,11 +366,14 @@
       white-space: nowrap;
     }
 
-    /* Choices Mode Buttons (Bubbly 3D blocky) */
+    /* Choices Mode Buttons (Grid 2x2 Responsive) */
     .blox-choices-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      width: 100%;
+      position: relative;
+      z-index: 35;
     }
 
     .blox-choice-btn {
@@ -374,17 +382,20 @@
       border-radius: 12px;
       color: #ffffff;
       font-family: var(--font-ui);
-      font-size: 1.08rem;
+      font-size: 1.1rem;
       font-weight: 800;
-      padding: 0.85rem 0.6rem;
+      padding: 0.75rem 0.8rem;
       cursor: pointer;
-      box-shadow: 0 5px 0 #121a36;
-      transition: all 0.1s ease;
+      box-shadow: 0 4px 0 #121a36;
+      transition: all 0.12s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
       text-align: center;
+      min-height: 48px;
+      position: relative;
+      z-index: 36;
     }
 
     .blox-choice-btn:hover:not(:disabled) {
@@ -423,6 +434,8 @@
       display: flex;
       gap: 0.8rem;
       align-items: center;
+      position: relative;
+      z-index: 35;
     }
 
     .blox-type-input {
@@ -600,10 +613,11 @@
 
     @media (max-width: 768px) {
       .scenario-text {
-        font-size: 17px;
+        font-size: 20px;
       }
       .blox-choices-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
       }
       .blox-powerup-btn span.pu-name {
         display: none;
@@ -1435,11 +1449,27 @@
           name: isBoss ? "TITAN BUG BOSS" : "VIRUS CUBE"
         };
 
-        // Prepare Choices (1 Correct + 3 Wrong)
+        // Prepare Choices (1 Correct + 3 Distinct Wrong from Category / Global Pool)
         if (this.gameMode === "choice") {
-          const wrongPool = VOCAB_SCENARIOS.filter(v => v.id !== this.activeQuestion.id);
-          const wrongChoices = this.shuffleArray(wrongPool).slice(0, 3).map(v => v.term);
+          // 1. Gather distinct wrong choices from the same category first
+          const sameCategoryWrong = VOCAB_SCENARIOS
+            .filter(v => v.category === this.activeQuestion.category && v.term !== this.activeQuestion.term)
+            .map(v => v.term);
 
+          // 2. Global fallback wrong choices
+          const globalWrong = VOCAB_SCENARIOS
+            .filter(v => v.term !== this.activeQuestion.term)
+            .map(v => v.term);
+
+          // 3. Deduplicate and shuffle
+          const candidateTerms = Array.from(
+            new Set([...this.shuffleArray(sameCategoryWrong), ...this.shuffleArray(globalWrong)])
+          );
+
+          // 4. Slice exactly 3 unique wrong terms
+          const wrongChoices = candidateTerms.slice(0, 3);
+
+          // 5. Combine with correct answer -> exactly 4 choices
           this.choicesList = this.shuffleArray([
             { term: this.activeQuestion.term, correct: true },
             ...wrongChoices.map(t => ({ term: t, correct: false }))
@@ -1447,11 +1477,19 @@
 
           const container = document.getElementById('choices-container');
           if (container) {
+            // Reset and render fresh, non-faded, fully active choice buttons
             container.innerHTML = this.choicesList.map((c, i) => `
               <button class="blox-choice-btn" data-idx="${i}" onclick="Game.handleChoiceButtonClick(${i})">
                 <span>${c.term}</span>
               </button>
             `).join('');
+          }
+        } else {
+          // Reset Type Mode input
+          const typeInput = document.getElementById('blox-type-input');
+          if (typeInput) {
+            typeInput.value = "";
+            typeInput.focus();
           }
         }
       }

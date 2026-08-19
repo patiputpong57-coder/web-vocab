@@ -370,32 +370,35 @@
     .blox-choices-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 12px;
       width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
       position: relative;
       z-index: 35;
     }
 
     .blox-choice-btn {
+      width: 100%;
+      min-height: 56px;
       background: #1f2b54;
       border: 3px solid #3d518c;
-      border-radius: 12px;
+      border-radius: 14px;
       color: #ffffff;
-      font-family: var(--font-ui);
-      font-size: 1.1rem;
+      font-family: var(--font-code), var(--font-ui);
+      font-size: 19px; /* Bold 18px-20px font size */
       font-weight: 800;
-      padding: 0.75rem 0.8rem;
+      padding: 0.85rem 1rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #121a36;
       transition: all 0.12s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
       text-align: center;
-      min-height: 48px;
       position: relative;
       z-index: 36;
+      box-sizing: border-box;
     }
 
     .blox-choice-btn:hover:not(:disabled) {
@@ -1449,40 +1452,31 @@
           name: isBoss ? "TITAN BUG BOSS" : "VIRUS CUBE"
         };
 
-        // Prepare Choices (1 Correct + 3 Distinct Wrong from Category / Global Pool)
+        // Prepare Choices (1 Correct + 3 Distinct Wrong STRICTLY from the Same Category Pool)
         if (this.gameMode === "choice") {
-          // 1. Gather distinct wrong choices from the same category first
-          const sameCategoryWrong = VOCAB_SCENARIOS
-            .filter(v => v.category === this.activeQuestion.category && v.term !== this.activeQuestion.term)
-            .map(v => v.term);
+          // 1. Gather all other distinct terms STRICTLY from the SAME category
+          const sameCategoryWrong = this.shuffleArray(
+            VOCAB_SCENARIOS.filter(v => v.category === this.activeQuestion.category && v.term !== this.activeQuestion.term)
+          ).slice(0, 3).map(v => v.term);
 
-          // 2. Global fallback wrong choices
-          const globalWrong = VOCAB_SCENARIOS
-            .filter(v => v.term !== this.activeQuestion.term)
-            .map(v => v.term);
-
-          // 3. Deduplicate and shuffle
-          const candidateTerms = Array.from(
-            new Set([...this.shuffleArray(sameCategoryWrong), ...this.shuffleArray(globalWrong)])
-          );
-
-          // 4. Slice exactly 3 unique wrong terms
-          const wrongChoices = candidateTerms.slice(0, 3);
-
-          // 5. Combine with correct answer -> exactly 4 choices
+          // 2. Combine with correct answer -> exactly 4 choices
           this.choicesList = this.shuffleArray([
             { term: this.activeQuestion.term, correct: true },
-            ...wrongChoices.map(t => ({ term: t, correct: false }))
+            ...sameCategoryWrong.map(t => ({ term: t, correct: false }))
           ]);
 
           const container = document.getElementById('choices-container');
           if (container) {
-            // Reset and render fresh, non-faded, fully active choice buttons
-            container.innerHTML = this.choicesList.map((c, i) => `
-              <button class="blox-choice-btn" data-idx="${i}" onclick="Game.handleChoiceButtonClick(${i})">
-                <span>${c.term}</span>
-              </button>
-            `).join('');
+            // Clear and render using DOM elements with textContent to avoid HTML escape bugs with <a>, <html>, <p>, etc.
+            container.innerHTML = '';
+            this.choicesList.forEach((c, i) => {
+              const btn = document.createElement('button');
+              btn.className = 'blox-choice-btn';
+              btn.setAttribute('data-idx', i);
+              btn.textContent = c.term; // CRITICAL: textContent safely renders literal <a>, <html>, <p>, <footer>
+              btn.onclick = () => Game.handleChoiceButtonClick(i);
+              container.appendChild(btn);
+            });
           }
         } else {
           // Reset Type Mode input

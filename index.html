@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Digital Business Vocab Game - เรียนรู้และทดสอบคำศัพท์ภาษาอังกฤษสำหรับธุรกิจดิจิทัล เทคโนโลยี และสตาร์ทอัพ ผ่านมินิเกมสุดมันส์">
+  <title>Digital Business Vocab Game | เกมคำศัพท์ธุรกิจดิจิทัล</title>
+  
+  <!-- Google Fonts: Inter & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="brand-logo" onclick="App.showView('home')">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>Digital Business Vocab</h1>
+          <p>Master English for Tech & Business</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="stat-pill xp-pill" title="ค่าประสบการณ์ (XP)">
+          <span>⭐</span>
+          <span id="header-xp">0</span> XP
+        </div>
+        <div class="stat-pill level-pill" title="ระดับผู้เล่น">
+          <span>🏆</span>
+          <span id="header-level">Novice</span>
+        </div>
+        <button class="icon-btn" id="sound-toggle-btn" title="เปิด/ปิดเสียง" onclick="App.toggleSound()">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" id="tab-home" onclick="App.showView('home')">
+        <span>🏠</span> หน้าแรก
+      </button>
+      <button class="nav-tab" id="tab-quiz" onclick="App.startQuiz()">
+        <span>⚡</span> Speed Quiz
+      </button>
+      <button class="nav-tab" id="tab-memory" onclick="App.startMemory()">
+        <span>🎴</span> Memory Match
+      </button>
+      <button class="nav-tab" id="tab-scramble" onclick="App.startScramble()">
+        <span>🧩</span> Word Scramble
+      </button>
+      <button class="nav-tab" id="tab-flashcards" onclick="App.startFlashcards()">
+        <span>📖</span> Flashcards
+      </button>
+      <button class="nav-tab" id="tab-glossary" onclick="App.showGlossary()">
+        <span>📚</span> พจนานุกรม
+      </button>
+    </nav>
+
+    <!-- VIEW 1: HOME / DASHBOARD -->
+    <main id="view-home" class="view-panel active">
+      <section class="hero-banner">
+        <div class="hero-content">
+          <div class="badge-tag">🚀 Interactive Learning Experience</div>
+          <h2 class="hero-title">เก่งศัพท์ธุรกิจดิจิทัล<br>เล่นสนุก จำแม่น ใช้ได้จริง!</h2>
+          <p class="hero-subtitle">
+            รวบรวมคำศัพท์สำคัญกว่า 50+ คำจากวงการ E-Commerce, FinTech, Data & AI, Startup และ Cybersecurity พร้อมระบบฝึกออกเสียงและมินิเกมหลากหลายรูปแบบ
+          </p>
+          <div class="hero-btn-group">
+            <button class="btn btn-primary" onclick="App.startQuiz()">
+              🎮 เริ่มเล่น Speed Quiz
+            </button>
+            <button class="btn btn-secondary" onclick="App.startFlashcards()">
+              📖 ฝึกการ์ดคำศัพท์
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Game Modes -->
+      <section>
+        <div class="section-title">
+          <span>🎯 เลือกโหมดการเรียนรู้</span>
+        </div>
+        <div class="game-modes-grid">
+          <!-- Mode 1 -->
+          <div class="mode-card" style="--card-accent: #00f2fe; --card-glow: rgba(0, 242, 254, 0.3);" onclick="App.startQuiz()">
+            <div>
+              <div class="mode-card-header">
+                <div class="mode-icon">⚡</div>
+                <span class="mode-badge">ยอดนิยม</span>
+              </div>
+              <h3>Speed Quiz</h3>
+              <p>ควิซจับเวลา 15 วินาที พร้อมคอมโบสตรีคและตัวช่วย 50:50</p>
+            </div>
+            <div class="mode-card-footer">
+              <span>เริ่มทำควิซ &rarr;</span>
+              <span>10 ข้อ</span>
+            </div>
+          </div>
+
+          <!-- Mode 2 -->
+          <div class="mode-card" style="--card-accent: #a855f7; --card-glow: rgba(168, 85, 247, 0.3);" onclick="App.startMemory()">
+            <div>
+              <div class="mode-card-header">
+                <div class="mode-icon">🎴</div>
+                <span class="mode-badge">ฝึกความจำ</span>
+              </div>
+              <h3>Memory Match</h3>
+              <p>เปิดการ์ดจับคู่ศัพท์ภาษาอังกฤษกับความหมายภาษาไทย</p>
+            </div>
+            <div class="mode-card-footer">
+              <span>เล่นเกมจับคู่ &rarr;</span>
+              <span>12 การ์ด</span>
+            </div>
+          </div>
+
+          <!-- Mode 3 -->
+          <div class="mode-card" style="--card-accent: #f59e0b; --card-glow: rgba(245, 158, 11, 0.3);" onclick="App.startScramble()">
+            <div>
+              <div class="mode-card-header">
+                <div class="mode-icon">🧩</div>
+                <span class="mode-badge">ฝึกสะกดคำ</span>
+              </div>
+              <h3>Word Scramble</h3>
+              <p>เรียงตัวอักษรภาษาอังกฤษที่สลับตำแหน่งให้เป็นคำศัพท์ที่ถูกต้อง</p>
+            </div>
+            <div class="mode-card-footer">
+              <span>เริ่มทายคำ &rarr;</span>
+              <span>มีคำใบ้</span>
+            </div>
+          </div>
+
+          <!-- Mode 4 -->
+          <div class="mode-card" style="--card-accent: #10b981; --card-glow: rgba(168, 85, 247, 0.3);" onclick="App.startFlashcards()">
+            <div>
+              <div class="mode-card-header">
+                <div class="mode-icon">📖</div>
+                <span class="mode-badge">ทบทวนบทเรียน</span>
+              </div>
+              <h3>Flashcards</h3>
+              <p>แฟลชการ์ด 3 มิติ พร้อมระบบเสียงอ่าน Native และประโยคตัวอย่าง</p>
+            </div>
+            <div class="mode-card-footer">
+              <span>เปิดคลังการ์ด &rarr;</span>
+              <span>50+ คำศัพท์</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Categories -->
+      <section>
+        <div class="section-title">
+          <span>📂 หมวดหมู่คำศัพท์</span>
+        </div>
+        <div class="categories-grid" id="home-categories-list">
+          <!-- Dynamically Rendered -->
+        </div>
+      </section>
+    </main>
+
+    <!-- VIEW 2: SPEED QUIZ -->
+    <main id="view-quiz" class="view-panel">
+      <div class="game-play-area">
+        <div class="quiz-top-bar">
+          <div style="font-weight: 700;">
+            ข้อที่ <span id="quiz-current-num">1</span>/<span id="quiz-total-num">10</span>
+          </div>
+
+          <div class="quiz-progress-wrap">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="streak-indicator">
+            🔥 <span id="quiz-streak">0</span> คอมโบ
+          </div>
+
+          <div class="timer-circle" id="quiz-timer">
+            15
+          </div>
+        </div>
+
+        <div class="quiz-card">
+          <div class="quiz-category-tag" id="quiz-category-tag">
+            📈 E-Commerce & Marketing
+          </div>
+          <div class="quiz-question-term">
+            <span id="quiz-term-text">Conversion Rate</span>
+            <button class="speak-btn" id="quiz-speak-btn" title="ฟังการออกเสียง">
+              🔊
+            </button>
+          </div>
+          <div class="quiz-phonetic" id="quiz-phonetic-text">/kənˈvɜːr.ʒən reɪt/</div>
+          <div class="quiz-instruction">เลือกความหมายภาษาไทยที่ถูกต้องที่สุด:</div>
+
+          <div class="quiz-options-grid" id="quiz-options-container">
+            <!-- Options dynamically injected -->
+          </div>
+
+          <div class="explanation-box" id="quiz-explanation-box">
+            <h4>💡 คำอธิบาย:</h4>
+            <p id="quiz-explanation-text"></p>
+            <div class="example-text" id="quiz-example-text"></div>
+          </div>
+
+          <div class="quiz-lifelines">
+            <button class="lifeline-btn" id="btn-lifeline-5050" onclick="App.useLifeline5050()">
+              ✂️ ตัด 2 ช้อยส์ (50:50)
+            </button>
+            <button class="lifeline-btn" id="btn-lifeline-time" onclick="App.useLifelineTime()">
+              ⏱️ เพิ่มเวลา +10s
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn btn-primary" id="quiz-next-btn" style="display: none;" onclick="App.nextQuizQuestion()">
+            ข้อถัดไป &rarr;
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- VIEW 3: MEMORY MATCH -->
+    <main id="view-memory" class="view-panel">
+      <div class="game-play-area">
+        <div class="memory-status-bar">
+          <div>🎮 จำนวนครั้งที่เปิด: <strong id="memory-moves">0</strong></div>
+          <div>⏱️ เวลา: <strong id="memory-timer">00:00</strong></div>
+          <div>✨ จับคู่สำเร็จ: <strong id="memory-matches">0</strong>/6 คู่</div>
+          <button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="App.startMemory()">
+            🔄 เริ่มใหม่
+          </button>
+        </div>
+
+        <div class="memory-grid" id="memory-grid-container">
+          <!-- Memory Cards Dynamically Rendered -->
+        </div>
+      </div>
+    </main>
+
+    <!-- VIEW 4: WORD SCRAMBLE -->
+    <main id="view-scramble" class="view-panel">
+      <div class="game-play-area">
+        <div class="scramble-box">
+          <div class="badge-tag" id="scramble-category-tag">หมวดหมู่</div>
+          <h2 style="margin-bottom: 1.5rem; font-size: 1.6rem;">🧩 เรียงตัวอักษรให้ถูกต้อง</h2>
+          
+          <div class="scramble-hint-card">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">คำใบ้ความหมาย:</div>
+            <div id="scramble-definition-th" style="color: var(--text-main); font-size: 1rem;"></div>
+          </div>
+
+          <!-- Answer Slots -->
+          <div class="scramble-slots" id="scramble-slots-container"></div>
+
+          <!-- Letter Pool -->
+          <div class="scramble-pool" id="scramble-letters-container"></div>
+
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-secondary" onclick="App.resetScrambleCurrent()">
+              ↩️ ล้างคำตอบ
+            </button>
+            <button class="btn btn-secondary" onclick="App.scrambleGiveHint()">
+              💡 ขอตัวช่วยแรก
+            </button>
+            <button class="btn btn-primary" id="scramble-next-btn" style="display: none;" onclick="App.nextScramble()">
+              ข้อต่อไป &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- VIEW 5: FLASHCARDS -->
+    <main id="view-flashcards" class="view-panel">
+      <div class="flashcard-wrapper">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <select class="category-select" id="flashcard-category-select" onchange="App.filterFlashcards()">
+            <option value="all">📁 ทุกหมวดหมู่ (50+ คำ)</option>
+            <option value="marketing">📈 E-Commerce & Marketing</option>
+            <option value="fintech">💳 FinTech & Payments</option>
+            <option value="data_ai">🤖 Data & AI Analytics</option>
+            <option value="startup">🚀 Startup & Strategy</option>
+            <option value="security">🔒 Cybersecurity & Cloud</option>
+          </select>
+
+          <div style="font-weight: 700; color: var(--text-muted);">
+            การ์ดที่ <span id="fc-current-idx">1</span>/<span id="fc-total-count">50</span>
+          </div>
+        </div>
+
+        <div class="flashcard-container" id="main-flashcard" onclick="App.flipFlashcard()">
+          <!-- Front Face -->
+          <div class="flashcard-face flashcard-front">
+            <div class="badge-tag" id="fc-category-badge">หมวดหมู่</div>
+            <div>
+              <div class="flashcard-term" id="fc-term">Conversion Rate</div>
+              <div class="quiz-phonetic" id="fc-phonetic">/kənˈvɜːr.ʒən reɪt/</div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <button class="speak-btn" onclick="event.stopPropagation(); App.speakCurrentFlashcard();" title="ฟังการออกเสียง">
+                🔊
+              </button>
+              <span style="font-size: 0.8rem; color: var(--text-dim);">แตะเพื่อดูความหมาย & 3D Flip</span>
+            </div>
+          </div>
+
+          <!-- Back Face -->
+          <div class="flashcard-face flashcard-back">
+            <div>
+              <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-bottom: 0.4rem;">ความหมายภาษาไทย:</div>
+              <p style="font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.2rem; color: #fff;" id="fc-def-th"></p>
+              
+              <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.4rem;">English Definition:</div>
+              <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.2rem; color: #94a3b8;" id="fc-def-en"></p>
+
+              <div class="vocab-example" id="fc-example"></div>
+            </div>
+            <div style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+              แตะเพื่อพลิกกลับ
+            </div>
+          </div>
+        </div>
+
+        <div class="flashcard-controls">
+          <button class="btn btn-secondary" onclick="App.prevFlashcard()">
+            &larr; ก่อนหน้า
+          </button>
+          <button class="btn btn-secondary" onclick="App.speakCurrentFlashcard()">
+            🔊 ออกเสียง
+          </button>
+          <button class="btn btn-primary" onclick="App.nextFlashcard()">
+            ถัดไป &rarr;
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- VIEW 6: GLOSSARY / DICTIONARY -->
+    <main id="view-glossary" class="view-panel">
+      <div class="glossary-filters">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="glossary-search" class="search-input" placeholder="ค้นหาคำศัพท์ภาษาอังกฤษ หรือความหมายภาษาไทย..." oninput="App.renderGlossary()">
+        </div>
+        <select class="category-select" id="glossary-category-filter" onchange="App.renderGlossary()">
+          <option value="all">📂 ทุกหมวดหมู่</option>
+          <option value="marketing">📈 E-Commerce & Marketing</option>
+          <option value="fintech">💳 FinTech & Payments</option>
+          <option value="data_ai">🤖 Data & AI Analytics</option>
+          <option value="startup">🚀 Startup & Strategy</option>
+          <option value="security">🔒 Cybersecurity & Cloud</option>
+        </select>
+      </div>
+
+      <div class="glossary-list" id="glossary-cards-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- VIEW 7: RESULTS MODAL / SUMMARY -->
+    <main id="view-results" class="view-panel">
+      <div class="results-modal">
+        <div class="results-trophy" id="results-icon">🏆</div>
+        <h2 id="results-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">ยอดเยี่ยมมาก!</h2>
+        <p id="results-subtitle" style="color: var(--text-muted); margin-bottom: 1.5rem;">คุณทำคะแนนได้ในระดับยอดฝีมือ</p>
+
+        <div class="score-display">
+          <span id="results-score">0</span>
+          <span style="font-size: 1.2rem; color: var(--text-muted); font-weight: 500;">คะแนน</span>
+        </div>
+
+        <div class="results-stats-grid">
+          <div class="result-stat-box">
+            <span>ความแม่นยำ</span>
+            <strong id="results-accuracy">100%</strong>
+          </div>
+          <div class="result-stat-box">
+            <span>คอมโบสูงสุด</span>
+            <strong id="results-max-streak">5 🔥</strong>
+          </div>
+          <div class="result-stat-box">
+            <span>XP ที่ได้รับ</span>
+            <strong id="results-earned-xp">+150 ⭐</strong>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn btn-primary" onclick="App.showView('home')">
+            🏠 กลับหน้าหลัก
+          </button>
+          <button class="btn btn-secondary" onclick="App.replayCurrentGame()">
+            🔄 เล่นใหม่อีกครั้ง
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>© 2026 Digital Business Vocabulary Game | Interactive English Learning Web Application</p>
+      <p style="margin-top: 0.4rem; font-size: 0.78rem;">Built with Vanilla HTML, CSS & JavaScript • Ready for GitHub Pages</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="vocab-data.js"></script>
+  <script src="sound.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

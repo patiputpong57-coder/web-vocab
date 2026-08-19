@@ -816,7 +816,7 @@
      * Google Apps Script Web App Integration URL
      * Put your deployed Google Sheet Web App URL here.
      */
-    const webAppUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzVE6wodqurlMz3wI9YSaBvNrXY6JZxPgUJ7558A1JzzZJUwhibIe_giluhn7Vrv54l0Q/exec";
 
     /* ==========================================================================
        1. 40 COMPUTER TECHNOLOGY VOCABULARY TERMS (4 CATEGORIES)
@@ -1780,7 +1780,7 @@
 
       async syncScoreToGoogleSheet(payload) {
         const statusEl = document.getElementById('sheet-sync-status');
-        if (webAppUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+        if (!webAppUrl || webAppUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
           if (statusEl) statusEl.textContent = "ℹ️ คะแนนถูกบันทึกลงเครื่องแล้ว (เชื่อมต่อ Google Sheet ได้โดยใส่ Web App URL)";
           return;
         }
@@ -1790,11 +1790,12 @@
           await fetch(webAppUrl, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
           });
           if (statusEl) statusEl.textContent = "✅ บันทึกคะแนนลง Google Sheet สำเร็จเรียบร้อย!";
         } catch (e) {
+          console.warn("Google Sheet sync error:", e);
           if (statusEl) statusEl.textContent = "⚠️ ไม่สามารถเชื่อมต่อ Google Sheet ได้ บันทึกไว้ในเครื่องเรียบร้อย";
         }
       }

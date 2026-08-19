@@ -3,37 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Cyber Spellcaster: Vocab Quest - 2D Educational Action Game for Learning Computer Technology Terminology">
-  <title>Cyber Spellcaster: Vocab Quest | มหาเวทไซเบอร์ พิชิตศัพท์คอมพิวเตอร์</title>
+  <meta name="description" content="Roblox Vocab Legends: Web Quest - เกมการศึกษาเรียนรู้ศัพท์เว็บไซเบอร์สไตล์ Roblox 3D Blocky">
+  <title>Roblox Vocab Legends: Web Quest | ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</title>
 
-  <!-- Google Fonts: Orbitron, Prompt, Inter -->
+  <!-- Google Fonts: Fredoka, Prompt, Orbitron, Titan One -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;800;900&family=Prompt:wght@300;400;500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Prompt:wght@400;500;600;700;800;900&family=Titan+One&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Canvas Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     /* ==========================================================================
-       CYBERPUNK ARCADE DESIGN SYSTEM
+       ROBLOX BRIGHT & BLOCKY 3D DESIGN SYSTEM
        ========================================================================== */
     :root {
-      --bg-dark: #070913;
-      --bg-panel: rgba(13, 19, 38, 0.85);
-      --bg-panel-solid: #0d1326;
-      --neon-cyan: #00f0ff;
-      --neon-magenta: #ff007f;
-      --neon-yellow: #ffe600;
-      --neon-green: #00ff66;
-      --neon-purple: #9d4edd;
-      --neon-orange: #ff6b00;
-      --text-main: #f0f6fc;
-      --text-muted: #8b9bb4;
-      --border-cyan: rgba(0, 240, 255, 0.4);
-      --font-cyber: 'Orbitron', monospace, sans-serif;
-      --font-thai: 'Prompt', 'Inter', -apple-system, sans-serif;
-      --font-pixel: 'VT323', monospace;
+      --blox-bg-1: #0a1128;
+      --blox-bg-2: #1c2541;
+      --blox-yellow: #ffd700;
+      --blox-gold: #ffaa00;
+      --blox-cyan: #00f0ff;
+      --blox-blue: #0077ff;
+      --blox-pink: #ff2a85;
+      --blox-purple: #b339eb;
+      --blox-green: #2ecc71;
+      --blox-red: #ff3838;
+      --blox-dark: #121829;
+      --blox-card-bg: rgba(20, 28, 55, 0.92);
+      
+      --font-blox-title: 'Titan One', 'Fredoka', cursive, sans-serif;
+      --font-ui: 'Prompt', 'Fredoka', sans-serif;
+      --font-code: 'Orbitron', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      /* 3D Button Shadows */
+      --btn-shadow-blue: 0 6px 0 #0055b3, 0 10px 15px rgba(0, 0, 0, 0.4);
+      --btn-shadow-green: 0 6px 0 #1b8a47, 0 10px 15px rgba(0, 0, 0, 0.4);
+      --btn-shadow-yellow: 0 6px 0 #c28200, 0 10px 15px rgba(0, 0, 0, 0.4);
+      --btn-shadow-pink: 0 6px 0 #b30050, 0 10px 15px rgba(0, 0, 0, 0.4);
+      --btn-shadow-purple: 0 6px 0 #7312a1, 0 10px 15px rgba(0, 0, 0, 0.4);
     }
 
     * {
@@ -45,181 +58,161 @@
     }
 
     body {
-      background: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-thai);
+      background: linear-gradient(135deg, #0a1128 0%, #1c2541 50%, #2e1065 100%);
+      color: #ffffff;
+      font-family: var(--font-ui);
       min-height: 100vh;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
       position: relative;
     }
 
-    /* Animated Cyber Grid Background */
-    body::before {
-      content: '';
+    /* Floating Block Particles in Background */
+    .floating-blocks-bg {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-        radial-gradient(circle at 50% 30%, rgba(157, 78, 221, 0.15), transparent 70%);
-      background-size: 40px 40px, 40px 40px, 100% 100%;
       pointer-events: none;
       z-index: 0;
-    }
-
-    /* Scanline effect */
-    body::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    /* Main Container */
-    #game-wrapper {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      max-width: 1280px;
-      max-height: 760px;
-      background: var(--bg-panel-solid);
-      border: 2px solid var(--border-cyan);
-      border-radius: 12px;
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 30px rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
       overflow: hidden;
-      z-index: 1;
+    }
+
+    .bg-block {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      animation: floatUp 15s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
     }
 
     /* ==========================================================================
-       TOP HUD (STATUS BAR)
+       MAIN GAME FRAMEWORK
        ========================================================================== */
-    .top-hud {
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+      max-width: 1240px;
+      max-height: 760px;
+      background: var(--blox-card-bg);
+      border: 4px solid var(--blox-cyan);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.35), inset 0 0 25px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Top Roblox Status Bar */
+    .blox-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.6rem 1.2rem;
-      background: rgba(8, 12, 24, 0.95);
-      border-bottom: 2px solid var(--border-cyan);
-      font-family: var(--font-cyber);
+      padding: 0.7rem 1.4rem;
+      background: rgba(14, 21, 45, 0.98);
+      border-bottom: 3px solid rgba(0, 240, 255, 0.4);
       z-index: 20;
     }
 
-    .hud-player-info {
+    .player-tag-pill {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.6rem;
+      background: rgba(0, 240, 255, 0.15);
+      border: 2px solid var(--blox-cyan);
+      border-radius: 50px;
+      padding: 0.35rem 0.9rem;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fff;
     }
 
-    .hud-tag {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.82rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px solid var(--border-cyan);
-      border-radius: 4px;
-      color: var(--neon-cyan);
-    }
-
-    .stat-bars {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .bar-container {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .bar-track {
-      width: 120px;
-      height: 12px;
-      background: #111;
-      border: 1px solid #444;
-      border-radius: 3px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .bar-fill {
-      height: 100%;
-      width: 100%;
-      transition: width 0.25s ease-out;
-    }
-
-    .hp-fill { background: linear-gradient(90deg, #ff0055, #ff5500); box-shadow: 0 0 8px #ff0055; }
-    .mana-fill { background: linear-gradient(90deg, #00f0ff, #0088ff); box-shadow: 0 0 8px #00f0ff; }
-    .shield-fill { background: linear-gradient(90deg, #ffe600, #ffaa00); box-shadow: 0 0 8px #ffe600; }
-
-    .hud-game-stats {
+    .blox-stats-group {
       display: flex;
       align-items: center;
       gap: 1.2rem;
     }
 
-    .hud-score-box {
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: var(--neon-yellow);
-      text-shadow: 0 0 10px rgba(255, 230, 0, 0.5);
-    }
-
-    .hud-combo-box {
+    .level-stage-badge {
+      background: var(--blox-pink);
+      color: #fff;
+      font-family: var(--font-blox-title);
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
       font-size: 0.95rem;
-      color: var(--neon-magenta);
-      font-weight: 800;
-      text-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
-    }
-
-    .hud-controls {
+      box-shadow: var(--btn-shadow-pink);
       display: flex;
-      gap: 0.5rem;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .hud-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-cyan);
-      color: var(--neon-cyan);
-      padding: 0.35rem 0.7rem;
-      border-radius: 4px;
+    .stat-coin-box {
+      font-family: var(--font-blox-title);
+      font-size: 1.25rem;
+      color: var(--blox-yellow);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-shadow: 0 2px 0 #996600;
+    }
+
+    .rush-hour-tag {
+      display: none;
+      background: linear-gradient(90deg, #ff0055, #ff5500);
+      color: #fff;
+      font-family: var(--font-blox-title);
+      font-size: 0.85rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 12px;
+      animation: pulseAlert 0.7s infinite alternate;
+    }
+
+    @keyframes pulseAlert {
+      from { transform: scale(0.95); }
+      to { transform: scale(1.08); filter: drop-shadow(0 0 10px #ff0055); }
+    }
+
+    .header-ctrl-btn {
+      background: #2a3556;
+      border: 2px solid #485885;
+      color: #fff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
       cursor: pointer;
-      font-family: var(--font-cyber);
-      font-size: 0.8rem;
-      transition: all 0.15s ease;
+      box-shadow: 0 3px 0 #182035;
+      transition: all 0.1s;
     }
 
-    .hud-btn:hover {
-      background: var(--neon-cyan);
+    .header-ctrl-btn:hover {
+      background: var(--blox-cyan);
       color: #000;
-      box-shadow: 0 0 10px var(--neon-cyan);
+      border-color: var(--blox-cyan);
+    }
+
+    .header-ctrl-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #182035;
     }
 
     /* ==========================================================================
-       CANVAS 2D BATTLEFIELD
+       2D CANVAS BATTLEFIELD
        ========================================================================== */
-    .battlefield-container {
+    .battle-canvas-wrapper {
       flex: 1;
       position: relative;
       width: 100%;
-      background: linear-gradient(180deg, #070a14 0%, #0d152a 70%, #152244 100%);
+      background: radial-gradient(circle at 50% 50%, #1e294b 0%, #10172e 100%);
       overflow: hidden;
     }
 
@@ -229,373 +222,390 @@
       display: block;
     }
 
-    /* Critical Banner & Overlays */
-    #critical-banner {
+    /* Floating Boss Alert */
+    #boss-alert-banner {
       position: absolute;
-      top: 25%;
+      top: 20%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      font-family: var(--font-cyber);
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: var(--neon-yellow);
-      text-shadow: 0 0 20px #ff0055, 0 0 40px #ffe600;
+      background: linear-gradient(135deg, #ff0055, #9900ff);
+      border: 3px solid #ffd700;
+      padding: 0.6rem 1.8rem;
+      border-radius: 30px;
+      font-family: var(--font-blox-title);
+      font-size: 1.8rem;
+      color: #fff;
+      text-shadow: 0 3px 0 #000;
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
       pointer-events: none;
       z-index: 50;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    #critical-banner.show {
+    #boss-alert-banner.show {
       transform: translate(-50%, -50%) scale(1.1);
     }
 
     /* ==========================================================================
-       POWER-UP DOCK (5 ITEMS)
+       ROBLOX POWER-UPS (CLICK ONLY CONTROL - NO KEYBOARD SHORTCUTS)
        ========================================================================== */
-    .powerup-dock {
+    .blox-powerups-dock {
       display: flex;
       justify-content: center;
-      gap: 0.6rem;
-      padding: 0.4rem 1rem;
-      background: rgba(10, 15, 30, 0.9);
-      border-top: 1px solid rgba(0, 240, 255, 0.2);
-      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      gap: 0.75rem;
+      padding: 0.45rem 1rem;
+      background: rgba(14, 21, 45, 0.95);
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
       z-index: 20;
     }
 
-    .powerup-slot {
+    .blox-powerup-btn {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.35rem 0.75rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 0.8rem;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+      transition: all 0.15s ease;
     }
 
-    .powerup-slot.ready {
-      border-color: var(--slot-color, var(--neon-cyan));
-      background: rgba(0, 240, 255, 0.1);
-      box-shadow: 0 0 10px var(--slot-glow, rgba(0, 240, 255, 0.4));
+    .blox-powerup-btn.ready {
+      border-color: var(--pu-color, var(--blox-yellow));
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 4px 0 var(--pu-shadow, #886600);
     }
 
-    .powerup-slot.ready:hover {
+    .blox-powerup-btn.ready:hover {
       transform: translateY(-2px);
-      background: rgba(0, 240, 255, 0.2);
+      box-shadow: 0 6px 0 var(--pu-shadow, #886600), 0 0 15px var(--pu-color, var(--blox-yellow));
     }
 
-    .powerup-slot.disabled {
+    .blox-powerup-btn.ready:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--pu-shadow, #886600);
+    }
+
+    .blox-powerup-btn.disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      filter: grayscale(0.8);
+      filter: grayscale(0.9);
+      box-shadow: none;
     }
 
-    .powerup-key {
-      font-family: var(--font-cyber);
-      font-size: 0.7rem;
-      background: #000;
-      border: 1px solid #555;
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
-      color: #aaa;
+    .pu-icon {
+      font-size: 1.25rem;
     }
 
-    .powerup-name {
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .powerup-count {
-      font-family: var(--font-cyber);
-      font-weight: 800;
-      color: var(--neon-yellow);
+    .pu-badge {
+      background: var(--blox-yellow);
+      color: #000;
+      font-family: var(--font-blox-title);
+      font-size: 0.75rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 8px;
     }
 
     /* ==========================================================================
-       SPELL CASTING INTERFACE (CHOICE / TYPE)
+       QUESTION BANNER & SPELL CASTING INTERFACE (FONT SIZE >= 20PX)
        ========================================================================== */
-    .spellcasting-panel {
-      padding: 0.85rem 1.5rem;
-      background: rgba(6, 9, 20, 0.98);
-      border-top: 2px solid var(--border-cyan);
-      min-height: 140px;
+    .question-deck-panel {
+      padding: 0.9rem 1.6rem;
+      background: rgba(9, 14, 30, 0.98);
+      border-top: 3px solid var(--blox-cyan);
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 0.7rem;
       z-index: 20;
     }
 
-    .target-hud {
+    /* High-contrast Large Question Banner (>= 20px) */
+    .scenario-question-banner {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%), #141c38;
+      border: 2px solid var(--blox-yellow);
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.6rem;
-      padding: 0.4rem 0.8rem;
-      background: rgba(0, 240, 255, 0.05);
-      border-left: 3px solid var(--neon-cyan);
-      border-radius: 4px;
+      gap: 0.8rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
 
-    .target-definition {
-      font-size: 0.98rem;
-      font-weight: 600;
+    .scenario-icon {
+      font-size: 1.8rem;
+    }
+
+    .scenario-text {
+      font-size: 20px; /* EXACTLY >= 20px as required */
+      font-weight: 800;
       color: #ffffff;
+      line-height: 1.35;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
       flex: 1;
+    }
+
+    .scenario-tag {
+      background: var(--blox-cyan);
+      color: #030a1c;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .target-category-badge {
-      font-size: 0.72rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(157, 78, 221, 0.3);
-      border: 1px solid var(--neon-purple);
-      border-radius: 3px;
-      color: #e0aaff;
-      margin-left: 0.8rem;
-    }
-
-    /* Choice Mode */
-    .choices-grid {
+    /* Choices Mode Buttons (Bubbly 3D blocky) */
+    .blox-choices-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.65rem;
+      gap: 0.75rem;
     }
 
-    .choice-btn {
-      background: rgba(18, 26, 51, 0.9);
-      border: 1.5px solid var(--border-cyan);
-      color: var(--text-main);
-      padding: 0.75rem 0.5rem;
-      border-radius: 6px;
-      font-family: var(--font-cyber);
-      font-size: 0.92rem;
-      font-weight: 700;
+    .blox-choice-btn {
+      background: #1f2b54;
+      border: 3px solid #3d518c;
+      border-radius: 12px;
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 1.08rem;
+      font-weight: 800;
+      padding: 0.85rem 0.6rem;
       cursor: pointer;
+      box-shadow: 0 5px 0 #121a36;
+      transition: all 0.1s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.15s ease;
-      position: relative;
-      overflow: hidden;
+      gap: 0.4rem;
+      text-align: center;
     }
 
-    .choice-btn:hover:not(:disabled) {
-      background: rgba(0, 240, 255, 0.18);
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    .blox-choice-btn:hover:not(:disabled) {
+      background: var(--blox-blue);
+      border-color: var(--blox-cyan);
+      box-shadow: var(--btn-shadow-blue);
       transform: translateY(-2px);
     }
 
-    .choice-btn:active:not(:disabled) {
-      transform: translateY(0);
+    .blox-choice-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #121a36;
     }
 
-    .choice-btn.correct {
-      background: rgba(0, 255, 102, 0.25) !important;
-      border-color: var(--neon-green) !important;
-      color: var(--neon-green) !important;
-      box-shadow: 0 0 20px var(--neon-green) !important;
+    .blox-choice-btn.correct {
+      background: var(--blox-green) !important;
+      border-color: #a8ffb2 !important;
+      box-shadow: var(--btn-shadow-green) !important;
+      color: #000 !important;
     }
 
-    .choice-btn.wrong {
-      background: rgba(255, 0, 85, 0.25) !important;
-      border-color: var(--neon-magenta) !important;
-      color: var(--neon-magenta) !important;
-      box-shadow: 0 0 20px var(--neon-magenta) !important;
+    .blox-choice-btn.wrong {
+      background: var(--blox-red) !important;
+      border-color: #ff9999 !important;
+      box-shadow: 0 5px 0 #8a0e0e !important;
+      animation: shake 0.3s;
     }
 
-    .choice-btn.faded {
+    .blox-choice-btn.faded {
       opacity: 0.25;
       pointer-events: none;
     }
 
-    .choice-key {
-      font-size: 0.72rem;
-      color: var(--neon-cyan);
-      opacity: 0.7;
-    }
-
-    /* Type Mode */
-    .typing-input-wrap {
+    /* Type Mode Input */
+    .blox-typing-wrap {
       display: flex;
       gap: 0.8rem;
       align-items: center;
     }
 
-    .typing-input {
+    .blox-type-input {
       flex: 1;
-      background: rgba(18, 26, 51, 0.9);
-      border: 2px solid var(--border-cyan);
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      color: var(--neon-cyan);
-      font-family: var(--font-cyber);
-      font-size: 1.1rem;
-      font-weight: 700;
+      background: #141c38;
+      border: 3px solid var(--blox-cyan);
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      font-family: var(--font-code);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--blox-yellow);
       outline: none;
-      letter-spacing: 1px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
       text-transform: uppercase;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
-    .typing-input:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    .blox-type-input:focus {
+      border-color: var(--blox-yellow);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), inset 0 2px 8px rgba(0, 0, 0, 0.6);
     }
 
     /* ==========================================================================
-       MODALS & OVERLAYS (LOGIN, GAME OVER, LEADERBOARD)
+       CHILD-FRIENDLY BRIGHT LOGIN SCREEN & MODALS
        ========================================================================== */
-    .modal-overlay {
+    .modal-backdrop {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(4, 7, 18, 0.92);
-      backdrop-filter: blur(8px);
+      background: rgba(6, 10, 24, 0.88);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 200;
+      z-index: 100;
       animation: fadeIn 0.3s ease;
     }
 
-    .modal-card {
-      background: #0d1428;
-      border: 2px solid var(--neon-cyan);
-      border-radius: 12px;
-      box-shadow: 0 0 40px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    .blox-dialog-card {
       width: 90%;
-      max-width: 520px;
-      padding: 2rem;
+      max-width: 540px;
+      background: linear-gradient(180deg, #1d274c 0%, #121a36 100%);
+      border: 4px solid var(--blox-yellow);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.4);
+      padding: 2.2rem;
       text-align: center;
       position: relative;
     }
 
-    .modal-title {
-      font-family: var(--font-cyber);
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+    .dialog-avatar-hero {
+      font-size: 4rem;
       margin-bottom: 0.4rem;
+      animation: bounce 1.8s infinite ease-in-out;
     }
 
-    .modal-subtitle {
-      font-size: 0.88rem;
-      color: var(--text-muted);
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .dialog-title {
+      font-family: var(--font-blox-title);
+      font-size: 1.85rem;
+      color: var(--blox-yellow);
+      text-shadow: 0 3px 0 #a36200, 0 0 20px rgba(255, 215, 0, 0.6);
+      margin-bottom: 0.3rem;
+    }
+
+    .dialog-subtitle {
+      font-size: 0.95rem;
+      color: #c4d1eb;
       margin-bottom: 1.5rem;
+      font-weight: 500;
     }
 
-    .form-group {
+    .form-group-field {
       text-align: left;
       margin-bottom: 1rem;
     }
 
-    .form-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
+    .field-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--blox-cyan);
+      margin-bottom: 0.35rem;
       display: block;
-      margin-bottom: 0.3rem;
     }
 
-    .form-input, .form-select {
+    .field-input, .field-select {
       width: 100%;
+      background: #0f162e;
+      border: 2px solid #364673;
+      border-radius: 10px;
       padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-cyan);
-      border-radius: 6px;
-      color: var(--text-main);
-      font-size: 0.95rem;
-      font-family: var(--font-thai);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 600;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
 
-    .form-input:focus, .form-select:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    .field-input:focus, .field-select:focus {
+      border-color: var(--blox-yellow);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     }
 
-    .form-select option {
-      background: #0d1428;
+    .field-select option {
+      background: #121a36;
       color: #fff;
     }
 
-    .start-btn {
+    /* Big Chunky 3D Start Button */
+    .big-blox-btn {
       width: 100%;
       margin-top: 1.2rem;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, var(--neon-cyan) 0%, #0088ff 100%);
-      border: none;
-      border-radius: 6px;
-      color: #030814;
-      font-family: var(--font-cyber);
-      font-size: 1.1rem;
-      font-weight: 900;
+      padding: 1rem;
+      background: linear-gradient(180deg, #38ef7d 0%, #11998e 100%);
+      border: 3px solid #7dffb2;
+      border-radius: 18px;
+      color: #ffffff;
+      font-family: var(--font-blox-title);
+      font-size: 1.35rem;
       cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-      transition: all 0.2s ease;
+      box-shadow: var(--btn-shadow-green);
+      transition: all 0.15s ease;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    .start-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+    .big-blox-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #1b8a47, 0 12px 20px rgba(0, 255, 102, 0.5);
     }
 
-    /* Leaderboard Table */
-    .leaderboard-list {
-      max-height: 200px;
+    .big-blox-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #1b8a47;
+    }
+
+    /* Leaderboard Listing */
+    .leaderboard-container {
+      max-height: 180px;
       overflow-y: auto;
+      background: #0c1226;
+      border: 2px solid #2a3761;
+      border-radius: 12px;
       margin: 1rem 0;
-      text-align: left;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
     }
 
-    .leaderboard-row {
+    .leaderboard-item {
       display: flex;
       justify-content: space-between;
-      padding: 0.5rem 0.8rem;
+      padding: 0.55rem 0.9rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      font-weight: 700;
     }
 
-    .leaderboard-row:nth-child(1) { color: var(--neon-yellow); font-weight: 800; }
-    .leaderboard-row:nth-child(2) { color: #e2e8f0; font-weight: 700; }
-    .leaderboard-row:nth-child(3) { color: #cd7f32; font-weight: 700; }
+    .leaderboard-item:nth-child(1) { color: var(--blox-yellow); }
+    .leaderboard-item:nth-child(2) { color: #e2e8f0; }
+    .leaderboard-item:nth-child(3) { color: #ff9966; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
+      from { opacity: 0; transform: scale(0.96); }
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Screen Shake */
-    .shake {
-      animation: shakeAnim 0.3s ease-in-out;
-    }
-
-    @keyframes shakeAnim {
-      0%, 100% { transform: translate(0, 0); }
-      20% { transform: translate(-6px, 4px); }
-      40% { transform: translate(6px, -4px); }
-      60% { transform: translate(-4px, -2px); }
-      80% { transform: translate(4px, 2px); }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
     }
 
     @media (max-width: 768px) {
-      .choices-grid {
+      .scenario-text {
+        font-size: 17px;
+      }
+      .blox-choices-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-      .powerup-name {
-        display: none;
-      }
-      .stat-bars {
+      .blox-powerup-btn span.pu-name {
         display: none;
       }
     }
@@ -603,278 +613,473 @@
 </head>
 <body>
 
-  <div id="game-wrapper">
-    <!-- TOP HUD -->
-    <header class="top-hud">
-      <div class="hud-player-info">
-        <div class="hud-tag">
-          <span>🧙‍♂️</span>
-          <span id="hud-player-name">Player</span>
+  <!-- Floating Background Blocks -->
+  <div class="floating-blocks-bg" id="bg-blocks"></div>
+
+  <!-- MAIN GAME CONTAINER -->
+  <div id="game-container">
+
+    <!-- TOP ROBLOX HUD -->
+    <header class="blox-header">
+      <div class="player-tag-pill">
+        <span>🤖</span>
+        <span id="hud-student-name">Robloxian</span>
+      </div>
+
+      <div class="blox-stats-group">
+        <!-- Stage Progress: 10 Questions Strict -->
+        <div class="level-stage-badge">
+          <span>🚩 QUESTION</span>
+          <span id="hud-question-idx">1</span>/10
         </div>
 
-        <div class="stat-bars">
-          <!-- HP Bar -->
-          <div class="bar-container">
-            <span style="color: #ff0055;">HP</span>
-            <div class="bar-track">
-              <div class="bar-fill hp-fill" id="hp-bar" style="width: 100%;"></div>
-            </div>
-            <span id="hp-text">100/100</span>
-          </div>
+        <div class="rush-hour-tag" id="rush-hour-banner">
+          ⚡ RUSH HOUR (+30% SPEED)
+        </div>
 
-          <!-- Mana Bar -->
-          <div class="bar-container">
-            <span style="color: var(--neon-cyan);">MP</span>
-            <div class="bar-track">
-              <div class="bar-fill mana-fill" id="mana-bar" style="width: 100%;"></div>
-            </div>
-            <span id="mana-text">100/100</span>
-          </div>
-
-          <!-- Shield Bar -->
-          <div class="bar-container" id="shield-hud-box" style="display: none;">
-            <span style="color: var(--neon-yellow);">🛡️</span>
-            <div class="bar-track" style="width: 60px;">
-              <div class="bar-fill shield-fill" id="shield-bar" style="width: 100%;"></div>
-            </div>
-          </div>
+        <div class="stat-coin-box">
+          <span>🪙</span>
+          <span id="hud-score">0</span>
         </div>
       </div>
 
-      <div class="hud-game-stats">
-        <div class="hud-combo-box">
-          🔥 <span id="hud-combo">0</span> COMBO
-        </div>
-        <div class="hud-score-box">
-          SCORE: <span id="hud-score">0</span>
-        </div>
-      </div>
-
-      <div class="hud-controls">
-        <button class="hud-btn" id="btn-sound-toggle" onclick="AudioEngine.toggleMute()">🔊 BGM</button>
-        <button class="hud-btn" onclick="Game.togglePause()">⏸️</button>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="header-ctrl-btn" id="btn-sound-toggle" onclick="AudioEngine.toggleMute()">🔊 SOUND</button>
+        <button class="header-ctrl-btn" onclick="Game.openLeaderboard()">🏆 TOP 10</button>
       </div>
     </header>
 
-    <!-- 2D BATTLEFIELD CANVAS -->
-    <main class="battlefield-container">
+    <!-- 2D BATTLE CANVAS -->
+    <main class="battle-canvas-wrapper">
       <canvas id="gameCanvas"></canvas>
-      <div id="critical-banner">CRITICAL CAST! 💥</div>
+      <div id="boss-alert-banner">👑 BOSS BATTLE INCOMING!</div>
     </main>
 
-    <!-- POWER-UP SYSTEM (5 ITEMS) -->
-    <section class="powerup-dock">
-      <!-- 1. Freeze -->
-      <div class="powerup-slot disabled" id="pu-freeze" style="--slot-color: #00f0ff; --slot-glow: rgba(0,240,255,0.4);" onclick="Game.activatePowerup('freeze')">
-        <span class="powerup-key">Q</span>
-        <span>⏱️</span>
-        <span class="powerup-name">Freeze (แช่แข็ง)</span>
-        <span class="powerup-count" id="count-freeze">0</span>
-      </div>
+    <!-- ROBLOX POWER-UP DOCK (5 ITEMS - CLICK ONLY CONTROL) -->
+    <section class="blox-powerups-dock">
+      <!-- 1. Freeze Clock -->
+      <button class="blox-powerup-btn disabled" id="pu-freeze" style="--pu-color: #00f0ff; --pu-shadow: #0088b3;" onclick="Game.usePowerup('freeze')">
+        <span class="pu-icon">⏱️</span>
+        <span class="pu-name">Freeze (5s)</span>
+        <span class="pu-badge" id="count-freeze">0</span>
+      </button>
 
-      <!-- 2. Nuke -->
-      <div class="powerup-slot disabled" id="pu-nuke" style="--slot-color: #ff0055; --slot-glow: rgba(255,0,85,0.4);" onclick="Game.activatePowerup('nuke')">
-        <span class="powerup-key">W</span>
-        <span>💣</span>
-        <span class="powerup-name">Nuke (ล้างจอ)</span>
-        <span class="powerup-count" id="count-nuke">0</span>
-      </div>
+      <!-- 2. Blox Nuke -->
+      <button class="blox-powerup-btn disabled" id="pu-nuke" style="--pu-color: #ff3838; --pu-shadow: #990000;" onclick="Game.usePowerup('nuke')">
+        <span class="pu-icon">💣</span>
+        <span class="pu-name">Blox Nuke</span>
+        <span class="pu-badge" id="count-nuke">0</span>
+      </button>
 
-      <!-- 3. Hint -->
-      <div class="powerup-slot disabled" id="pu-hint" style="--slot-color: #ffe600; --slot-glow: rgba(255,230,0,0.4);" onclick="Game.activatePowerup('hint')">
-        <span class="powerup-key">E</span>
-        <span>💡</span>
-        <span class="powerup-name">Auto-Hint</span>
-        <span class="powerup-count" id="count-hint">0</span>
-      </div>
+      <!-- 3. Super Hint -->
+      <button class="blox-powerup-btn disabled" id="pu-hint" style="--pu-color: #ffd700; --pu-shadow: #996600;" onclick="Game.usePowerup('hint')">
+        <span class="pu-icon">💡</span>
+        <span class="pu-name">Super Hint</span>
+        <span class="pu-badge" id="count-hint">0</span>
+      </button>
 
-      <!-- 4. Shield -->
-      <div class="powerup-slot disabled" id="pu-shield" style="--slot-color: #9d4edd; --slot-glow: rgba(157,78,221,0.4);" onclick="Game.activatePowerup('shield')">
-        <span class="powerup-key">R</span>
-        <span>🛡️</span>
-        <span class="powerup-name">Mana Shield</span>
-        <span class="powerup-count" id="count-shield">0</span>
-      </div>
+      <!-- 4. Roblox Shield -->
+      <button class="blox-powerup-btn disabled" id="pu-shield" style="--pu-color: #b339eb; --pu-shadow: #661188;" onclick="Game.usePowerup('shield')">
+        <span class="pu-icon">🛡️</span>
+        <span class="pu-name">Roblox Shield</span>
+        <span class="pu-badge" id="count-shield">0</span>
+      </button>
 
-      <!-- 5. 2x Score -->
-      <div class="powerup-slot disabled" id="pu-double" style="--slot-color: #00ff66; --slot-glow: rgba(0,255,102,0.4);" onclick="Game.activatePowerup('double')">
-        <span class="powerup-key">T</span>
-        <span>⚡</span>
-        <span class="powerup-name">2x Score</span>
-        <span class="powerup-count" id="count-double">0</span>
-      </div>
+      <!-- 5. 2x XP Boost -->
+      <button class="blox-powerup-btn disabled" id="pu-double" style="--pu-color: #2ecc71; --pu-shadow: #146633;" onclick="Game.usePowerup('double')">
+        <span class="pu-icon">⚡</span>
+        <span class="pu-name">2x Boost (10s)</span>
+        <span class="pu-badge" id="count-double">0</span>
+      </button>
     </section>
 
-    <!-- SPELL CASTING INTERFACE -->
-    <footer class="spellcasting-panel">
-      <div class="target-hud">
-        <span style="font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700; margin-right: 0.5rem;">TARGET DEF:</span>
-        <div class="target-definition" id="active-target-def">กำลังสแกนหาเป้าหมายไวรัสในระบบ...</div>
-        <div class="target-category-badge" id="active-target-cat">CATEGORY</div>
+    <!-- QUESTION BANNER (FONT SIZE >= 20PX) & CHOICES -->
+    <footer class="question-deck-panel">
+      <!-- High-contrast Large Question Prompt (>= 20px) -->
+      <div class="scenario-question-banner">
+        <div class="scenario-icon" id="scenario-icon">🎮</div>
+        <div class="scenario-text" id="scenario-text">
+          กำลังเตรียมความท้าทายภารกิจสร้างเว็บ...
+        </div>
+        <div class="scenario-tag" id="scenario-category-badge">HTML TAGS</div>
       </div>
 
       <!-- Choice Mode Container -->
-      <div class="choices-grid" id="choices-container">
-        <!-- 4 choices injected dynamically -->
+      <div class="blox-choices-grid" id="choices-container">
+        <!-- 4 Bubbly Roblox Buttons -->
       </div>
 
       <!-- Type Mode Container -->
-      <div class="typing-input-wrap" id="typing-container" style="display: none;">
-        <input type="text" id="type-input" class="typing-input" placeholder="พิมพ์คำศัพท์ภาษาอังกฤษที่นี่แล้วกด ENTER..." autocomplete="off">
+      <div class="blox-typing-wrap" id="typing-container" style="display: none;">
+        <input type="text" id="blox-type-input" class="blox-type-input" placeholder="พิมพ์คำศัพท์ภาษาอังกฤษ เช่น <html> หรือ font-size แล้วกด ENTER..." autocomplete="off">
       </div>
     </footer>
 
-    <!-- MODAL 1: REGISTRATION / LOGIN SCREEN -->
-    <div class="modal-overlay" id="modal-login">
-      <div class="modal-card">
-        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧙‍♂️⚡</div>
-        <h1 class="modal-title">CYBER SPELLCASTER</h1>
-        <p class="modal-subtitle">VOCAB QUEST: มหาเวทไซเบอร์ พิชิตศัพท์คอมพิวเตอร์</p>
+    <!-- MODAL 1: BRIGHT CHILD-FRIENDLY REGISTRATION SCREEN -->
+    <div class="modal-backdrop" id="modal-login">
+      <div class="blox-dialog-card">
+        <div class="dialog-avatar-hero">🧱✨</div>
+        <h1 class="dialog-title">ROBLOX VOCAB LEGENDS</h1>
+        <p class="dialog-subtitle">ภารกิจมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ 10 ข้อสุดมันส์!</p>
 
-        <div class="form-group">
-          <label class="form-label">รหัสผู้เรียน (Student ID)</label>
-          <input type="text" id="input-student-id" class="form-input" placeholder="เช่น 6601001234" required>
+        <div class="form-group-field">
+          <label class="field-label">รหัสผู้เรียน (Student ID)</label>
+          <input type="text" id="input-student-id" class="field-input" placeholder="กรอกรหัสนักเรียน เช่น 6601234" required>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">ชื่อ - นามสกุล (Student Name)</label>
-          <input type="text" id="input-student-name" class="form-input" placeholder="เช่น สมชาย สายโค้ด" required>
+        <div class="form-group-field">
+          <label class="field-label">ชื่อ - นามสกุล (Student Name)</label>
+          <input type="text" id="input-student-name" class="field-input" placeholder="กรอกชื่อ-นามสกุล เช่น น้องบล็อกซ์ สายโค้ด" required>
         </div>
 
-        <div class="form-group" style="display: flex; gap: 0.8rem;">
-          <div style="flex: 1;">
-            <label class="form-label">หมวดหมู่คำศัพท์</label>
-            <select id="select-category" class="form-select">
-              <option value="all">📁 ทุกหมวดหมู่ (40 คำศัพท์)</option>
-              <option value="1">1. Web Code & Styling</option>
-              <option value="2">2. Hosting, Server & UI/UX</option>
-              <option value="3">3. Database & Security</option>
-              <option value="4">4. SEO & Digital Tech</option>
+        <div style="display: flex; gap: 0.8rem; margin-bottom: 0.5rem;">
+          <div style="flex: 1;" class="form-group-field">
+            <label class="field-label">หมวดหมู่ด่าน</label>
+            <select id="select-category" class="field-select">
+              <option value="all">🌟 ทุกหมวดหมู่รวมกัน (40 คำ)</option>
+              <option value="1">1. HTML & Structural Tags</option>
+              <option value="2">2. CSS & Styling Attributes</option>
+              <option value="3">3. JavaScript & Logic</option>
+              <option value="4">4. Server, Database & Deploy</option>
             </select>
           </div>
 
-          <div style="flex: 1;">
-            <label class="form-label">โหมดการเล่น</label>
-            <select id="select-mode" class="form-select">
-              <option value="choice">🎯 Choice Mode (กดช้อยส์ 1-4)</option>
+          <div style="flex: 1;" class="form-group-field">
+            <label class="field-label">โหมดการเล่น</label>
+            <select id="select-mode" class="field-select">
+              <option value="choice">🎯 Choice Mode (กดปุ่มช้อยส์)</option>
               <option value="type">⌨️ Type Mode (พิมพ์คำศัพท์)</option>
             </select>
           </div>
         </div>
 
-        <button class="start-btn" onclick="Game.submitLoginAndStart()">
-          🚀 เริ่มการต่อสู้ (START GAME)
+        <button class="big-blox-btn" onclick="Game.submitRegistrationAndStart()">
+          🚀 START GAME / เข้าสู่เกม
         </button>
       </div>
     </div>
 
-    <!-- MODAL 2: GAME OVER / VICTORY / RESULTS -->
-    <div class="modal-overlay" id="modal-results" style="display: none;">
-      <div class="modal-card">
-        <div id="results-icon" style="font-size: 3.5rem; margin-bottom: 0.5rem;">🏆</div>
-        <h2 class="modal-title" id="results-title">MISSION COMPLETE!</h2>
-        <p class="modal-subtitle" id="results-subtitle">คุณปกป้องเซิร์ฟเวอร์จากไวรัสได้สำเร็จ</p>
+    <!-- MODAL 2: STAGE CLEAR / RESULTS MODAL (STRICT 10 QUESTIONS COMPLETE) -->
+    <div class="modal-backdrop" id="modal-stage-clear" style="display: none;">
+      <div class="blox-dialog-card">
+        <div style="font-size: 3.8rem; margin-bottom: 0.4rem;" id="results-avatar">🎉🏆</div>
+        <h2 class="dialog-title" id="results-title">STAGE CLEAR!</h2>
+        <p class="dialog-subtitle" id="results-subtitle">คุณตอบคำถามครบทั้ง 10 ข้อสำเร็จแล้ว!</p>
 
-        <div style="display: flex; justify-content: space-around; margin: 1rem 0; padding: 0.8rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+        <div style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem; margin: 1rem 0;">
           <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">SCORE</div>
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-yellow);" id="res-score">0</div>
+            <div style="font-size: 0.8rem; color: #a4b3d6;">SCORE (เหรียญ)</div>
+            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-yellow);" id="res-score">0</div>
           </div>
           <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">ACCURACY</div>
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-green);" id="res-accuracy">100%</div>
+            <div style="font-size: 0.8rem; color: #a4b3d6;">ACCURACY</div>
+            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-green);" id="res-accuracy">100%</div>
           </div>
           <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">MAX STREAK</div>
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--neon-magenta);" id="res-streak">0 🔥</div>
+            <div style="font-size: 0.8rem; color: #a4b3d6;">TIME USED</div>
+            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-cyan);" id="res-time">0s</div>
           </div>
         </div>
 
-        <div id="sheet-sync-status" style="font-size: 0.8rem; color: var(--neon-cyan); margin-bottom: 0.5rem;">
-          📡 กำลังบันทึกคะแนนไปยัง Google Sheet...
+        <div id="sync-status-msg" style="font-size: 0.85rem; color: var(--blox-cyan); margin: 0.6rem 0; font-weight: 700;">
+          📡 กำลังบันทึกคะแนนเข้าสู่ระบบ...
         </div>
 
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-top: 1rem; text-align: left;">
-          🏆 TOP 5 LEADERBOARD
+        <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+          <button class="big-blox-btn" style="flex: 1; margin-top: 0;" onclick="Game.restartLevel()">
+            🔄 เล่นด่านนี้ใหม่อีกครั้ง
+          </button>
+          <button class="header-ctrl-btn" style="padding: 0.8rem 1rem; border-radius: 16px; font-weight: 800;" onclick="Game.manualSyncSheet()">
+            📤 ส่งคะแนนซ้ำ
+          </button>
         </div>
-        <div class="leaderboard-list" id="leaderboard-entries">
-          <!-- Leaderboard Rows -->
+      </div>
+    </div>
+
+    <!-- MODAL 3: LEADERBOARD MODAL -->
+    <div class="modal-backdrop" id="modal-leaderboard" style="display: none;">
+      <div class="blox-dialog-card">
+        <h2 class="dialog-title">🏆 TOP 10 LEADERBOARD</h2>
+        <p class="dialog-subtitle">ตารางอันดับยอดฝีมือนักสร้างเว็บ Robloxian</p>
+
+        <div class="leaderboard-container" id="leaderboard-list">
+          <!-- Populated dynamically -->
         </div>
 
-        <button class="start-btn" onclick="Game.restartGame()">
-          🔄 เล่นใหม่อีกครั้ง (REPLAY)
+        <button class="header-ctrl-btn" style="width: 100%; padding: 0.8rem; border-radius: 12px; font-size: 1rem;" onclick="Game.closeLeaderboard()">
+          ปิดหน้าต่าง (CLOSE)
         </button>
       </div>
     </div>
+
   </div>
 
   <!-- ==========================================================================
-       JAVASCRIPT GAME ENGINE & VOCAB DATABASE
+       JAVASCRIPT GAME ENGINE & SCENARIO DATABASE
        ========================================================================== -->
   <script>
     /**
-     * Google Apps Script Web App Integration URL
-     * Put your deployed Google Sheet Web App URL here.
+     * Google Apps Script Web App Integration Endpoint
      */
     const webAppUrl = "https://script.google.com/macros/s/AKfycbzVE6wodqurlMz3wI9YSaBvNrXY6JZxPgUJ7558A1JzzZJUwhibIe_giluhn7Vrv54l0Q/exec";
 
     /* ==========================================================================
-       1. 40 COMPUTER TECHNOLOGY VOCABULARY TERMS (4 CATEGORIES)
+       1. 40 DETAILED SCENARIO-BASED WEB VOCABULARY (4 CATEGORIES)
        ========================================================================== */
-    const VOCAB_DATABASE = [
-      // Category 1: Web Structure, Code & Styling
-      { id: 1, category: 1, catName: "Web & Styling", term: "HTML", def: "ภาษาโครงสร้างหลักที่ใช้กำหนดองค์ประกอบและเนื้อหาบนเว็บเพจ" },
-      { id: 2, category: 1, catName: "Web & Styling", term: "CSS", def: "ภาษาที่ใช้จัดตกแต่งรูปแบบ สไตล์ สีสัน และเค้าโครงของเว็บเพจ" },
-      { id: 3, category: 1, catName: "Web & Styling", term: "JavaScript", def: "ภาษาโปรแกรมสำหรับใส่ความฟังก์ชัน Interactive และการตอบสนองบนเว็บ" },
-      { id: 4, category: 1, catName: "Web & Styling", term: "DOM", def: "โครงสร้างต้นไม้ที่เบราว์เซอร์ใช้จัดระเบียบองค์ประกอบ HTML" },
-      { id: 5, category: 1, catName: "Web & Styling", term: "Tag", def: "สัญลักษณ์คุมข้อความใน HTML เพื่อบอกประเภทเนื้อหา" },
-      { id: 6, category: 1, catName: "Web & Styling", term: "Attribute", def: "คุณลักษณะเสริมที่ใส่ใน Tag เพื่อกำหนดค่าเพิ่มเติม" },
-      { id: 7, category: 1, catName: "Web & Styling", term: "Flexbox", def: "ระบบจัดเค้าโครง CSS แบบ 1 มิติที่ช่วยจัดวาง Element ให้ยืดหยุ่น" },
-      { id: 8, category: 1, catName: "Web & Styling", term: "Grid", def: "ระบบจัดเค้าโครง CSS แบบ 2 มิติสำหรับเลย์เอาต์ซับซ้อน" },
-      { id: 9, category: 1, catName: "Web & Styling", term: "Responsive Design", def: "การออกแบบเว็บให้รองรับการแสดงผลทุกขนาดหน้าจอ" },
-      { id: 10, category: 1, catName: "Web & Styling", term: "Framework", def: "ชุดโค้ดและเครื่องมือสำเร็จรูปที่ช่วยให้เขียนโปรแกรมได้เร็วขึ้น" },
+    const VOCAB_SCENARIOS = [
+      // Category 1: HTML & Structural Tags
+      {
+        id: 1, category: 1, catName: "HTML Tags",
+        term: "<html>",
+        ttsPronounce: "HTML tag: The root of the entire webpage",
+        scenario: "🌐 คุณกำลังเริ่มต้นเขียนโครงสร้างเว็บไซต์ใหม่ทั้งหมด ต้องใช้แท็กรากฐานตัวใดครอบโค้ดทั้งหน้าเว็บ?"
+      },
+      {
+        id: 2, category: 1, catName: "HTML Tags",
+        term: "<head>",
+        ttsPronounce: "Head tag: Stores metadata, title, and stylesheets",
+        scenario: "⚙️ ต้องการใส่ชื่อหน้าเว็บ (Title) และตั้งค่า Meta Data สำหรับ SEO ต้องใส่ไว้ในส่วนใดของ HTML?"
+      },
+      {
+        id: 3, category: 1, catName: "HTML Tags",
+        term: "<body>",
+        ttsPronounce: "Body tag: Contains visible contents of the website",
+        scenario: "🎨 ต้องการวางข้อความ รูปภาพ ปุ่มกด และเนื้อหาทั้งหมดที่ให้ผู้เข้าชมมองเห็น ต้องใส่ในส่วนใด?"
+      },
+      {
+        id: 4, category: 1, catName: "HTML Tags",
+        term: "<header>",
+        ttsPronounce: "Header tag: Top introductory navigation container",
+        scenario: "👑 ส่วนบนสุดของเว็บไซต์ที่มักจะวางโลโก้โรงเรียนและแถบเมนูนำทางหลัก ควรใช้แท็กใด?"
+      },
+      {
+        id: 5, category: 1, catName: "HTML Tags",
+        term: "<footer>",
+        ttsPronounce: "Footer tag: Bottom copyright and contact bar",
+        scenario: "📜 แถบด้านล่างสุดของเว็บที่ต้องการใส่ข้อความลิขสิทธิ์ © 2026 และช่องทางติดต่อ ควรใช้แท็กใด?"
+      },
+      {
+        id: 6, category: 1, catName: "HTML Tags",
+        term: "<h1>",
+        ttsPronounce: "H1 tag: Top level major heading",
+        scenario: "📢 ต้องการสร้างหัวข้อข่าวหลักที่มีขนาดตัวอักษรใหญ่และสำคัญที่สุดในหน้าเว็บ ควรใช้แท็กใด?"
+      },
+      {
+        id: 7, category: 1, catName: "HTML Tags",
+        term: "<p>",
+        ttsPronounce: "P tag: Paragraph block of text",
+        scenario: "📝 ต้องการเขียนเนื้อหาบทความแบ่งเป็นย่อหน้าให้อ่านง่ายและเป็นระเบียบ ควรใช้แท็กใด?"
+      },
+      {
+        id: 8, category: 1, catName: "HTML Tags",
+        term: "<a>",
+        ttsPronounce: "A tag: Anchor hyperlink to navigate pages",
+        scenario: "🔗 ต้องการทำลิงก์ให้ผู้ใช้คลิกแล้วเปลี่ยนหน้าไปยังเว็บ Google ทันที ต้องใช้แท็กใด?"
+      },
+      {
+        id: 9, category: 1, catName: "HTML Tags",
+        term: "<img>",
+        ttsPronounce: "Image tag: Embeds graphics and photos",
+        scenario: "🖼️ ต้องการนำรูปภาพสัตว์เลี้ยงสุดน่ารักมาแสดงผลบนหน้าเว็บไซต์ ต้องใช้แท็กใด?"
+      },
+      {
+        id: 10, category: 1, catName: "HTML Tags",
+        term: "<br>",
+        ttsPronounce: "BR tag: Line break within text",
+        scenario: "↩️ ต้องการสั่งให้ข้อความตัดขึ้นบรรทัดใหม่ทันทีโดยไม่ต้องแยกเป็นย่อหน้าใหม่ ต้องใช้แท็กใด?"
+      },
 
-      // Category 2: Systems, Hosting, Domain & Design
-      { id: 11, category: 2, catName: "Systems & Hosting", term: "Web Server", def: "เครื่องคอมพิวเตอร์ที่ทำหน้าที่จัดเก็บและส่งมอบไฟล์เว็บไซต์" },
-      { id: 12, category: 2, catName: "Systems & Hosting", term: "Hosting", def: "บริการให้เช่าพื้นที่บน Web Server เพื่อรับฝากเว็บไซต์" },
-      { id: 13, category: 2, catName: "Systems & Hosting", term: "Domain Name", def: "ชื่อที่ใช้ระบุตัวตนของเว็บไซต์บนอินเทอร์เน็ตแทน IP Address" },
-      { id: 14, category: 2, catName: "Systems & Hosting", term: "DNS", def: "ระบบแปลงชื่อ Domain Name ให้เป็นหมายเลข IP Address" },
-      { id: 15, category: 2, catName: "Systems & Hosting", term: "IP Address", def: "หมายเลขประจำเครื่องคอมพิวเตอร์ที่เชื่อมต่ออยู่ในเครือข่าย" },
-      { id: 16, category: 2, catName: "Systems & Hosting", term: "UI", def: "ส่วนต่อประสานผู้ใช้ หน้าตา สัญลักษณ์ และการจัดวางปุ่มบนหน้าจอ" },
-      { id: 17, category: 2, catName: "Systems & Hosting", term: "UX", def: "ประสบการณ์และความพึงพอใจโดยรวมของผู้ใช้เมื่อใช้งานระบบ" },
-      { id: 18, category: 2, catName: "Systems & Hosting", term: "Wireframe", def: "แบบโครงร่างขาวดำจำลองหน้าตาเว็บก่อนเริ่มออกแบบจริง" },
-      { id: 19, category: 2, catName: "Systems & Hosting", term: "Prototype", def: "ตัวอย่างแบบจำลองโต้ตอบได้ ใช้ทดสอบการทำงานของเว็บก่อนพัฒนาจริง" },
-      { id: 20, category: 2, catName: "Systems & Hosting", term: "Client-Side", def: "การประมวลผลข้อมูลที่เกิดขึ้นในฝั่งของเว็บเบราว์เซอร์ผู้ใช้" },
+      // Category 2: CSS & Styling Attributes
+      {
+        id: 11, category: 2, catName: "CSS Styling",
+        term: "color",
+        ttsPronounce: "Color: Sets foreground text font color",
+        scenario: "🎨 ต้องการเปลี่ยนสีตัวอักษรของข้อความให้เป็นสีแดงสด (Red) ต้องใช้คำสั่ง CSS ใด?"
+      },
+      {
+        id: 12, category: 2, catName: "CSS Styling",
+        term: "background-color",
+        ttsPronounce: "Background color: Sets element background hue",
+        scenario: "🌈 ต้องการเปลี่ยนสีพื้นหลังของการ์ดข้อความให้เป็นสีเหลืองพาสเทล ต้องใช้คำสั่ง CSS ใด?"
+      },
+      {
+        id: 13, category: 2, catName: "CSS Styling",
+        term: "font-size",
+        ttsPronounce: "Font size: Configures typography text dimension",
+        scenario: "🔍 ตัวหนังสือเล็กเกินไปจนอ่านไม่ออก! ต้องการเพิ่มขนาดตัวอักษรเป็น 24px ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 14, category: 2, catName: "CSS Styling",
+        term: "margin",
+        ttsPronounce: "Margin: Outer spacing around elements",
+        scenario: "↔️ กล่องข้อความสองกล่องติดกันเกินไป! ต้องการเพิ่มระยะห่างภายนอกเส้นขอบ ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 15, category: 2, catName: "CSS Styling",
+        term: "padding",
+        ttsPronounce: "Padding: Inner space between border and content",
+        scenario: "📦 ข้อความชิดขอบกล่องเกินไป ต้องการเพิ่มระยะเว้นว่างภายในกล่อง ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 16, category: 2, catName: "CSS Styling",
+        term: "border",
+        ttsPronounce: "Border: Outline stroke surrounding element",
+        scenario: "🔲 ต้องการวาดเส้นกรอบล้อมรอบรูปภาพขนาด 2px สีน้ำเงิน ต้องใช้คำสั่ง CSS ใด?"
+      },
+      {
+        id: 17, category: 2, catName: "CSS Styling",
+        term: "display",
+        ttsPronounce: "Display: Controls layout render behavior",
+        scenario: "📐 ต้องการกำหนดรูปแบบการแสดงผลของบล็อก เช่น เปลี่ยนเป็น flex หรือ inline-block ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 18, category: 2, catName: "CSS Styling",
+        term: "flex",
+        ttsPronounce: "Flex: Dynamic flexible responsive layout",
+        scenario: "🧩 ต้องการจัดวางปุ่มกด 3 ปุ่มให้อยู่กึ่งกลางหน้าจอและยืดหยุ่นได้อัตโนมัติ ต้องใช้ระบบ CSS ใด?"
+      },
+      {
+        id: 19, category: 2, catName: "CSS Styling",
+        term: "width",
+        ttsPronounce: "Width: Defines horizontal dimension",
+        scenario: "📏 ต้องการกำหนดความกว้างของการ์ดตัวละครให้มีขนาด 300px ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 20, category: 2, catName: "CSS Styling",
+        term: "height",
+        ttsPronounce: "Height: Defines vertical dimension",
+        scenario: "📐 ต้องการกำหนดความสูงของแถบเมนูนำทางให้มีขนาด 60px ต้องใช้คำสั่งใด?"
+      },
 
-      // Category 3: Data Storage, Security & CMS
-      { id: 21, category: 3, catName: "Data & Security", term: "Database", def: "ระบบจัดเก็บข้อมูลอย่างเป็นระเบียบเพื่อให้ค้นหาและจัดการได้ง่าย" },
-      { id: 22, category: 3, catName: "Data & Security", term: "SQL", def: "ภาษามาตรฐานที่ใช้ในการบริหารจัดการและคิวรีฐานข้อมูล" },
-      { id: 23, category: 3, catName: "Data & Security", term: "CMS", def: "ระบบช่วยสร้างและจัดการเนื้อหาบนเว็บโดยไม่ต้องเขียนโค้ดทั้งหมด" },
-      { id: 24, category: 3, catName: "Data & Security", term: "SSL/TLS", def: "โพรโทคอลความปลอดภัยที่ใช้เข้ารหัสข้อมูลระหว่างเบราว์เซอร์กับเซิร์ฟเวอร์" },
-      { id: 25, category: 3, catName: "Data & Security", term: "HTTPS", def: "โปรโตคอลการสื่อสารเว็บแบบปลอดภัยที่มีการเข้ารหัสข้อมูล" },
-      { id: 26, category: 3, catName: "Data & Security", term: "Authentication", def: "กระบวนการยืนยันตัวตนของผู้ใช้ เช่น การล็อกอินด้วยรหัสผ่าน" },
-      { id: 27, category: 3, catName: "Data & Security", term: "Authorization", def: "กระบวนการตรวจสอบสิทธิ์การเข้าถึงข้อมูลของผู้ใช้" },
-      { id: 28, category: 3, catName: "Data & Security", term: "Encryption", def: "การเข้ารหัสข้อมูลเปลี่ยนข้อความธรรมดาให้กลายเป็นรหัสลับ" },
-      { id: 29, category: 3, catName: "Data & Security", term: "Backup", def: "การสำรองข้อมูลไว้ในอีกแหล่งเพื่อป้องกันข้อมูลสูญหาย" },
-      { id: 30, category: 3, catName: "Data & Security", term: "CRUD", def: "ปฏิบัติการพื้นฐานฐานข้อมูล Create Read Update Delete" },
+      // Category 3: JavaScript & Logic
+      {
+        id: 21, category: 3, catName: "JS Logic",
+        term: "let / const",
+        ttsPronounce: "Let and Const: Declare storage variables",
+        scenario: "💾 ต้องการสร้างกล่องเก็บข้อมูลคะแนนของผู้เล่น (Variable) ใน JavaScript ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 22, category: 3, catName: "JS Logic",
+        term: "function",
+        ttsPronounce: "Function: Reusable block of computational code",
+        scenario: "⚙️ ต้องการเขียนชุดคำสั่งการคำนวณคะแนนรวมไว้เพื่อเรียกใช้งานซ้ำๆ ได้ ต้องสร้างอะไร?"
+      },
+      {
+        id: 23, category: 3, catName: "JS Logic",
+        term: "if...else",
+        ttsPronounce: "If Else: Conditional decision branching logic",
+        scenario: "🤔 ถ้าคะแนนมากกว่า 80 ให้ผ่าน มิฉะนั้นให้สอบใหม่! โครงสร้างตรรกะตัดสินใจนี้เรียกว่าอะไร?"
+      },
+      {
+        id: 24, category: 3, catName: "JS Logic",
+        term: "addEventListener",
+        ttsPronounce: "Add event listener: Captures user clicks and keys",
+        scenario: "🖱️ ต้องการให้โปรแกรมคอยดักฟังเหตุการณ์เมื่อผู้ใช้ 'คลิกปุ่ม' เพื่อยิงเวทมนตร์ ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 25, category: 3, catName: "JS Logic",
+        term: "console.log()",
+        ttsPronounce: "Console log: Prints debugging output to console",
+        scenario: "🐞 โปรแกรมเกิดข้อผิดพลาด! ต้องการพิมพ์ข้อความตรวจสอบค่าตัวแปรลงใน Developer Console ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 26, category: 3, catName: "JS Logic",
+        term: "alert()",
+        ttsPronounce: "Alert: Pops up a notification modal message",
+        scenario: "🔔 ต้องการสั่งให้เบราว์เซอร์แสดงหน้าต่างป็อปอัปข้อความเตือนขึ้นมาทันที ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 27, category: 3, catName: "JS Logic",
+        term: "Array",
+        ttsPronounce: "Array: Ordered collection list of elements",
+        scenario: "📋 ต้องการเก็บรายชื่อนักเรียน 10 คนไว้ในตัวแปรตัวเดียวในรูปแบบรายการ ต้องใช้โครงสร้างข้อมูลใด?"
+      },
+      {
+        id: 28, category: 3, catName: "JS Logic",
+        term: "Loop (for/while)",
+        ttsPronounce: "Loop: Iterates code repeatedly",
+        scenario: "🔄 ต้องการให้โค้ดวาดเหรียญทองซ้ำๆ จำนวน 100 เหรียญบนหน้าจอ ต้องใช้คำสั่งควบคุมใด?"
+      },
+      {
+        id: 29, category: 3, catName: "JS Logic",
+        term: "document.getElementById()",
+        ttsPronounce: "Get element by ID: Selects DOM element by unique ID",
+        scenario: "🎯 ต้องการค้นหาและดึงองค์ประกอบ HTML ที่มีรหัส id='score' มาใช้งานใน JS ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 30, category: 3, catName: "JS Logic",
+        term: "return",
+        ttsPronounce: "Return: Sends result output back from function",
+        scenario: "📤 ฟังก์ชันคำนวณเสร็จแล้ว ต้องการส่งผลลัพธ์ของคะแนนกลับออกมายังจุดที่เรียกใช้ ต้องใช้คำสั่งใด?"
+      },
 
-      // Category 4: SEO, Payment & Digital Security
-      { id: 31, category: 4, catName: "SEO & Digital Tech", term: "SEO", def: "การปรับแต่งเว็บให้ติดอันดับต้นๆ บนการค้นหาของ Search Engine" },
-      { id: 32, category: 4, catName: "SEO & Digital Tech", term: "Keyword", def: "คำหรือวลีค้นหาที่ผู้ใช้พิมพ์ใน Search Engine" },
-      { id: 33, category: 4, catName: "SEO & Digital Tech", term: "Backlink", def: "ลิงก์จากเว็บไซต์อื่นที่เชื่อมโยงกลับมายังเว็บไซต์ของเรา" },
-      { id: 34, category: 4, catName: "SEO & Digital Tech", term: "Payment Gateway", def: "ระบบตัวกลางที่ทำหน้าที่เชื่อมต่อและประมวลผลการชำระเงินออนไลน์" },
-      { id: 35, category: 4, catName: "SEO & Digital Tech", term: "PCI-DSS", def: "มาตรฐานความปลอดภัยสากลสำหรับระบบการจัดการข้อมูลบัตรเครดิต" },
-      { id: 36, category: 4, catName: "SEO & Digital Tech", term: "Firewall", def: "ระบบความปลอดภัยคอยกรองและป้องกันการเข้าถึงเครือข่ายที่ไม่ได้รับอนุญาต" },
-      { id: 37, category: 4, catName: "SEO & Digital Tech", term: "2FA", def: "การยืนยันตัวตนแบบ 2 ขั้นตอนเพื่อเพิ่มความปลอดภัย" },
-      { id: 38, category: 4, catName: "SEO & Digital Tech", term: "Phishing", def: "การหลอกลวงทางออนไลน์เพื่อขโมยข้อมูลสำคัญด้วยหน้าเว็บปลอม" },
-      { id: 39, category: 4, catName: "SEO & Digital Tech", term: "Cybersecurity", def: "การปกป้องระบบ เครือข่าย และข้อมูลจากภัยคุกคามทางดิจิทัล" },
-      { id: 40, category: 4, catName: "SEO & Digital Tech", term: "Meta Tag", def: "ข้อมูลอธิบายเนื้อหาเว็บเพจที่ใส่ไว้ในโค้ดเพื่อให้ Search Engine ทำความเข้าใจ" }
+      // Category 4: Server, Database & Deploy
+      {
+        id: 31, category: 4, catName: "Server & Deploy",
+        term: "npm",
+        ttsPronounce: "NPM: Node package manager",
+        scenario: "📦 ต้องการติดตั้งเครื่องมือเสริมและ Library ในโปรเจกต์ Node.js อย่างรวดเร็ว ต้องใช้เครื่องมือใด?"
+      },
+      {
+        id: 32, category: 4, catName: "Server & Deploy",
+        term: "git push",
+        ttsPronounce: "Git push: Uploads code commits to remote repository",
+        scenario: "🚀 เขียนโค้ดเสร็จแล้ว ต้องการอัปโหลดโค้ดจากเครื่องขึ้นไปเก็บบน GitHub Cloud ต้องใช้คำสั่งใด?"
+      },
+      {
+        id: 33, category: 4, catName: "Server & Deploy",
+        term: "API",
+        ttsPronounce: "API: Application programming interface bridge",
+        scenario: "🔌 ต้องการให้เว็บแอปพลิเคชันของเราเชื่อมต่อและแลกเปลี่ยนข้อมูลกับระบบภายนอก ต้องใช้ตัวกลางใด?"
+      },
+      {
+        id: 34, category: 4, catName: "Server & Deploy",
+        term: "JSON",
+        ttsPronounce: "JSON: JavaScript object notation data format",
+        scenario: "📄 รูปแบบข้อความมาตรฐานที่นิยมใช้ส่งข้อมูลข้ามไประหว่างหน้าเว็บ (Client) กับเซิร์ฟเวอร์คืออะไร?"
+      },
+      {
+        id: 35, category: 4, catName: "Server & Deploy",
+        term: "HTTP Status 200",
+        ttsPronounce: "HTTP Status 200: OK successful request response",
+        scenario: "✅ เซิร์ฟเวอร์ตอบกลับรหัสสถานะใด เพื่อบอกว่าคำขอข้อมูลสำเร็จสมบูรณ์ ไร้ข้อผิดพลาด?"
+      },
+      {
+        id: 36, category: 4, catName: "Server & Deploy",
+        term: "HTTP Status 404",
+        ttsPronounce: "HTTP Status 404: Not found missing page resource",
+        scenario: "❌ เมื่อผู้ใช้พิมพ์ URL ผิดและไม่พบหน้าเว็บที่ต้องการ เซิร์ฟเวอร์จะส่งรหัสแจ้งเตือนใด?"
+      },
+      {
+        id: 37, category: 4, catName: "Server & Deploy",
+        term: "PORT",
+        ttsPronounce: "Port: Network communication endpoint channel",
+        scenario: "🚪 ช่องทางเข้าออกดิจิทัลบนเซิร์ฟเวอร์สำหรับบริการเว็บ เช่น 80 (HTTP) หรือ 443 (HTTPS) เรียกว่าอะไร?"
+      },
+      {
+        id: 38, category: 4, catName: "Server & Deploy",
+        term: "Environment Variable",
+        ttsPronounce: "Environment variable: Secure configuration storage",
+        scenario: "🔑 ต้องการเก็บ API Key หรือรหัสผ่านฐานข้อมูลอย่างปลอดภัยโดยไม่เปิดเผยในโค้ด ต้องเก็บไว้ในที่ใด?"
+      },
+      {
+        id: 39, category: 4, catName: "Server & Deploy",
+        term: "Node.js",
+        ttsPronounce: "Node JS: Server side JavaScript runtime engine",
+        scenario: "⚡ สภาพแวดล้อมรันไทม์ที่ทำให้เราสามารถเขียนภาษา JavaScript ฝั่งเซิร์ฟเวอร์ (Backend) ได้คืออะไร?"
+      },
+      {
+        id: 40, category: 4, catName: "Server & Deploy",
+        term: "Vercel",
+        ttsPronounce: "Vercel: Cloud platform for hosting static frontend websites",
+        scenario: "☁️ แพลตฟอร์มคลาวด์ยอดนิยมสำหรับ Deploy ฝากเว็บและเผยแพร่ผลงานขึ้นออนไลน์ฟรีอย่างง่ายดายคืออะไร?"
+      }
     ];
 
     /* ==========================================================================
-       2. WEB AUDIO API SYNTHESIZER (PROCEDURAL SFX & SYNTHWAVE BGM)
+       2. WEB AUDIO API SYNTHESIZER (ROBLOX OOF, COIN CHIME & SYNTH BGM)
        ========================================================================== */
-    class SoundEngine {
+    class BloxAudioSystem {
       constructor() {
         this.ctx = null;
         this.muted = false;
@@ -888,7 +1093,7 @@
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           this.ctx = new AudioContext();
         }
-        if (this.ctx.state === 'suspended') {
+        if (this.ctx && this.ctx.state === 'suspended') {
           this.ctx.resume();
         }
       }
@@ -896,7 +1101,7 @@
       toggleMute() {
         this.muted = !this.muted;
         const btn = document.getElementById('btn-sound-toggle');
-        if (btn) btn.textContent = this.muted ? '🔇 MUTED' : '🔊 BGM';
+        if (btn) btn.textContent = this.muted ? '🔇 MUTED' : '🔊 SOUND';
         if (this.muted && this.bgmPlaying) {
           this.stopBGM();
         } else if (!this.muted && !this.bgmPlaying) {
@@ -904,11 +1109,10 @@
         }
       }
 
-      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1, timeOffset = 0) {
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.15, timeOffset = 0) {
         if (this.muted) return;
         this.init();
         if (!this.ctx) return;
-
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
@@ -925,10 +1129,40 @@
 
           osc.start(now);
           osc.stop(now + duration);
-        } catch (e) {}
+        } catch(e) {}
       }
 
-      playLaser() {
+      // Classic Roblox "Oof" pitch drop
+      playRobloxOof() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const now = this.ctx.currentTime;
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.22);
+
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } catch(e) {}
+      }
+
+      playCoinChime() {
+        this.playTone(987.77, 'sine', 0.08, 0.15, 0);     // B5
+        this.playTone(1318.51, 'triangle', 0.25, 0.2, 0.07); // E6
+      }
+
+      playLaserShoot() {
         if (this.muted) return;
         this.init();
         if (!this.ctx) return;
@@ -937,63 +1171,58 @@
           const gain = this.ctx.createGain();
           const now = this.ctx.currentTime;
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(880, now);
-          osc.frequency.exponentialRampToValueAtTime(110, now + 0.18);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.frequency.setValueAtTime(750, now);
+          osc.frequency.exponentialRampToValueAtTime(150, now + 0.14);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.18);
-        } catch (e) {}
+          osc.stop(now + 0.14);
+        } catch(e) {}
       }
 
-      playExplosion() {
-        this.playTone(150, 'sawtooth', 0.25, 0.25, 0);
-        this.playTone(80, 'triangle', 0.35, 0.3, 0.05);
+      playPowerupSound() {
+        this.playTone(523.25, 'triangle', 0.08, 0.15, 0);
+        this.playTone(659.25, 'triangle', 0.08, 0.15, 0.06);
+        this.playTone(783.99, 'triangle', 0.08, 0.15, 0.12);
+        this.playTone(1046.50, 'sine', 0.25, 0.2, 0.18);
       }
 
-      playError() {
-        this.playTone(220, 'sawtooth', 0.15, 0.15, 0);
-        this.playTone(180, 'sawtooth', 0.25, 0.2, 0.1);
+      playVictoryFanfare() {
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((freq, idx) => {
+          this.playTone(freq, 'triangle', 0.35, 0.25, idx * 0.12);
+        });
       }
 
-      playCombo() {
-        this.playTone(523.25, 'sine', 0.1, 0.12, 0);
-        this.playTone(659.25, 'sine', 0.1, 0.12, 0.06);
-        this.playTone(783.99, 'triangle', 0.2, 0.18, 0.12);
-      }
-
-      playCritical() {
-        this.playTone(587.33, 'triangle', 0.12, 0.2, 0);
-        this.playTone(880.00, 'triangle', 0.12, 0.2, 0.08);
-        this.playTone(1174.66, 'sine', 0.3, 0.25, 0.16);
-      }
-
-      playPowerup() {
-        this.playTone(440, 'triangle', 0.1, 0.15, 0);
-        this.playTone(554.37, 'triangle', 0.1, 0.15, 0.08);
-        this.playTone(659.25, 'triangle', 0.1, 0.15, 0.16);
-        this.playTone(880, 'sine', 0.25, 0.2, 0.24);
+      speak(text) {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.92;
+          window.speechSynthesis.speak(utterance);
+        }
       }
 
       startBGM() {
         if (this.bgmPlaying || this.muted) return;
         this.init();
         this.bgmPlaying = true;
-        const bassNotes = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
-        const leadNotes = [440, 523.25, 659.25, 523.25, 587.33, 659.25, 783.99, 659.25];
+        const bassMelody = [130.81, 130.81, 164.81, 146.83, 130.81, 130.81, 196.00, 164.81];
+        const leadMelody = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 783.99, 1046.50];
 
         this.bgmTimer = setInterval(() => {
           if (this.muted) return;
-          const bass = bassNotes[this.bgmStep % bassNotes.length];
-          const lead = leadNotes[this.bgmStep % leadNotes.length];
-          this.playTone(bass, 'sawtooth', 0.12, 0.04, 0);
+          const bass = bassMelody[this.bgmStep % bassMelody.length];
+          const lead = leadMelody[this.bgmStep % leadMelody.length];
+          this.playTone(bass, 'sawtooth', 0.12, 0.03, 0);
           if (this.bgmStep % 2 === 0) {
-            this.playTone(lead, 'sine', 0.1, 0.03, 0.05);
+            this.playTone(lead, 'sine', 0.1, 0.04, 0.05);
           }
           this.bgmStep++;
-        }, 180);
+        }, 200);
       }
 
       stopBGM() {
@@ -1002,65 +1231,76 @@
       }
     }
 
-    const AudioEngine = new SoundEngine();
+    const AudioEngine = new BloxAudioSystem();
 
     /* ==========================================================================
-       3. 2D CANVAS GAME ENGINE (CYBER SPELLCASTER)
+       3. ROBLOX VOCAB LEGENDS 2D GAME ENGINE (10 QUESTIONS STRICT)
        ========================================================================== */
-    class CyberSpellcasterGame {
+    class RobloxVocabLegendsGame {
       constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
 
-        // Game State
-        this.isRunning = false;
-        this.isPaused = false;
+        // Registration & Session State
         this.studentId = "";
         this.studentName = "";
+        this.categoryChoice = "all";
         this.gameMode = "choice"; // "choice" or "type"
-        this.categoryFilter = "all";
 
-        this.hp = 100;
-        this.maxHp = 100;
-        this.mana = 100;
-        this.maxMana = 100;
-        this.shield = 0;
+        // 10-Question Stage Engine
+        this.stageQuestions = [];
+        this.currentQuestionIdx = 0; // 0 to 9 (10 questions strict)
+        this.activeQuestion = null;
+        this.choicesList = [];
+        this.isLevelFinished = false;
+
+        // Stats
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
-        this.totalAnswers = 0;
-        this.correctAnswers = 0;
+        this.correctCount = 0;
         this.startTime = 0;
 
-        // Powerup Inventory
+        // Power-Ups Inventory (CLICK ONLY)
         this.powerups = {
-          freeze: 0,
-          nuke: 0,
-          hint: 0,
-          shield: 0,
-          double: 0
+          freeze: 1,
+          nuke: 1,
+          hint: 2,
+          shield: 1,
+          double: 1
         };
 
         // Active Buffs
-        this.freezeTimer = 0;
-        this.doubleScoreTimer = 0;
+        this.freezeFrames = 0;
+        this.doubleXPFrames = 0;
+        this.activeShields = 0;
 
-        // Game Entities
-        this.player = { x: 80, y: 0, size: 50, frame: 0 };
-        this.enemies = [];
+        // Canvas Entities
+        this.player = { x: 75, y: 0, size: 55 };
+        this.activeEnemy = null;
         this.projectiles = [];
         this.particles = [];
-        this.floatingTexts = [];
+        this.floatingCoins = [];
 
-        // Question Tracking
-        this.targetEnemy = null;
-        this.currentChoices = [];
-        this.spawnTimer = 0;
-        this.spawnInterval = 320; // frames
-        this.targetWordStartTime = 0;
-
+        this.initBackgroundBlocks();
         this.initCanvasSize();
-        this.bindEvents();
+        this.bindInputEvents();
+      }
+
+      initBackgroundBlocks() {
+        const bg = document.getElementById('bg-blocks');
+        if (!bg) return;
+        for (let i = 0; i < 15; i++) {
+          const block = document.createElement('div');
+          block.className = 'bg-block';
+          const size = Math.random() * 40 + 20;
+          block.style.width = `${size}px`;
+          block.style.height = `${size}px`;
+          block.style.left = `${Math.random() * 100}vw`;
+          block.style.animationDelay = `${Math.random() * 10}s`;
+          block.style.animationDuration = `${Math.random() * 10 + 10}s`;
+          bg.appendChild(block);
+        }
       }
 
       initCanvasSize() {
@@ -1074,38 +1314,19 @@
         window.addEventListener('resize', resize);
       }
 
-      bindEvents() {
-        // Keyboard Shortcuts (1-4 for choices, Q-T for powerups, Enter for typing)
-        window.addEventListener('keydown', (e) => {
-          if (!this.isRunning || this.isPaused) return;
-
-          // Choice Mode keys 1-4
-          if (this.gameMode === "choice" && ['1', '2', '3', '4'].includes(e.key)) {
-            const idx = parseInt(e.key, 10) - 1;
-            this.handleChoiceClick(idx);
-          }
-
-          // Powerup shortcuts
-          const key = e.key.toUpperCase();
-          if (key === 'Q') this.activatePowerup('freeze');
-          if (key === 'W') this.activatePowerup('nuke');
-          if (key === 'E') this.activatePowerup('hint');
-          if (key === 'R') this.activatePowerup('shield');
-          if (key === 'T') this.activatePowerup('double');
-        });
-
-        // Typing input
-        const typeInput = document.getElementById('type-input');
+      bindInputEvents() {
+        // Typing input Enter handler
+        const typeInput = document.getElementById('blox-type-input');
         if (typeInput) {
           typeInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-              this.handleTypeSubmit();
+              this.handleTypeAnswerSubmit();
             }
           });
         }
       }
 
-      submitLoginAndStart() {
+      submitRegistrationAndStart() {
         const idInput = document.getElementById('input-student-id');
         const nameInput = document.getElementById('input-student-name');
         const catSelect = document.getElementById('select-category');
@@ -1116,12 +1337,13 @@
           return;
         }
 
+        AudioEngine.playCoinChime();
         this.studentId = idInput.value.trim();
         this.studentName = nameInput.value.trim();
-        this.categoryFilter = catSelect.value;
+        this.categoryChoice = catSelect.value;
         this.gameMode = modeSelect.value;
 
-        document.getElementById('hud-player-name').textContent = this.studentName;
+        document.getElementById('hud-student-name').textContent = this.studentName;
         document.getElementById('modal-login').style.display = 'none';
 
         // Toggle UI Mode
@@ -1133,358 +1355,292 @@
         } else {
           choicesGrid.style.display = 'none';
           typingWrap.style.display = 'flex';
-          setTimeout(() => document.getElementById('type-input').focus(), 300);
+          setTimeout(() => document.getElementById('blox-type-input').focus(), 300);
         }
 
         AudioEngine.startBGM();
-        this.start();
+        this.startLevel();
       }
 
-      start() {
-        this.isRunning = true;
-        this.isPaused = false;
-        this.hp = 100;
-        this.mana = 100;
-        this.shield = 0;
+      startLevel() {
+        this.isLevelFinished = false;
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
-        this.totalAnswers = 0;
-        this.correctAnswers = 0;
+        this.correctCount = 0;
         this.startTime = Date.now();
-        this.enemies = [];
+
         this.projectiles = [];
         this.particles = [];
-        this.floatingTexts = [];
-        this.powerups = { freeze: 1, nuke: 1, hint: 2, shield: 1, double: 1 };
-        this.updateHUD();
-        this.updatePowerupDock();
+        this.floatingCoins = [];
+        this.activeEnemy = null;
 
-        // Spawn first enemy immediately
-        this.spawnEnemy();
+        this.powerups = { freeze: 1, nuke: 1, hint: 2, shield: 1, double: 1 };
+        this.updatePowerupDock();
+        this.updateHUD();
+
+        // Build EXACTLY 10 Questions pool
+        let pool = [...VOCAB_SCENARIOS];
+        if (this.categoryChoice !== 'all') {
+          const catNum = parseInt(this.categoryChoice, 10);
+          pool = pool.filter(v => v.category === catNum);
+        }
+
+        // Shuffle & pick exactly 10 questions
+        this.stageQuestions = this.shuffleArray(pool).slice(0, 10);
+        this.currentQuestionIdx = 0;
+
+        this.loadQuestion(this.currentQuestionIdx);
         this.loop();
       }
 
-      getFilteredVocab() {
-        if (this.categoryFilter === 'all') return VOCAB_DATABASE;
-        const catNum = parseInt(this.categoryFilter, 10);
-        return VOCAB_DATABASE.filter(v => v.category === catNum);
-      }
+      loadQuestion(idx) {
+        if (idx >= 10 || idx >= this.stageQuestions.length) {
+          this.finishStage();
+          return;
+        }
 
-      spawnEnemy() {
-        const pool = this.getFilteredVocab();
-        const vocab = pool[Math.floor(Math.random() * pool.length)];
+        this.activeQuestion = this.stageQuestions[idx];
+        const isBoss = (idx === 4 || idx === 9); // Question 5 and 10 are Bosses!
+        const isRushHour = (idx >= 7); // Question 8, 9, 10 are Rush Hour!
 
-        const types = ['virus', 'bug', 'trojan', 'glitch'];
-        const enemyType = types[Math.floor(Math.random() * types.length)];
+        // Update Rush Hour tag
+        const rushTag = document.getElementById('rush-hour-banner');
+        if (rushTag) rushTag.style.display = isRushHour ? 'block' : 'none';
 
-        const enemy = {
-          vocab: vocab,
-          type: enemyType,
+        // Update Question Banner (>= 20px font size)
+        const qIdxEl = document.getElementById('hud-question-idx');
+        const scenarioTextEl = document.getElementById('scenario-text');
+        const catBadgeEl = document.getElementById('scenario-category-badge');
+        const iconEl = document.getElementById('scenario-icon');
+
+        if (qIdxEl) qIdxEl.textContent = idx + 1;
+        if (scenarioTextEl) scenarioTextEl.textContent = this.activeQuestion.scenario;
+        if (catBadgeEl) catBadgeEl.textContent = this.activeQuestion.catName;
+        if (iconEl) iconEl.textContent = isBoss ? '👑' : (isRushHour ? '⚡' : '🎮');
+
+        if (isBoss) {
+          this.showBossBanner();
+        }
+
+        // Spawn Roblox Monster / Boss
+        const speed = isRushHour ? 0.75 : (isBoss ? 0.45 : 0.55);
+        this.activeEnemy = {
           x: this.canvas.width + 40,
-          y: Math.random() * (this.canvas.height - 180) + 90,
-          speed: 0.65 + Math.random() * 0.45,
-          hp: 1,
-          maxHp: 1,
-          size: 42,
-          color: enemyType === 'virus' ? '#ff0055' : enemyType === 'bug' ? '#ffe600' : enemyType === 'trojan' ? '#9d4edd' : '#00ff66'
+          y: this.canvas.height / 2,
+          size: isBoss ? 75 : 50,
+          isBoss: isBoss,
+          speed: speed,
+          color: isBoss ? '#ffd700' : (idx % 2 === 0 ? '#00f0ff' : '#ff2a85'),
+          name: isBoss ? "TITAN BUG BOSS" : "VIRUS CUBE"
         };
 
-        this.enemies.push(enemy);
-
-        if (!this.targetEnemy) {
-          this.setTargetEnemy(enemy);
-        }
-      }
-
-      setTargetEnemy(enemy) {
-        this.targetEnemy = enemy;
-        this.targetWordStartTime = Date.now();
-
-        // Update Target Definition HUD
-        const defEl = document.getElementById('active-target-def');
-        const catEl = document.getElementById('active-target-cat');
-        if (defEl) defEl.textContent = enemy.vocab.def;
-        if (catEl) catEl.textContent = enemy.vocab.catName;
-
-        // Populate Choice Buttons
+        // Prepare Choices (1 Correct + 3 Wrong)
         if (this.gameMode === "choice") {
-          const pool = this.getFilteredVocab();
-          const wrongOptions = pool
-            .filter(v => v.id !== enemy.vocab.id)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 3)
-            .map(v => v.term);
+          const wrongPool = VOCAB_SCENARIOS.filter(v => v.id !== this.activeQuestion.id);
+          const wrongChoices = this.shuffleArray(wrongPool).slice(0, 3).map(v => v.term);
 
-          this.currentChoices = [
-            { term: enemy.vocab.term, correct: true },
-            ...wrongOptions.map(t => ({ term: t, correct: false }))
-          ].sort(() => 0.5 - Math.random());
+          this.choicesList = this.shuffleArray([
+            { term: this.activeQuestion.term, correct: true },
+            ...wrongChoices.map(t => ({ term: t, correct: false }))
+          ]);
 
           const container = document.getElementById('choices-container');
           if (container) {
-            container.innerHTML = this.currentChoices.map((opt, i) => `
-              <button class="choice-btn" data-idx="${i}" onclick="Game.handleChoiceClick(${i})">
-                <span class="choice-key">[${i + 1}]</span>
-                <span>${opt.term}</span>
+            container.innerHTML = this.choicesList.map((c, i) => `
+              <button class="blox-choice-btn" data-idx="${i}" onclick="Game.handleChoiceButtonClick(${i})">
+                <span>${c.term}</span>
               </button>
             `).join('');
           }
         }
       }
 
-      handleChoiceClick(idx) {
-        if (!this.targetEnemy || !this.currentChoices[idx]) return;
-        const choice = this.currentChoices[idx];
-        const buttons = document.querySelectorAll('.choice-btn');
+      showBossBanner() {
+        const banner = document.getElementById('boss-alert-banner');
+        if (banner) {
+          banner.classList.add('show');
+          setTimeout(() => banner.classList.remove('show'), 1200);
+        }
+      }
 
-        this.totalAnswers++;
+      handleChoiceButtonClick(choiceIdx) {
+        if (!this.activeQuestion || this.isLevelFinished) return;
+        const choice = this.choicesList[choiceIdx];
+        const buttons = document.querySelectorAll('.blox-choice-btn');
 
         if (choice.correct) {
-          if (buttons[idx]) buttons[idx].classList.add('correct');
-          this.castSpellOnTarget(true);
+          if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('correct');
+          this.processCorrectAnswer();
         } else {
-          if (buttons[idx]) buttons[idx].classList.add('wrong');
-          this.castSpellOnTarget(false);
+          if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('wrong');
+          this.processWrongAnswer();
         }
       }
 
-      handleTypeSubmit() {
-        const input = document.getElementById('type-input');
-        if (!input || !this.targetEnemy) return;
+      handleTypeAnswerSubmit() {
+        const input = document.getElementById('blox-type-input');
+        if (!input || !this.activeQuestion || this.isLevelFinished) return;
 
-        const val = input.value.trim().toUpperCase();
-        const targetVal = this.targetEnemy.vocab.term.toUpperCase();
+        const val = input.value.trim().toLowerCase();
+        const target = this.activeQuestion.term.toLowerCase();
 
-        this.totalAnswers++;
-
-        if (val === targetVal) {
-          this.castSpellOnTarget(true);
+        if (val === target) {
+          this.processCorrectAnswer();
           input.value = "";
         } else {
-          this.castSpellOnTarget(false);
+          this.processWrongAnswer();
           input.value = "";
         }
       }
 
-      castSpellOnTarget(isCorrect) {
-        if (isCorrect) {
-          this.correctAnswers++;
-          this.combo++;
-          if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+      processCorrectAnswer() {
+        this.correctCount++;
+        this.combo++;
+        if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-          // Check Critical (Answered < 3.2s)
-          const timeTaken = (Date.now() - this.targetWordStartTime) / 1000;
-          const isCritical = timeTaken < 3.2;
+        AudioEngine.playCoinChime();
+        AudioEngine.playLaserShoot();
 
-          if (isCritical) {
-            AudioEngine.playCritical();
-            this.showCriticalBanner();
-          } else {
-            AudioEngine.playLaser();
-          }
+        // Pronounce correct answer using Text-to-Speech
+        AudioEngine.speak(this.activeQuestion.ttsPronounce);
 
-          // Launch Spell Projectile
+        // Fire Laser Projectile from Player to Enemy
+        if (this.activeEnemy) {
           this.projectiles.push({
             x: this.player.x + 30,
             y: this.player.y,
-            target: this.targetEnemy,
-            speed: 16,
-            isCritical: isCritical,
-            color: isCritical ? '#ffe600' : '#00f0ff'
+            target: this.activeEnemy,
+            speed: 18,
+            color: '#00f0ff'
           });
-
-          // Score Calculation
-          let points = isCritical ? 250 : 100;
-          points += this.combo * 15;
-          if (this.doubleScoreTimer > 0) points *= 2;
-          this.score += points;
-
-          // Mana Regeneration
-          this.mana = Math.min(this.maxMana, this.mana + 5);
-
-          // Check Powerup Unlock on Streaks
-          if (this.combo === 3) this.grantPowerup('hint');
-          if (this.combo === 5) this.grantPowerup('freeze');
-          if (this.combo === 8) this.grantPowerup('nuke');
-          if (this.combo === 10) this.grantPowerup('double');
-
-          this.createFloatingText(`+${points}`, this.player.x + 40, this.player.y - 20, isCritical ? '#ffe600' : '#00ff66');
-          AudioEngine.playCombo();
-        } else {
-          // Wrong Answer Penalty
-          AudioEngine.playError();
-          this.combo = 0;
-          this.mana = Math.max(0, this.mana - 15);
-          this.createFloatingText("SPELL FIZZLE! ✗", this.player.x + 40, this.player.y - 20, '#ff0055');
-          this.triggerScreenShake();
         }
+
+        // Points
+        let points = this.activeEnemy && this.activeEnemy.isBoss ? 300 : 150;
+        points += this.combo * 20;
+        if (this.doubleXPFrames > 0) points *= 2;
+        this.score += points;
+
+        this.createCoinText(`+${points} 🪙`, this.player.x + 40, this.player.y - 20);
+
+        // Powerup Unlock via Combo Streaks (3, 5, 8)
+        if (this.combo === 3) this.grantPowerup('hint');
+        if (this.combo === 5) this.grantPowerup('freeze');
+        if (this.combo === 8) this.grantPowerup('nuke');
 
         this.updateHUD();
       }
 
-      showCriticalBanner() {
-        const banner = document.getElementById('critical-banner');
-        if (banner) {
-          banner.classList.add('show');
-          setTimeout(() => banner.classList.remove('show'), 800);
-        }
+      processWrongAnswer() {
+        this.combo = 0;
+        AudioEngine.playRobloxOof();
+        this.createCoinText("OOPS! ✗", this.player.x + 30, this.player.y - 20, '#ff3838');
+        this.updateHUD();
       }
 
       grantPowerup(type) {
         this.powerups[type]++;
         this.updatePowerupDock();
-        AudioEngine.playPowerup();
-        this.createFloatingText(`+1 ${type.toUpperCase()}! 🎁`, this.player.x + 50, this.player.y - 40, '#ffe600');
+        AudioEngine.playPowerupSound();
+        this.createCoinText(`+1 ${type.toUpperCase()}! 🎁`, this.player.x + 50, this.player.y - 40, '#ffd700');
       }
 
-      activatePowerup(type) {
-        if (this.powerups[type] <= 0 || !this.isRunning || this.isPaused) return;
+      // CRITICAL: CLICK ONLY POWER-UP HANDLER (NO KEYBOARD BINDINGS)
+      usePowerup(type) {
+        if (this.powerups[type] <= 0 || this.isLevelFinished) return;
 
         this.powerups[type]--;
-        AudioEngine.playPowerup();
+        AudioEngine.playPowerupSound();
 
         if (type === 'freeze') {
-          this.freezeTimer = 300; // 5 seconds at 60fps
-          this.createFloatingText("TIME FROZEN! ⏱️", this.canvas.width / 2, 100, '#00f0ff');
+          this.freezeFrames = 300; // 5s at 60fps
+          this.createCoinText("TIME FROZEN! ⏱️", this.canvas.width / 2, 80, '#00f0ff');
         } else if (type === 'nuke') {
-          this.enemies.forEach(e => {
-            this.createExplosion(e.x, e.y, '#ff0055', 40);
-          });
-          this.score += this.enemies.length * 150;
-          this.enemies = [];
-          this.targetEnemy = null;
-          this.createFloatingText("CYBER NUKE! 💣", this.canvas.width / 2, 100, '#ff0055');
-          AudioEngine.playExplosion();
-          this.triggerScreenShake();
-          setTimeout(() => this.spawnEnemy(), 600);
+          if (this.activeEnemy) {
+            this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ff3838', 35);
+            this.score += 200;
+            this.activeEnemy = null;
+            this.createCoinText("BLOX NUKE! 💣", this.canvas.width / 2, 80, '#ff3838');
+            this.nextQuestionTransition();
+          }
         } else if (type === 'hint') {
           if (this.gameMode === "choice") {
-            const wrongBtns = Array.from(document.querySelectorAll('.choice-btn'))
-              .filter((btn, i) => !this.currentChoices[i].correct);
-            wrongBtns.slice(0, 2).forEach(b => b.classList.add('faded'));
+            const wrongButtons = Array.from(document.querySelectorAll('.blox-choice-btn'))
+              .filter((btn, i) => !this.choicesList[i].correct);
+            wrongButtons.slice(0, 2).forEach(b => b.classList.add('faded'));
           } else {
-            const input = document.getElementById('type-input');
-            if (input && this.targetEnemy) {
-              input.value = this.targetEnemy.vocab.term.substring(0, 3);
+            const input = document.getElementById('blox-type-input');
+            if (input && this.activeQuestion) {
+              input.value = this.activeQuestion.term.substring(0, 3);
             }
           }
         } else if (type === 'shield') {
-          this.shield = Math.min(2, this.shield + 1);
-          this.createFloatingText("MANA SHIELD ON! 🛡️", this.player.x + 40, this.player.y - 20, '#9d4edd');
+          this.activeShields += 2;
+          this.createCoinText("+2 SHIELD! 🛡️", this.player.x + 30, this.player.y - 30, '#b339eb');
         } else if (type === 'double') {
-          this.doubleScoreTimer = 600; // 10 seconds at 60fps
-          this.createFloatingText("2X SCORE BOOST! ⚡", this.canvas.width / 2, 100, '#00ff66');
+          this.doubleXPFrames = 600; // 10s at 60fps
+          this.createCoinText("2X XP BOOST! ⚡", this.canvas.width / 2, 80, '#2ecc71');
         }
 
-        this.updateHUD();
         this.updatePowerupDock();
+        this.updateHUD();
       }
 
       updatePowerupDock() {
         Object.keys(this.powerups).forEach(type => {
-          const slot = document.getElementById(`pu-${type}`);
+          const btn = document.getElementById(`pu-${type}`);
           const count = document.getElementById(`count-${type}`);
-          if (slot && count) {
+          if (btn && count) {
             count.textContent = this.powerups[type];
-            if (this.powerups[type] > 0) {
-              slot.className = 'powerup-slot ready';
-            } else {
-              slot.className = 'powerup-slot disabled';
-            }
+            btn.className = this.powerups[type] > 0 ? 'blox-powerup-btn ready' : 'blox-powerup-btn disabled';
           }
         });
       }
 
       updateHUD() {
-        // HP & Mana Bars
-        const hpBar = document.getElementById('hp-bar');
-        const hpText = document.getElementById('hp-text');
-        const manaBar = document.getElementById('mana-bar');
-        const manaText = document.getElementById('mana-text');
         const scoreEl = document.getElementById('hud-score');
-        const comboEl = document.getElementById('hud-combo');
-        const shieldBox = document.getElementById('shield-hud-box');
-        const shieldBar = document.getElementById('shield-bar');
-
-        if (hpBar) hpBar.style.width = `${(this.hp / this.maxHp) * 100}%`;
-        if (hpText) hpText.textContent = `${this.hp}/${this.maxHp}`;
-        if (manaBar) manaBar.style.width = `${(this.mana / this.maxMana) * 100}%`;
-        if (manaText) manaText.textContent = `${this.mana}/${this.maxMana}`;
         if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
-        if (comboEl) comboEl.textContent = this.combo;
-
-        if (shieldBox && shieldBar) {
-          if (this.shield > 0) {
-            shieldBox.style.display = 'flex';
-            shieldBar.style.width = `${(this.shield / 2) * 100}%`;
-          } else {
-            shieldBox.style.display = 'none';
-          }
-        }
       }
 
-      triggerScreenShake() {
-        const wrapper = document.getElementById('game-wrapper');
-        if (wrapper) {
-          wrapper.classList.add('shake');
-          setTimeout(() => wrapper.classList.remove('shake'), 300);
-        }
+      createCoinText(text, x, y, color = '#ffd700') {
+        this.floatingCoins.push({ text, x, y, color, alpha: 1, vy: -1.4 });
       }
 
       createExplosion(x, y, color, count = 25) {
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = Math.random() * 6 + 2;
+          const speed = Math.random() * 5 + 2;
           this.particles.push({
-            x: x,
-            y: y,
+            x, y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
-            size: Math.random() * 4 + 2,
-            color: color,
+            size: Math.random() * 5 + 3,
+            color,
             alpha: 1,
-            decay: Math.random() * 0.03 + 0.02
+            decay: 0.025
           });
         }
       }
 
-      createFloatingText(text, x, y, color) {
-        this.floatingTexts.push({
-          text, x, y, color, alpha: 1, vy: -1.5
-        });
-      }
-
-      // --- MAIN ANIMATION / GAME LOOP (60 FPS) ---
+      // --- MAIN GAME LOOP ---
       loop() {
-        if (!this.isRunning) return;
+        if (this.isLevelFinished) return;
 
-        if (!this.isPaused) {
-          this.update();
-          this.render();
-        }
+        this.update();
+        this.render();
 
         requestAnimationFrame(() => this.loop());
       }
 
       update() {
-        // Timers
-        if (this.freezeTimer > 0) this.freezeTimer--;
-        if (this.doubleScoreTimer > 0) this.doubleScoreTimer--;
+        if (this.freezeFrames > 0) this.freezeFrames--;
+        if (this.doubleXPFrames > 0) this.doubleXPFrames--;
 
-        // Spawn logic
-        this.spawnTimer++;
-        if (this.spawnTimer >= this.spawnInterval) {
-          this.spawnTimer = 0;
-          if (this.enemies.length < 4) {
-            this.spawnEnemy();
-          }
-        }
-
-        // Update Projectiles
+        // Projectiles
         for (let i = this.projectiles.length - 1; i >= 0; i--) {
           const p = this.projectiles[i];
-          if (!p.target || !this.enemies.includes(p.target)) {
+          if (!p.target || !this.activeEnemy) {
             this.projectiles.splice(i, 1);
             continue;
           }
@@ -1494,71 +1650,39 @@
           const dist = Math.hypot(dx, dy);
 
           if (dist < p.speed) {
-            // Hit Target!
-            AudioEngine.playExplosion();
-            this.createExplosion(p.target.x, p.target.y, p.color, 30);
-
-            const enemyIdx = this.enemies.indexOf(p.target);
-            if (enemyIdx !== -1) {
-              this.enemies.splice(enemyIdx, 1);
-            }
-
+            // Hit!
+            this.createExplosion(p.target.x, p.target.y, p.target.color, 30);
             this.projectiles.splice(i, 1);
-
-            // Set next target
-            if (this.enemies.length > 0) {
-              this.setTargetEnemy(this.enemies[0]);
-            } else {
-              this.targetEnemy = null;
-              document.getElementById('active-target-def').textContent = "กำลังสแกนหาเป้าหมายไวรัสในระบบ...";
-              setTimeout(() => { if (this.isRunning) this.spawnEnemy(); }, 400);
-            }
+            this.activeEnemy = null;
+            this.nextQuestionTransition();
           } else {
             p.x += (dx / dist) * p.speed;
             p.y += (dy / dist) * p.speed;
           }
         }
 
-        // Update Enemies
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-          const enemy = this.enemies[i];
-
-          // If frozen, don't move
-          if (this.freezeTimer <= 0) {
-            enemy.x -= enemy.speed;
-          }
+        // Active Enemy Move
+        if (this.activeEnemy && this.freezeFrames <= 0) {
+          this.activeEnemy.x -= this.activeEnemy.speed;
 
           // Enemy reaches player
-          if (enemy.x <= this.player.x + 20) {
-            if (this.shield > 0) {
-              this.shield--;
-              this.createFloatingText("SHIELD BLOCKED! 🛡️", this.player.x + 30, this.player.y, '#ffe600');
+          if (this.activeEnemy.x <= this.player.x + 25) {
+            if (this.activeShields > 0) {
+              this.activeShields--;
+              this.createCoinText("SHIELD SAVED! 🛡️", this.player.x + 20, this.player.y - 20, '#b339eb');
             } else {
-              this.hp = Math.max(0, this.hp - 20);
+              AudioEngine.playRobloxOof();
               this.combo = 0;
-              this.triggerScreenShake();
-              AudioEngine.playError();
-              this.createFloatingText("-20 HP! 💥", this.player.x + 30, this.player.y, '#ff0055');
+              this.createCoinText("HIT! OOF 💥", this.player.x + 20, this.player.y - 20, '#ff3838');
             }
 
-            this.createExplosion(enemy.x, enemy.y, '#ff0055', 20);
-            this.enemies.splice(i, 1);
-
-            if (this.targetEnemy === enemy) {
-              this.targetEnemy = this.enemies[0] || null;
-              if (this.targetEnemy) this.setTargetEnemy(this.targetEnemy);
-            }
-
-            this.updateHUD();
-
-            if (this.hp <= 0) {
-              this.gameOver();
-              return;
-            }
+            this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ff3838', 20);
+            this.activeEnemy = null;
+            this.nextQuestionTransition();
           }
         }
 
-        // Update Particles
+        // Particles
         for (let i = this.particles.length - 1; i >= 0; i--) {
           const pt = this.particles[i];
           pt.x += pt.vx;
@@ -1567,35 +1691,42 @@
           if (pt.alpha <= 0) this.particles.splice(i, 1);
         }
 
-        // Update Floating Texts
-        for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
-          const ft = this.floatingTexts[i];
+        // Floating texts
+        for (let i = this.floatingCoins.length - 1; i >= 0; i--) {
+          const ft = this.floatingCoins[i];
           ft.y += ft.vy;
           ft.alpha -= 0.02;
-          if (ft.alpha <= 0) this.floatingTexts.splice(i, 1);
+          if (ft.alpha <= 0) this.floatingCoins.splice(i, 1);
         }
+      }
+
+      nextQuestionTransition() {
+        this.currentQuestionIdx++;
+        setTimeout(() => {
+          this.loadQuestion(this.currentQuestionIdx);
+        }, 500);
       }
 
       render() {
         const { ctx, canvas } = this;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw Player (Code Wizard)
-        this.renderWizard(this.player.x, this.player.y);
+        // Draw Robloxian Player Character
+        this.renderRobloxAvatar(this.player.x, this.player.y);
 
-        // Draw Enemies
-        this.enemies.forEach(enemy => {
-          this.renderEnemy(enemy);
-        });
+        // Draw Active Enemy
+        if (this.activeEnemy) {
+          this.renderRobloxEnemy(this.activeEnemy);
+        }
 
         // Draw Projectiles
         this.projectiles.forEach(p => {
           ctx.save();
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 15;
           ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 12;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.isCritical ? 8 : 5, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         });
@@ -1605,222 +1736,229 @@
           ctx.save();
           ctx.globalAlpha = pt.alpha;
           ctx.fillStyle = pt.color;
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(pt.x, pt.y, pt.size, pt.size);
           ctx.restore();
         });
 
-        // Draw Floating Texts
-        this.floatingTexts.forEach(ft => {
+        // Draw Floating Coins/Texts
+        this.floatingCoins.forEach(ft => {
           ctx.save();
           ctx.globalAlpha = ft.alpha;
-          ctx.font = "bold 16px 'Orbitron', sans-serif";
+          ctx.font = "bold 18px 'Fredoka', 'Prompt', sans-serif";
           ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, ft.x, ft.y);
           ctx.restore();
         });
       }
 
-      renderWizard(x, y) {
+      renderRobloxAvatar(x, y) {
         const { ctx } = this;
         ctx.save();
 
-        // Glowing Aura
-        ctx.shadowColor = 'rgba(0, 240, 255, 0.6)';
-        ctx.shadowBlur = 20;
+        // 3D Blocky Robloxian Character
+        // Yellow Head
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(x - 14, y - 36, 28, 22);
 
-        // Robe Body
-        ctx.fillStyle = '#0d2149';
-        ctx.beginPath();
-        ctx.moveTo(x, y - 25);
-        ctx.lineTo(x + 22, y + 25);
-        ctx.lineTo(x - 22, y + 25);
-        ctx.closePath();
-        ctx.fill();
+        // Cute Smile Face
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x - 8, y - 28, 4, 4);
+        ctx.fillRect(x + 4, y - 28, 4, 4);
+        ctx.fillRect(x - 4, y - 20, 8, 2);
 
-        // Robe Neon Accent
-        ctx.strokeStyle = '#00f0ff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        // Blue Torso
+        ctx.fillStyle = '#0077ff';
+        ctx.fillRect(x - 16, y - 14, 32, 28);
 
-        // Wizard Hat
-        ctx.fillStyle = '#152e66';
-        ctx.beginPath();
-        ctx.moveTo(x - 25, y - 18);
-        ctx.lineTo(x + 25, y - 18);
-        ctx.lineTo(x - 5, y - 48);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        // Block Tie / Emblem
+        ctx.fillStyle = '#ffd700';
+        ctx.fillRect(x - 4, y - 10, 8, 14);
 
-        // Wizard Staff
-        ctx.strokeStyle = '#ffe600';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x + 24, y + 28);
-        ctx.lineTo(x + 28, y - 35);
-        ctx.stroke();
+        // Yellow Arms
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(x - 26, y - 12, 10, 24);
+        ctx.fillRect(x + 16, y - 12, 10, 24);
 
-        // Staff Crystal Glow
+        // Green Legs
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillRect(x - 14, y + 14, 12, 22);
+        ctx.fillRect(x + 2, y + 14, 12, 22);
+
+        // Magic Blox Wand
+        ctx.fillStyle = '#ffd700';
+        ctx.fillRect(x + 24, y - 20, 4, 28);
         ctx.fillStyle = '#00f0ff';
-        ctx.beginPath();
-        ctx.arc(x + 28, y - 35, 6, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillRect(x + 22, y - 26, 8, 8);
 
         ctx.restore();
       }
 
-      renderEnemy(enemy) {
+      renderRobloxEnemy(enemy) {
         const { ctx } = this;
         ctx.save();
 
-        const isTarget = this.targetEnemy === enemy;
+        ctx.fillStyle = enemy.color;
+        ctx.shadowColor = enemy.color;
+        ctx.shadowBlur = enemy.isBoss ? 25 : 12;
 
-        // Draw Target Indicator
-        if (isTarget) {
-          ctx.strokeStyle = '#ffe600';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([4, 4]);
-          ctx.beginPath();
-          ctx.arc(enemy.x, enemy.y, enemy.size / 2 + 10, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.setLineDash([]);
+        const size = enemy.size;
+        ctx.fillRect(enemy.x - size / 2, enemy.y - size / 2, size, size);
+
+        // Enemy Eyes
+        ctx.fillStyle = '#000';
+        ctx.fillRect(enemy.x - size / 4, enemy.y - size / 4, 6, 6);
+        ctx.fillRect(enemy.x + size / 4 - 6, enemy.y - size / 4, 6, 6);
+
+        // Boss Crown 👑
+        if (enemy.isBoss) {
+          ctx.font = "28px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("👑", enemy.x, enemy.y - size / 2 - 8);
         }
 
-        // Enemy Body (Bug / Virus shape)
-        ctx.shadowColor = enemy.color;
-        ctx.shadowBlur = 15;
-        ctx.fillStyle = enemy.color;
-
-        ctx.beginPath();
-        ctx.arc(enemy.x, enemy.y, enemy.size / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Cyber Eyes
-        ctx.fillStyle = '#000';
-        ctx.beginPath();
-        ctx.arc(enemy.x - 6, enemy.y - 4, 3, 0, Math.PI * 2);
-        ctx.arc(enemy.x + 6, enemy.y - 4, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Floating Definition Banner above enemy head
-        const termPreview = enemy.vocab.term;
-        ctx.font = "bold 12px 'Orbitron', sans-serif";
+        // Enemy Label
+        ctx.font = "bold 13px 'Orbitron', sans-serif";
         ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.fillText(termPreview, enemy.x, enemy.y - 30);
+        ctx.textAlign = "center";
+        ctx.fillText(enemy.name, enemy.x, enemy.y + size / 2 + 16);
 
         ctx.restore();
       }
 
-      togglePause() {
-        this.isPaused = !this.isPaused;
-      }
-
-      gameOver() {
-        this.isRunning = false;
+      // --- STAGE FINISH & RESULTS MODAL ---
+      finishStage() {
+        this.isLevelFinished = true;
         AudioEngine.stopBGM();
-        AudioEngine.playExplosion();
+        AudioEngine.playVictoryFanfare();
 
-        const accuracy = this.totalAnswers > 0 
-          ? Math.round((this.correctAnswers / this.totalAnswers) * 100) 
-          : 100;
-        const timeUsed = Math.round((Date.now() - this.startTime) / 1000);
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+        }
 
-        // Show Modal
-        document.getElementById('modal-results').style.display = 'flex';
-        document.getElementById('results-icon').textContent = this.score > 1000 ? '🏆' : '💀';
-        document.getElementById('results-title').textContent = this.score > 1000 ? 'MISSION ACCOMPLISHED!' : 'SYSTEM BREACHED!';
+        const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
+        const accuracy = Math.round((this.correctCount / 10) * 100);
+
+        document.getElementById('modal-stage-clear').style.display = 'flex';
         document.getElementById('res-score').textContent = this.score.toLocaleString();
         document.getElementById('res-accuracy').textContent = `${accuracy}%`;
-        document.getElementById('res-streak').textContent = `${this.maxCombo} 🔥`;
+        document.getElementById('res-time').textContent = `${timeUsedSec}s`;
 
-        if (this.score > 1000 && typeof confetti === 'function') {
-          confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
-        }
-
-        // Save & Render Leaderboard
-        this.saveScoreToLeaderboard({
+        // Save locally to Leaderboard
+        this.saveToLeaderboard({
           studentId: this.studentId,
           studentName: this.studentName,
           score: this.score,
-          accuracy: `${accuracy}%`,
+          accuracy: accuracy,
+          timeUsed: `${timeUsedSec}s`,
           date: new Date().toLocaleDateString('th-TH')
         });
 
-        // Submit to Google Sheet API
-        this.syncScoreToGoogleSheet({
+        // Trigger Google Sheets Sync
+        this.syncScoreToSheet({
           studentId: this.studentId,
           studentName: this.studentName,
-          category: this.categoryFilter,
+          category: `Category ${this.categoryChoice}`,
           score: this.score,
-          timeUsed: `${timeUsed}s`,
-          accuracy: `${accuracy}%`
+          timeUsed: `${timeUsedSec}s`,
+          accuracy: accuracy
         });
       }
 
-      saveScoreToLeaderboard(entry) {
-        let scores = JSON.parse(localStorage.getItem('cyber_spellcaster_leaderboard') || '[]');
-        scores.push(entry);
-        scores.sort((a, b) => b.score - a.score);
-        scores = scores.slice(0, 5);
-        localStorage.setItem('cyber_spellcaster_leaderboard', JSON.stringify(scores));
-
-        const container = document.getElementById('leaderboard-entries');
-        if (container) {
-          container.innerHTML = scores.map((s, idx) => `
-            <div class="leaderboard-row">
-              <span>#${idx + 1} ${s.studentName} (${s.studentId})</span>
-              <span>${s.score.toLocaleString()} PTS (${s.accuracy})</span>
-            </div>
-          `).join('');
-        }
+      saveToLeaderboard(entry) {
+        let list = JSON.parse(localStorage.getItem('roblox_vocab_leaderboard') || '[]');
+        list.push(entry);
+        list.sort((a, b) => b.score - a.score);
+        list = list.slice(0, 10);
+        localStorage.setItem('roblox_vocab_leaderboard', JSON.stringify(list));
       }
 
-      async syncScoreToGoogleSheet(payload) {
-        const statusEl = document.getElementById('sheet-sync-status');
+      async syncScoreToSheet(payload) {
+        const msgEl = document.getElementById('sync-status-msg');
         if (!webAppUrl || webAppUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-          if (statusEl) statusEl.textContent = "ℹ️ คะแนนถูกบันทึกลงเครื่องแล้ว (เชื่อมต่อ Google Sheet ได้โดยใส่ Web App URL)";
+          if (msgEl) msgEl.textContent = "ℹ️ บันทึกคะแนนลงเครื่องแล้ว (เชื่อมต่อ Google Sheet ได้โดยใส่ Web App URL)";
           return;
         }
 
         try {
-          if (statusEl) statusEl.textContent = "📡 กำลังส่งข้อมูลคะแนนไปยัง Google Sheet...";
+          if (msgEl) msgEl.textContent = "📡 กำลังส่งข้อมูลไปยัง Google Sheet...";
           await fetch(webAppUrl, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
           });
-          if (statusEl) statusEl.textContent = "✅ บันทึกคะแนนลง Google Sheet สำเร็จเรียบร้อย!";
+          if (msgEl) msgEl.textContent = "✅ บันทึกคะแนนลง Google Sheet สำเร็จเรียบร้อย!";
         } catch (e) {
-          console.warn("Google Sheet sync error:", e);
-          if (statusEl) statusEl.textContent = "⚠️ ไม่สามารถเชื่อมต่อ Google Sheet ได้ บันทึกไว้ในเครื่องเรียบร้อย";
+          if (msgEl) msgEl.textContent = "⚠️ ไม่สามารถเชื่อมต่อ Google Sheet ได้ บันทึกคะแนนในเครื่องแล้ว";
         }
       }
 
-      restartGame() {
-        document.getElementById('modal-results').style.display = 'none';
-        this.start();
+      manualSyncSheet() {
+        const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
+        const accuracy = Math.round((this.correctCount / 10) * 100);
+        this.syncScoreToSheet({
+          studentId: this.studentId,
+          studentName: this.studentName,
+          category: `Category ${this.categoryChoice}`,
+          score: this.score,
+          timeUsed: `${timeUsedSec}s`,
+          accuracy: accuracy
+        });
+      }
+
+      openLeaderboard() {
+        const modal = document.getElementById('modal-leaderboard');
+        const container = document.getElementById('leaderboard-list');
+        const list = JSON.parse(localStorage.getItem('roblox_vocab_leaderboard') || '[]');
+
+        if (container) {
+          if (list.length === 0) {
+            container.innerHTML = `<div style="padding: 1.5rem; text-align: center; color: #889ac2;">ยังไม่มีข้อมูลคะแนน</div>`;
+          } else {
+            container.innerHTML = list.map((item, i) => `
+              <div class="leaderboard-item">
+                <span>#${i + 1} ${item.studentName} (${item.studentId})</span>
+                <span style="color: var(--blox-yellow);">${item.score.toLocaleString()} 🪙 (${item.accuracy}%)</span>
+              </div>
+            `).join('');
+          }
+        }
+
+        if (modal) modal.style.display = 'flex';
+      }
+
+      closeLeaderboard() {
+        const modal = document.getElementById('modal-leaderboard');
+        if (modal) modal.style.display = 'none';
+      }
+
+      restartLevel() {
+        document.getElementById('modal-stage-clear').style.display = 'none';
+        this.startLevel();
         AudioEngine.startBGM();
+      }
+
+      shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
       }
     }
 
     // Initialize Game Instance
-    const Game = new CyberSpellcasterGame();
+    const Game = new RobloxVocabLegendsGame();
 
     /* ==========================================================================
-       GOOGLE APPS SCRIPT DEPLOYMENT GUIDE (FOR GOOGLE SHEETS SYNC)
+       GOOGLE APPS SCRIPT DEPLOYMENT SCRIPT (FOR GOOGLE SHEETS)
        ==========================================================================
-       Copy the following code into Extensions > Apps Script in your Google Sheet:
-
        function doPost(e) {
          try {
            var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
            var data = JSON.parse(e.postData.contents);
            
-           // Ensure headers exist
            if (sheet.getLastRow() === 0) {
              sheet.appendRow(["Timestamp", "Student ID", "Student Name", "Category", "Score", "Time Used", "Accuracy"]);
            }
@@ -1832,13 +1970,13 @@
              data.category,
              data.score,
              data.timeUsed,
-             data.accuracy
+             data.accuracy + "%"
            ]);
            
-           return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
+           return ContentService.createTextOutput(JSON.stringify({"result": "success"}))
              .setMimeType(ContentService.MimeType.JSON);
-         } catch (error) {
-           return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
+         } catch(err) {
+           return ContentService.createTextOutput(JSON.stringify({"result": "error", "error": err.toString()}))
              .setMimeType(ContentService.MimeType.JSON);
          }
        }

@@ -1230,11 +1230,11 @@
           <div class="home-card-panel">
             <h1 class="home-title-hero">ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</h1>
             
-            <!-- Live Supabase Star Rating Display -->
-            <div class="home-rating-pill" id="home-star-rating-pill" onclick="App.openReviewModal()">
+            <!-- Live Supabase Star Rating Display (Opens Public Reviews Breakdown Modal) -->
+            <div class="home-rating-pill" id="home-star-rating-pill" onclick="App.openPublicReviewsModal()" title="คลิกเพื่อดูคะแนนและผลการรีวิวทั้งหมด">
               <span>⭐</span>
               <span id="home-avg-rating-val">4.9 / 5.0</span>
-              <span style="color: #94a3b8; font-size: 0.75rem;" id="home-total-reviews-count">(จาก 48 รีวิว)</span>
+              <span style="color: #cbd5e1; font-size: 0.75rem;" id="home-total-reviews-count">(จาก 48 รีวิว - ดูรีวิวทั้งหมด 👁️)</span>
             </div>
 
             <!-- 1. Code-based SVG Character Selection (3 Roblox Models) -->
@@ -1738,6 +1738,12 @@
             <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
           </div>
 
+          <!-- Real-Time In-Game Thai Explanation Banner -->
+          <div class="question-explanation-banner" id="question-explanation-banner" style="display: none; background: rgba(0, 240, 255, 0.15); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.5rem 0.9rem; font-size: 0.9rem; color: #fff; align-items: center; gap: 0.6rem; box-shadow: 0 0 15px rgba(0,240,255,0.25);">
+            <span style="font-size: 1.25rem;">💡</span>
+            <span id="question-explanation-text" style="font-weight: 600; line-height: 1.35;"></span>
+          </div>
+
           <div class="choices-grid-layout" id="choices-container">
             <!-- 4 Choice buttons safely rendered with textContent -->
           </div>
@@ -1772,10 +1778,10 @@
   </div>
 
   <!-- ==========================================================================
-       MODAL 2: STAGE COMPLETE (VICTORY / DEFEAT) - EXACTLY 2 ACTION BUTTONS
+       MODAL 2: STAGE COMPLETE (VICTORY / DEFEAT) - WITH DETAILED THAI EXPLANATIONS
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-stage-result">
-    <div class="blox-modal-card" style="max-width: 520px;">
+    <div class="blox-modal-card" style="max-width: 540px;">
       <div style="font-size: 3.6rem; margin-bottom: 0.3rem;" id="res-icon">🎉</div>
       <h2 class="modal-title" id="res-title">STAGE CLEARED!</h2>
       <p class="modal-subtitle" id="res-subtitle">คุณตอบคำถามครบตามเป้าหมายของด่านแล้ว!</p>
@@ -1795,10 +1801,19 @@
         </div>
       </div>
 
-      <!-- Item-Level Visual Answer Pills Summary -->
+      <!-- Item-Level Visual Answer Pills Summary & Thai Explanations -->
       <div style="margin-bottom: 0.9rem; text-align: left;">
         <div style="font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.3rem;">ผลการตอบรายข้อ (Question Breakdown):</div>
-        <div class="answer-tracker-pill-group" id="res-item-pills" style="justify-content: center;"></div>
+        <div class="answer-tracker-pill-group" id="res-item-pills" style="justify-content: center; margin-bottom: 0.6rem;"></div>
+
+        <!-- Scrollable Thai Explanations List for Every Question -->
+        <div style="background: rgba(10, 16, 38, 0.75); border: 1.5px solid rgba(0, 240, 255, 0.3); border-radius: 10px; padding: 0.6rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <span style="font-size: 0.78rem; color: var(--blox-yellow); font-weight: 700;">📖 เฉลยและคำอธิบายภาษาไทยทุกข้อ (Thai Explanations):</span>
+            <span style="font-size: 0.7rem; color: #94a3b8;">เลื่อนดูได้ ⬇️</span>
+          </div>
+          <div id="res-detailed-breakdown-list" style="max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem; padding-right: 0.2rem;"></div>
+        </div>
       </div>
 
       <div id="res-sync-status" style="font-size: 0.8rem; color: var(--blox-cyan); margin-bottom: 1rem; font-weight: 600;">
@@ -1818,7 +1833,7 @@
   </div>
 
   <!-- ==========================================================================
-       MODAL 3: 1-5 STAR RATING REVIEW MODAL
+       MODAL 3: 1-5 STAR RATING REVIEW SUBMISSION MODAL
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-review-feedback">
     <div class="blox-modal-card">
@@ -1840,6 +1855,43 @@
       <div style="display: flex; gap: 0.6rem;">
         <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeReviewModal()">ข้าม (Skip)</button>
         <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.75rem; border-radius: 12px;" onclick="App.submitRatingReview()">ส่งรีวิว ⭐</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: PUBLIC REVIEWS & FEEDBACK LIST (HOMEPAGE REVIEW POPUP)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-public-reviews">
+    <div class="blox-modal-card" style="max-width: 560px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+        <h2 class="modal-title" style="font-size: 1.35rem; margin-bottom: 0;">⭐ คะแนนและรีวิวจากผู้เล่น</h2>
+        <button class="icon-toggle-btn" onclick="App.closePublicReviewsModal()">✖ ปิด</button>
+      </div>
+      <p class="modal-subtitle" style="text-align: left; margin-bottom: 0.8rem;">ผลการประเมินความพึงพอใจและข้อเสนอแนะเกี่ยวกับเกมทั้งหมด</p>
+
+      <!-- Rating Summary Card -->
+      <div style="display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.35); border-radius: 12px; padding: 0.75rem; margin-bottom: 0.8rem;">
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-blox-title); font-size: 2.2rem; color: var(--blox-yellow);" id="pub-avg-rating-val">4.9</div>
+          <div style="font-size: 0.85rem; color: var(--blox-yellow);">⭐⭐⭐⭐⭐</div>
+          <div style="font-size: 0.75rem; color: #94a3b8;" id="pub-total-reviews-count">จาก 48 รีวิว</div>
+        </div>
+        <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1rem; font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;">
+          <div>🟢 ประเมิน 5 ดาว: <strong id="pub-stars-5" style="color: var(--blox-green);">90%</strong></div>
+          <div>🟡 ประเมิน 4 ดาว: <strong id="pub-stars-4" style="color: var(--blox-yellow);">8%</strong></div>
+          <div>🔵 ประเมิน 1-3 ดาว: <strong id="pub-stars-123" style="color: var(--blox-cyan);">2%</strong></div>
+        </div>
+      </div>
+
+      <!-- Reviews Scrollable List -->
+      <div id="public-reviews-list-container" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; padding-right: 0.2rem;">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closePublicReviewsModal()">ปิดหน้าต่าง</button>
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.05rem; padding: 0.75rem; border-radius: 12px;" onclick="App.switchToSubmitReviewModal()">✍️ ส่งรีวิวของคุณ ⭐</button>
       </div>
     </div>
   </div>
@@ -2781,6 +2833,10 @@
           });
         }
 
+        // Hide real-time explanation banner on new question
+        const expBanner = document.getElementById('question-explanation-banner');
+        if (expBanner) expBanner.style.display = 'none';
+
         // Prepare Choices
         const sameStageOthers = App.shuffleArray(
           VOCAB_DATABASE.filter(v => v.stage === this.activeQuestion.stage && v.term !== this.activeQuestion.term)
@@ -2855,6 +2911,14 @@
         // Reset monster speeds back to normal slow baseline upon correct answer
         this.enemies.forEach(e => { e.speed = e.baseSpeed; });
 
+        // Display In-Game Real-Time Thai Explanation Banner
+        const expBanner = document.getElementById('question-explanation-banner');
+        const expText = document.getElementById('question-explanation-text');
+        if (expBanner && expText) {
+          expText.innerHTML = `<span style="color: var(--blox-green);">✅ ถูกต้อง!</span> <strong>${this.activeQuestion.term}</strong>: ${this.activeQuestion.ttsTh}`;
+          expBanner.style.display = 'flex';
+        }
+
         AudioEngine.playCoinChime();
         AudioEngine.speakBilingual(this.activeQuestion.ttsEn, this.activeQuestion.ttsTh);
 
@@ -2899,7 +2963,7 @@
             this.currentQIdx++;
             this.loadQuestion(this.currentQIdx);
           }
-        }, 1100);
+        }, 1300);
       }
 
       processWrongAnswer() {
@@ -2910,6 +2974,14 @@
         this.enemies.forEach(e => {
           e.speed = Math.min(e.speed + 1.5, 4.5);
         });
+
+        // Display In-Game Real-Time Thai Explanation Banner for incorrect answer
+        const expBanner = document.getElementById('question-explanation-banner');
+        const expText = document.getElementById('question-explanation-text');
+        if (expBanner && expText) {
+          expText.innerHTML = `<span style="color: #f87171;">💡 เฉลยที่ถูกต้อง:</span> <strong>${this.activeQuestion.term}</strong> — ${this.activeQuestion.ttsTh}`;
+          expBanner.style.display = 'flex';
+        }
 
         const targetX = this.enemies[0] ? this.enemies[0].x : this.player.x + 100;
         this.createFloatingText("WRONG! ✗", this.player.x + 30, this.player.y - 30, '#ef4444');
@@ -3562,6 +3634,24 @@
           }
         }
 
+        // Render Comprehensive Thai Explanations Breakdown
+        const detailedList = document.getElementById('res-detailed-breakdown-list');
+        if (detailedList) {
+          detailedList.innerHTML = this.stageQuestions.map((q, idx) => {
+            const isOk = this.answersHistory[idx] === true;
+            return `
+              <div style="background: rgba(0,0,0,0.35); border-left: 3.5px solid ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; padding: 0.45rem 0.65rem; border-radius: 6px; font-size: 0.78rem;">
+                <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 2px;">
+                  <span style="font-family: var(--font-code); color: var(--blox-yellow);">ข้อ ${idx + 1}: ${q.term}</span>
+                  <span style="color: ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; font-weight: 700;">${isOk ? '✓ ถูกต้อง' : '✗ ตอบผิด'}</span>
+                </div>
+                <div style="color: #e2e8f0; font-size: 0.74rem; margin-bottom: 2px;">${q.scenario}</div>
+                <div style="color: var(--blox-cyan); font-size: 0.74rem;"><strong>💡 คำอธิบายเฉลย (ไทย):</strong> ${q.ttsTh}</div>
+              </div>
+            `;
+          }).join('');
+        }
+
         document.getElementById('res-icon').textContent = isVictory ? '🎉🏆' : '💀';
         document.getElementById('res-title').textContent = isVictory ? 'STAGE CLEARED!' : 'GAME OVER!';
         document.getElementById('res-subtitle').textContent = isVictory ? 'ยินดีด้วย! คุณพิชิตคำศัพท์ครบทุกข้อแล้ว' : 'พลังชีวิตหมด! พยายามใหม่อีกครั้งนะ';
@@ -4023,6 +4113,60 @@
         link.href = URL.createObjectURL(blob);
         link.download = `roblox_regent_scores_${Date.now()}.csv`;
         link.click();
+      }
+
+      // Public Reviews Modal (Home Review Button Popup)
+      async openPublicReviewsModal() {
+        const modal = document.getElementById('modal-public-reviews');
+        if (!modal) return;
+
+        const reviews = await Supabase.fetchReviews();
+        const total = reviews.length;
+        const avg = total > 0 ? (reviews.reduce((acc, r) => acc + (r.rating_stars || 5), 0) / total).toFixed(1) : "5.0";
+        
+        const count5 = reviews.filter(r => (r.rating_stars || 5) === 5).length;
+        const count4 = reviews.filter(r => (r.rating_stars || 5) === 4).length;
+        const count123 = reviews.filter(r => (r.rating_stars || 5) < 4).length;
+
+        const p5 = total > 0 ? Math.round((count5 / total) * 100) : 100;
+        const p4 = total > 0 ? Math.round((count4 / total) * 100) : 0;
+        const p123 = total > 0 ? Math.round((count123 / total) * 100) : 0;
+
+        document.getElementById('pub-avg-rating-val').textContent = avg;
+        document.getElementById('pub-total-reviews-count').textContent = `จาก ${total} รีวิว`;
+        document.getElementById('pub-stars-5').textContent = `${p5}% (${count5} คน)`;
+        document.getElementById('pub-stars-4').textContent = `${p4}% (${count4} คน)`;
+        document.getElementById('pub-stars-123').textContent = `${p123}% (${count123} คน)`;
+
+        const container = document.getElementById('public-reviews-list-container');
+        if (container) {
+          container.innerHTML = reviews.map(r => {
+            const stars = '⭐'.repeat(r.rating_stars || 5);
+            const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('th-TH') : '-';
+            return `
+              <div style="background: rgba(20, 29, 64, 0.9); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.82rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                  <span style="color: var(--blox-yellow); font-size: 0.85rem;">${stars}</span>
+                  <span style="color: #94a3b8; font-size: 0.72rem;">${dateStr}</span>
+                </div>
+                <div style="color: #fff; font-weight: 500; margin-bottom: 2px;">${r.comment || 'ไม่มีความคิดเห็น'}</div>
+                <div style="color: var(--blox-cyan); font-size: 0.72rem;">โดย: ${r.student_id || 'Robloxian'}</div>
+              </div>
+            `;
+          }).join('') || '<div style="text-align: center; color: #94a3b8; padding: 1rem;">ยังไม่มีรีวิว</div>';
+        }
+
+        modal.classList.add('show');
+        AudioEngine.playCoinChime();
+      }
+
+      closePublicReviewsModal() {
+        document.getElementById('modal-public-reviews')?.classList.remove('show');
+      }
+
+      switchToSubmitReviewModal() {
+        this.closePublicReviewsModal();
+        this.openReviewModal();
       }
 
       // Review Modal & Rating Handling

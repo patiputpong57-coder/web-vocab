@@ -2448,6 +2448,25 @@
         localScores.unshift(payload);
         localStorage.setItem('roblox_regent_scores', JSON.stringify(localScores));
 
+        const leaderboardPayload = {
+          student_id: String(payload.student_id || ''),
+          student_name: String(payload.student_name || ''),
+          grade: String(payload.grade || payload.class_level || 'ปวช. 2/1'),
+          stage: String(payload.stage || payload.stage_name || 'Stage 1'),
+          score: Number(payload.score || 0),
+          accuracy: Number(payload.accuracy !== undefined ? payload.accuracy : (payload.percentage || 0))
+        };
+
+        // 1. Send data directly to 'leaderboard' table as required
+        try {
+          await fetch(`${this.url}/rest/v1/leaderboard`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(leaderboardPayload)
+          });
+        } catch (e) {}
+
+        // 2. Also keep 'scores' table synchronized for backward compatibility
         try {
           await fetch(`${this.url}/rest/v1/scores`, {
             method: 'POST',
@@ -2458,6 +2477,20 @@
       }
 
       async fetchScores() {
+        // 1. Fetch from 'leaderboard' table first
+        try {
+          const res = await fetch(`${this.url}/rest/v1/leaderboard?select=student_id,student_name,grade,stage,score,accuracy,created_at&order=score.desc`, {
+            headers: this.headers
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data.sort((a, b) => (b.score || 0) - (a.score || 0));
+            }
+          }
+        } catch (e) {}
+
+        // 2. Fallback to 'scores' table if leaderboard table is not ready
         try {
           const res = await fetch(`${this.url}/rest/v1/scores?select=*&order=score.desc`, {
             headers: this.headers
@@ -2469,6 +2502,7 @@
             }
           }
         } catch (e) {}
+
         const local = JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
         return local.sort((a, b) => (b.score || 0) - (a.score || 0));
       }
@@ -3895,8 +3929,11 @@
         const scorePayload = {
           student_id: this.studentId,
           student_name: this.studentName,
-          class_level: this.classLevel,
+          grade: this.classLevel || 'ปวช. 2/1',
+          stage: `Stage ${this.stageId}`,
           score: this.score,
+          accuracy: accuracy,
+          class_level: this.classLevel || 'ปวช. 2/1',
           percentage: accuracy,
           correct_answers: this.correctCount,
           total_questions: totalQ,
@@ -4161,15 +4198,19 @@
           const tr = document.createElement('tr');
           const trophy = idx === 0 ? '🥇 1' : (idx === 1 ? '🥈 2' : (idx === 2 ? '🥉 3' : `#${idx + 1}`));
           const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('th-TH') : '-';
+          const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
+          const stageVal = s.stage || s.stage_name || 'Stage 1';
+          const scoreVal = Number(s.score || 0);
+          const accVal = s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100);
 
           tr.innerHTML = `
             <td style="font-weight: 800; color: ${idx < 3 ? 'var(--blox-yellow)' : '#fff'};">${trophy}</td>
             <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id}</td>
             <td style="font-weight: 600;">${s.student_name}</td>
-            <td>${s.class_level || 'ปวช. 2/1'}</td>
-            <td><span class="nav-brand-badge">${s.stage_name || 'Stage 1'}</span></td>
-            <td style="font-family: var(--font-blox-title); color: var(--blox-yellow);">${(s.score || 0).toLocaleString()} 🪙</td>
-            <td style="font-weight: 700; color: var(--blox-green);">${s.percentage || 100}%</td>
+            <td>${gradeVal}</td>
+            <td><span class="nav-brand-badge">${stageVal}</span></td>
+            <td style="font-family: var(--font-blox-title); color: var(--blox-yellow);">${scoreVal.toLocaleString()} 🪙</td>
+            <td style="font-weight: 700; color: var(--blox-green);">${accVal}%</td>
             <td style="color: #94a3b8; font-size: 0.8rem;">${dateStr}</td>
           `;
           tbody.appendChild(tr);
@@ -4318,8 +4359,8 @@
       async renderTeacherAnalytics() {
         const scores = await Supabase.fetchScores();
         const entriesCount = scores.length;
-        const avgScore = entriesCount > 0 ? Math.round(scores.reduce((acc, s) => acc + (s.percentage || 0), 0) / entriesCount) : 0;
-        const clears = scores.filter(s => (s.percentage || 0) >= 60).length;
+        const avgScore = entriesCount > 0 ? Math.round(scores.reduce((acc, s) => acc + (s.accuracy !== undefined ? s.accuracy : (s.percentage || 0)), 0) / entriesCount) : 0;
+        const clears = scores.filter(s => (s.accuracy !== undefined ? s.accuracy : (s.percentage || 0)) >= 60).length;
         const clearRate = entriesCount > 0 ? Math.round((clears / entriesCount) * 100) : 0;
 
         document.getElementById('t-stat-entries').textContent = entriesCount;
@@ -4328,10 +4369,11 @@
 
         const classMap = {};
         scores.forEach(s => {
-          const cl = s.class_level || 'ปวช. 2/1';
+          const cl = s.grade || s.class_level || 'ปวช. 2/1';
+          const acc = s.accuracy !== undefined ? s.accuracy : (s.percentage || 0);
           if (!classMap[cl]) classMap[cl] = { count: 0, sumPercent: 0 };
           classMap[cl].count++;
-          classMap[cl].sumPercent += (s.percentage || 0);
+          classMap[cl].sumPercent += acc;
         });
 
         const breakdownList = document.getElementById('teacher-class-breakdown-list');
@@ -4360,13 +4402,18 @@
             <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${idx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${idx + 1}</div>
           `).join('');
 
+          const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
+          const stageVal = s.stage || s.stage_name || 'Stage 1';
+          const accVal = s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100);
+          const scoreVal = (s.score || 0).toLocaleString();
+
           tr.innerHTML = `
             <td><strong>${s.student_name}</strong> <span style="font-size: 0.75rem; color: #94a3b8;">(${s.student_id})</span></td>
-            <td>${s.class_level || 'ปวช. 2/1'}</td>
-            <td><span class="nav-brand-badge">${s.stage_name}</span></td>
-            <td style="color: var(--blox-yellow); font-weight: 700;">${(s.score || 0).toLocaleString()} (${s.percentage}%)</td>
+            <td>${gradeVal}</td>
+            <td><span class="nav-brand-badge">${stageVal}</span></td>
+            <td style="color: var(--blox-yellow); font-weight: 700;">${scoreVal} (${accVal}%)</td>
             <td><div class="answer-tracker-pill-group">${pillsHtml}</div></td>
-            <td style="color: #94a3b8; font-size: 0.78rem;">${new Date(s.created_at).toLocaleTimeString('th-TH')}</td>
+            <td style="color: #94a3b8; font-size: 0.78rem;">${new Date(s.created_at || Date.now()).toLocaleTimeString('th-TH')}</td>
           `;
           tbody.appendChild(tr);
         });

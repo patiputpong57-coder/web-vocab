@@ -2512,18 +2512,24 @@
         localReviews.unshift(review);
         localStorage.setItem('roblox_regent_reviews', JSON.stringify(localReviews));
 
+        const reviewPayload = {
+          student_id: String(review.student_id || 'Robloxian'),
+          rating: Number(review.rating !== undefined ? review.rating : (review.rating_stars || 5)),
+          comment: String(review.comment || review.feedback || '')
+        };
+
         try {
           await fetch(`${this.url}/rest/v1/reviews`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(review)
+            body: JSON.stringify(reviewPayload)
           });
         } catch (e) {}
       }
 
       async fetchReviews() {
         try {
-          const res = await fetch(`${this.url}/rest/v1/reviews?select=*&order=created_at.desc`, {
+          const res = await fetch(`${this.url}/rest/v1/reviews?select=id,rating,comment,student_id,created_at&order=created_at.desc`, {
             headers: this.headers
           });
           if (res.ok) {
@@ -2534,10 +2540,10 @@
         return JSON.parse(localStorage.getItem('roblox_regent_reviews') || JSON.stringify(DEFAULT_REVIEWS));
       }
 
-      // Questions Management
+      // Questions Management (category, question, option_a, option_b, option_c, option_d, correct_option, explanation)
       async fetchQuestions() {
         try {
-          const res = await fetch(`${this.url}/rest/v1/questions?select=*&order=id.asc`, {
+          const res = await fetch(`${this.url}/rest/v1/questions?select=id,category,question,option_a,option_b,option_c,option_d,correct_option,explanation,created_at&order=id.asc`, {
             headers: this.headers
           });
           if (res.ok) {
@@ -2549,21 +2555,43 @@
       }
 
       async saveQuestion(q) {
+        const questionPayload = {
+          category: String(q.category || q.stageName || `Stage ${q.stage || 1}`),
+          question: String(q.question || q.scenario || ''),
+          option_a: String(q.option_a || q.term || ''),
+          option_b: String(q.option_b || ''),
+          option_c: String(q.option_c || ''),
+          option_d: String(q.option_d || ''),
+          correct_option: String(q.correct_option || 'a').toLowerCase(),
+          explanation: String(q.explanation || q.ttsTh || '')
+        };
+
         try {
           await fetch(`${this.url}/rest/v1/questions`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(q)
+            body: JSON.stringify(questionPayload)
           });
         } catch (e) {}
       }
 
       async updateQuestion(id, q) {
+        const questionPayload = {
+          category: String(q.category || q.stageName || `Stage ${q.stage || 1}`),
+          question: String(q.question || q.scenario || ''),
+          option_a: String(q.option_a || q.term || ''),
+          option_b: String(q.option_b || ''),
+          option_c: String(q.option_c || ''),
+          option_d: String(q.option_d || ''),
+          correct_option: String(q.correct_option || 'a').toLowerCase(),
+          explanation: String(q.explanation || q.ttsTh || '')
+        };
+
         try {
           await fetch(`${this.url}/rest/v1/questions?id=eq.${id}`, {
             method: 'PATCH',
             headers: this.headers,
-            body: JSON.stringify(q)
+            body: JSON.stringify(questionPayload)
           });
         } catch (e) {}
       }
@@ -3998,7 +4026,52 @@
       async loadQuestionsFromSupabase() {
         const customQ = await Supabase.fetchQuestions();
         if (customQ && Array.isArray(customQ) && customQ.length > 0) {
-          VOCAB_DATABASE = customQ;
+          const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
+          const normalized = customQ.map((q, idx) => {
+            const catStr = String(q.category || q.stage || '1');
+            let stageNum = 1;
+            if (/html/i.test(catStr) || catStr === '1') stageNum = 1;
+            else if (/css/i.test(catStr) || catStr === '2') stageNum = 2;
+            else if (/js|javascript|dom/i.test(catStr) || catStr === '3') stageNum = 3;
+            else if (/server|database|cloud/i.test(catStr) || catStr === '4') stageNum = 4;
+            else stageNum = parseInt(catStr, 10) || 1;
+
+            const stageName = stageNames[stageNum] || catStr || "Web Development";
+
+            let term = q.term || '';
+            const correctOpt = String(q.correct_option || '').toLowerCase();
+            if (correctOpt === 'a' || correctOpt === 'option_a') term = q.option_a || term;
+            else if (correctOpt === 'b' || correctOpt === 'option_b') term = q.option_b || term;
+            else if (correctOpt === 'c' || correctOpt === 'option_c') term = q.option_c || term;
+            else if (correctOpt === 'd' || correctOpt === 'option_d') term = q.option_d || term;
+            else if (!term && q.option_a) term = q.option_a;
+
+            const scenario = q.question || q.scenario || 'โจทย์คำถาม';
+            const explanation = q.explanation || q.ttsTh || `เฉลย: ${term}`;
+
+            return {
+              id: q.id || (idx + 1),
+              stage: stageNum,
+              stageName: stageName,
+              term: term,
+              ttsEn: q.ttsEn || term,
+              ttsTh: explanation,
+              scenario: scenario,
+              codeExample: q.codeExample || `// ${term}`,
+              option_a: q.option_a || term,
+              option_b: q.option_b || '',
+              option_c: q.option_c || '',
+              option_d: q.option_d || '',
+              correct_option: correctOpt || 'a',
+              explanation: explanation,
+              category: q.category || stageName,
+              question: scenario
+            };
+          });
+
+          if (normalized.length > 0) {
+            VOCAB_DATABASE = normalized;
+          }
         }
       }
 
@@ -4447,19 +4520,26 @@
         const reviews = await Supabase.fetchReviews();
         tbody.innerHTML = '';
 
+        let sumRating = 0;
         reviews.forEach(r => {
           const tr = document.createElement('tr');
-          const stars = '⭐'.repeat(r.rating_stars || 5);
+          const rVal = Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5));
+          sumRating += rVal;
+          const stars = '⭐'.repeat(Math.max(1, Math.min(5, rVal)));
+          const dateStr = r.created_at ? new Date(r.created_at).toLocaleString('th-TH') : '-';
           tr.innerHTML = `
-            <td style="color: var(--blox-cyan);">${r.student_id}</td>
-            <td style="color: var(--blox-yellow);">${stars}</td>
+            <td style="color: var(--blox-cyan);">${r.student_id || 'Robloxian'}</td>
+            <td style="color: var(--blox-yellow);">${stars} (${rVal}★)</td>
             <td>${r.comment || '-'}</td>
-            <td style="color: #94a3b8; font-size: 0.78rem;">${r.created_at || '-'}</td>
+            <td style="color: #94a3b8; font-size: 0.78rem;">${dateStr}</td>
           `;
           tbody.appendChild(tr);
         });
 
+        const avgStars = reviews.length > 0 ? (sumRating / reviews.length).toFixed(1) : "5.0";
         document.getElementById('t-reviews-count').textContent = reviews.length;
+        const tStarsEl = document.getElementById('t-reviews-stars');
+        if (tStarsEl) tStarsEl.textContent = `${avgStars} ⭐`;
       }
 
       exportTeacherDataCSV() {
@@ -4488,11 +4568,11 @@
 
         const reviews = await Supabase.fetchReviews();
         const total = reviews.length;
-        const avg = total > 0 ? (reviews.reduce((acc, r) => acc + (r.rating_stars || 5), 0) / total).toFixed(1) : "5.0";
+        const avg = total > 0 ? (reviews.reduce((acc, r) => acc + Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5)), 0) / total).toFixed(1) : "5.0";
         
-        const count5 = reviews.filter(r => (r.rating_stars || 5) === 5).length;
-        const count4 = reviews.filter(r => (r.rating_stars || 5) === 4).length;
-        const count123 = reviews.filter(r => (r.rating_stars || 5) < 4).length;
+        const count5 = reviews.filter(r => Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5)) === 5).length;
+        const count4 = reviews.filter(r => Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5)) === 4).length;
+        const count123 = reviews.filter(r => Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5)) < 4).length;
 
         const p5 = total > 0 ? Math.round((count5 / total) * 100) : 100;
         const p4 = total > 0 ? Math.round((count4 / total) * 100) : 0;
@@ -4507,7 +4587,8 @@
         const container = document.getElementById('public-reviews-list-container');
         if (container) {
           container.innerHTML = reviews.map(r => {
-            const stars = '⭐'.repeat(r.rating_stars || 5);
+            const rVal = Number(r.rating !== undefined ? r.rating : (r.rating_stars || 5));
+            const stars = '⭐'.repeat(Math.max(1, Math.min(5, rVal)));
             const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('th-TH') : '-';
             return `
               <div style="background: rgba(20, 29, 64, 0.9); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.82rem;">
@@ -4520,8 +4601,6 @@
               </div>
             `;
           }).join('') || '<div style="text-align: center; color: #94a3b8; padding: 1rem;">ยังไม่มีรีวิว</div>';
-        }
-
         modal.classList.add('show');
         AudioEngine.playCoinChime();
       }
@@ -4557,12 +4636,15 @@
         const comment = document.getElementById('input-review-comment').value.trim();
         const idInput = document.getElementById('input-student-id').value.trim() || 'Robloxian';
 
-        await Supabase.saveReview({
+        const reviewData = {
           student_id: idInput,
+          rating: this.reviewRating,
           rating_stars: this.reviewRating,
           comment: comment || 'ยอดเยี่ยมมากครับ!',
           created_at: new Date().toISOString()
-        });
+        };
+
+        await Supabase.saveReview(reviewData);
 
         this.closeReviewModal();
         alert('ขอบคุณสำหรับคะแนนประเมินและข้อเสนอแนะ ⭐');
@@ -4572,7 +4654,7 @@
       async loadRatingSummary() {
         const reviews = await Supabase.fetchReviews();
         if (reviews.length > 0) {
-          const avg = (reviews.reduce((acc, r) => acc + (r.rating_stars || 5), 0) / reviews.length).toFixed(1);
+          const avg = (reviews.reduce((acc, r) => acc + (r.rating !== undefined ? r.rating : (r.rating_stars || 5)), 0) / reviews.length).toFixed(1);
           document.getElementById('home-avg-rating-val').textContent = `${avg} / 5.0`;
           document.getElementById('home-total-reviews-count').textContent = `(จาก ${reviews.length} รีวิว)`;
         }
@@ -4598,13 +4680,13 @@
         document.getElementById('modal-q-id').value = q.id;
         document.getElementById('modal-q-title').textContent = `✏️ แก้ไขข้อสอบ ID #${q.id}`;
         document.getElementById('modal-q-stage').value = q.stage || 1;
-        document.getElementById('modal-q-text').value = q.scenario || '';
-        document.getElementById('modal-q-choice-a').value = q.term || '';
-        document.getElementById('modal-q-choice-b').value = '';
-        document.getElementById('modal-q-choice-c').value = '';
-        document.getElementById('modal-q-choice-d').value = '';
-        document.getElementById('modal-q-correct').value = 'a';
-        document.getElementById('modal-q-explanation').value = q.ttsTh || '';
+        document.getElementById('modal-q-text').value = q.question || q.scenario || '';
+        document.getElementById('modal-q-choice-a').value = q.option_a || q.term || '';
+        document.getElementById('modal-q-choice-b').value = q.option_b || '';
+        document.getElementById('modal-q-choice-c').value = q.option_c || '';
+        document.getElementById('modal-q-choice-d').value = q.option_d || '';
+        document.getElementById('modal-q-correct').value = (q.correct_option || 'a').toLowerCase();
+        document.getElementById('modal-q-explanation').value = q.explanation || q.ttsTh || '';
         document.getElementById('modal-add-question').classList.add('show');
       }
 
@@ -4615,37 +4697,55 @@
       async saveTeacherQuestion() {
         const editIdStr = document.getElementById('modal-q-id').value.trim();
         const stage = parseInt(document.getElementById('modal-q-stage').value, 10);
-        const scenario = document.getElementById('modal-q-text').value.trim();
+        const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
+        const categoryName = stageNames[stage] || `Stage ${stage}`;
+
+        const questionText = document.getElementById('modal-q-text').value.trim();
         const choiceA = document.getElementById('modal-q-choice-a').value.trim();
         const choiceB = document.getElementById('modal-q-choice-b').value.trim();
         const choiceC = document.getElementById('modal-q-choice-c').value.trim();
         const choiceD = document.getElementById('modal-q-choice-d').value.trim();
-        const correct = document.getElementById('modal-q-correct').value;
+        const correct = document.getElementById('modal-q-correct').value.toLowerCase();
         const explanation = document.getElementById('modal-q-explanation').value.trim();
 
-        if (!scenario || !choiceA) {
+        if (!questionText || !choiceA) {
           alert('กรุณากรอกโจทย์คำถามและตัวเลือกที่ถูกต้อง');
           return;
         }
 
         const termMap = { a: choiceA, b: choiceB, c: choiceC, d: choiceD };
-        const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
         const chosenTerm = termMap[correct] || choiceA;
+
+        // Payload for Supabase questions table:
+        // category, question, option_a, option_b, option_c, option_d, correct_option, explanation
+        const questionPayload = {
+          category: categoryName,
+          question: questionText,
+          option_a: choiceA,
+          option_b: choiceB || choiceA,
+          option_c: choiceC || choiceA,
+          option_d: choiceD || choiceA,
+          correct_option: correct,
+          explanation: explanation || `เฉลย: ${chosenTerm}`
+        };
 
         if (editIdStr) {
           // Edit Existing Question
           const editId = parseInt(editIdStr, 10);
           const idx = VOCAB_DATABASE.findIndex(q => q.id === editId);
           if (idx !== -1) {
-            VOCAB_DATABASE[idx].stage = stage;
-            VOCAB_DATABASE[idx].stageName = stageNames[stage] || "Web Development";
-            VOCAB_DATABASE[idx].scenario = scenario;
-            VOCAB_DATABASE[idx].term = chosenTerm;
-            VOCAB_DATABASE[idx].ttsEn = chosenTerm;
-            VOCAB_DATABASE[idx].ttsTh = explanation || 'คำตอบที่ถูกต้อง';
-            VOCAB_DATABASE[idx].codeExample = `// ${chosenTerm}`;
-
-            await Supabase.updateQuestion(editId, VOCAB_DATABASE[idx]);
+            VOCAB_DATABASE[idx] = {
+              ...VOCAB_DATABASE[idx],
+              stage: stage,
+              stageName: categoryName,
+              scenario: questionText,
+              term: chosenTerm,
+              ttsEn: chosenTerm,
+              ttsTh: explanation || `เฉลย: ${chosenTerm}`,
+              codeExample: `// ${chosenTerm}`,
+              ...questionPayload
+            };
+            await Supabase.updateQuestion(editId, questionPayload);
           }
         } else {
           // Add New Question
@@ -4653,22 +4753,23 @@
           const newQ = {
             id: newId,
             stage: stage,
-            stageName: stageNames[stage] || "Web Development",
+            stageName: categoryName,
             term: chosenTerm,
             ttsEn: chosenTerm,
-            ttsTh: explanation || 'คำตอบที่ถูกต้อง',
-            scenario: scenario,
-            codeExample: `// ${chosenTerm}`
+            ttsTh: explanation || `เฉลย: ${chosenTerm}`,
+            scenario: questionText,
+            codeExample: `// ${chosenTerm}`,
+            ...questionPayload
           };
           VOCAB_DATABASE.push(newQ);
-          await Supabase.saveQuestion(newQ);
+          await Supabase.saveQuestion(questionPayload);
         }
 
         localStorage.setItem('roblox_regent_custom_questions', JSON.stringify(VOCAB_DATABASE));
         this.closeAddQuestionModal();
         this.renderTeacherQuestionsTable();
         this.renderLessons();
-        alert(editIdStr ? 'แก้ไขข้อสอบเรียบร้อยแล้ว!' : 'เพิ่มข้อสอบใหม่เรียบร้อยแล้ว!');
+        alert(editIdStr ? 'บันทึกการแก้ไขข้อสอบลง Supabase เรียบร้อยแล้ว! ✏️' : 'เพิ่มข้อสอบใหม่ลง Supabase เรียบร้อยแล้ว! ➕');
       }
 
       async deleteQuestion(id) {

@@ -1217,9 +1217,22 @@
     <!-- TOP NAVIGATION BAR (4 TABS) -->
     <nav class="top-nav-bar">
       <div class="nav-brand" style="cursor: pointer;" onclick="App.showView('home')" title="กลับหน้าแรก">
-        <span>🧱</span>
-        <span>ROBLOX VOCAB REGENT</span>
-        <span class="nav-brand-badge">EDTECH</span>
+        <div class="nav-rpg-logo-wrap" style="display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(168, 85, 247, 0.25)); border: 1.5px solid var(--blox-cyan); border-radius: 9px; box-shadow: 0 0 10px rgba(0, 240, 255, 0.4); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2L28 8V18C28 24.5 22.8 29.2 16 31C9.2 29.2 4 24.5 4 18V8L16 2Z" fill="url(#rpgLogoGrad)" stroke="#00f0ff" stroke-width="1.5"/>
+            <path d="M16 7L18.5 12L24 12.8L20 16.7L21 22.2L16 19.5L11 22.2L12 16.7L8 12.8L13.5 12L16 7Z" fill="#ffd700" stroke="#b45309" stroke-width="0.8"/>
+            <circle cx="16" cy="15" r="2.5" fill="#ffffff"/>
+            <defs>
+              <linearGradient id="rpgLogoGrad" x1="4" y1="2" x2="28" y2="31" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#002b4d"/>
+                <stop offset="0.5" stop-color="#1e1b4b"/>
+                <stop offset="1" stop-color="#4c1d95"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span style="font-family: var(--font-blox-title); letter-spacing: 0.5px; background: linear-gradient(135deg, #ffffff 40%, #00f0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ROBLOX VOCAB REGENT</span>
+        <span class="nav-brand-badge" style="background: linear-gradient(135deg, #a855f7, #ec4899); box-shadow: 0 0 8px rgba(168,85,247,0.5);">RPG QUEST</span>
       </div>
 
       <!-- 4 Core Tabs -->

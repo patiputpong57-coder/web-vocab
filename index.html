@@ -1005,6 +1005,34 @@
       white-space: nowrap;
     }
 
+    /* Clean 18px Regular Font Explanation Banner (No glow, plain and easy to read) */
+    .question-explanation-banner {
+      background: rgba(10, 16, 38, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 0.5rem 0.85rem;
+      font-family: var(--font-ui);
+      font-size: 18px;
+      font-weight: 400;
+      color: #ffffff;
+      text-shadow: none;
+      box-shadow: none;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    #question-explanation-text {
+      font-family: var(--font-ui);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #ffffff;
+      text-shadow: none;
+      background: transparent;
+    }
+
     .choices-grid-layout {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1738,13 +1766,13 @@
             <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
           </div>
 
-          <!-- Real-Time In-Game Thai Explanation Banner with Audio TTS Button -->
-          <div class="question-explanation-banner" id="question-explanation-banner" style="display: none; background: rgba(0, 240, 255, 0.15); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.5rem 0.9rem; font-size: 0.9rem; color: #fff; align-items: center; justify-content: space-between; gap: 0.6rem; box-shadow: 0 0 15px rgba(0,240,255,0.25);">
+          <!-- Real-Time In-Game Thai Explanation Banner (18px Regular Font, No Glow/Highlight) -->
+          <div class="question-explanation-banner" id="question-explanation-banner">
             <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
-              <span style="font-size: 1.25rem;">💡</span>
-              <span id="question-explanation-text" style="font-weight: 600; line-height: 1.35;"></span>
+              <span style="font-size: 1.1rem; opacity: 0.9;">💡</span>
+              <span id="question-explanation-text"></span>
             </div>
-            <button class="icon-toggle-btn" id="btn-replay-explanation-tts" style="white-space: nowrap; font-size: 0.78rem; padding: 0.3rem 0.6rem; background: var(--blox-cyan); color: #000; font-weight: 700; border-color: var(--blox-cyan);" onclick="Game.speakCurrentExplanation()">🔊 ฟังเสียงไทย</button>
+            <button class="icon-toggle-btn" id="btn-replay-explanation-tts" style="white-space: nowrap; font-size: 0.8rem; padding: 0.35rem 0.65rem; background: #25335e; color: #ffffff; font-weight: 500; border: 1px solid #435691;" onclick="Game.speakCurrentExplanation()">🔊 ฟังเสียง</button>
           </div>
 
           <div class="choices-grid-layout" id="choices-container">
@@ -2937,16 +2965,17 @@
         // Reset monster speeds back to normal slow baseline upon correct answer
         this.enemies.forEach(e => { e.speed = e.baseSpeed; });
 
-        // Display In-Game Real-Time Thai Explanation Banner
+        // Display In-Game Real-Time Thai Explanation (18px Regular Font, Plain & Easy to read)
         const expBanner = document.getElementById('question-explanation-banner');
         const expText = document.getElementById('question-explanation-text');
         if (expBanner && expText) {
-          expText.innerHTML = `<span style="color: var(--blox-green);">✅ ถูกต้อง!</span> <strong>${this.activeQuestion.term}</strong>: ${this.activeQuestion.ttsTh}`;
+          expText.textContent = `${this.activeQuestion.term} คือ ${this.activeQuestion.ttsTh}`;
           expBanner.style.display = 'flex';
         }
 
         AudioEngine.playCoinChime();
-        AudioEngine.speakBilingual(this.activeQuestion.ttsEn, this.activeQuestion.ttsTh);
+        // Play Thai audio explanation immediately on correct answer
+        AudioEngine.speakThai(this.activeQuestion.ttsTh);
 
         if (this.activeQuestion.stage === 1) {
           this.vfxShieldFrames = 45;
@@ -2989,7 +3018,7 @@
             this.currentQIdx++;
             this.loadQuestion(this.currentQIdx);
           }
-        }, 1300);
+        }, 1400);
       }
 
       processWrongAnswer() {
@@ -3001,16 +3030,16 @@
           e.speed = Math.min(e.speed + 1.5, 4.5);
         });
 
-        // Display In-Game Real-Time Thai Explanation Banner for incorrect answer
+        // Display In-Game Real-Time Thai Explanation Banner for incorrect answer (18px Regular Font)
         const expBanner = document.getElementById('question-explanation-banner');
         const expText = document.getElementById('question-explanation-text');
         if (expBanner && expText) {
-          expText.innerHTML = `<span style="color: #f87171;">💡 เฉลยที่ถูกต้อง:</span> <strong>${this.activeQuestion.term}</strong> — ${this.activeQuestion.ttsTh}`;
+          expText.textContent = `เฉลย: ${this.activeQuestion.term} คือ ${this.activeQuestion.ttsTh}`;
           expBanner.style.display = 'flex';
         }
 
         // Automatic Thai TTS explanation for incorrect answer
-        AudioEngine.speakBilingual(this.activeQuestion.ttsEn, `คำตอบที่ถูกต้องคือ ${this.activeQuestion.term} ${this.activeQuestion.ttsTh}`);
+        AudioEngine.speakThai(`คำตอบที่ถูกต้องคือ ${this.activeQuestion.term} ${this.activeQuestion.ttsTh}`);
 
         const targetX = this.enemies[0] ? this.enemies[0].x : this.player.x + 100;
         this.createFloatingText("WRONG! ✗", this.player.x + 30, this.player.y - 30, '#ef4444');
@@ -3021,7 +3050,7 @@
 
       speakCurrentExplanation() {
         if (this.activeQuestion) {
-          AudioEngine.speakBilingual(this.activeQuestion.term, this.activeQuestion.ttsTh);
+          AudioEngine.speakThai(this.activeQuestion.ttsTh);
         }
       }
 

@@ -2533,6 +2533,28 @@
         this.loop();
       }
 
+      startStage(stageNumber) {
+        // 1. คืนค่าพลังชีวิตและคะแนน
+        this.playerHP = 3;
+        this.score = 0;
+        this.isGameOver = false;
+
+        // 2. ตั้งตำแหน่งมอนสเตอร์ให้อยู่ขวาสุดของจอ (ห่างจากตัวละคร)
+        if (this.activeEnemy) {
+          this.activeEnemy.x = (this.canvas ? this.canvas.width : window.innerWidth) + 200;
+        }
+
+        // 3. อัปเดตการแสดงผลหัวใจบนจอ
+        this.updateHPUI();
+
+        // 4. เริ่มรัน Game Loop
+        requestAnimationFrame(() => this.loop());
+      }
+
+      updateHPUI() {
+        this.updateHUD();
+      }
+
       loadQuestion(idx) {
         if (idx >= this.stageQuestions.length) {
           this.finishLevel(true); // Victory!
@@ -2553,10 +2575,10 @@
         if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName;
         if (qIconEl) qIconEl.textContent = isBoss ? '👑' : '🎮';
 
-        // Spawn Themed Enemy
+        // Spawn Themed Enemy far to the right (offscreen)
         const speed = isBoss ? 0.55 : 0.68;
         this.activeEnemy = {
-          x: this.canvas.width + 40,
+          x: (this.canvas ? this.canvas.width : window.innerWidth) + 200,
           y: this.canvas.height / 2,
           size: isBoss ? 70 : 48,
           isBoss: isBoss,
@@ -3610,6 +3632,25 @@
 
     // Initialize Main Application Instance
     const App = new MainAppController();
+
+    // Global Functions per Specification
+    function startStage(stageNumber) {
+      const sNum = stageNumber || 1;
+      const studentId = document.getElementById('input-student-id')?.value.trim() || 'Robloxian';
+      const studentName = document.getElementById('input-student-name')?.value.trim() || 'Robloxian';
+      const classLevel = document.getElementById('input-class-level')?.value.trim() || 'ปวช. 2/1';
+      Game.startSession(studentId, studentName, classLevel, sNum, App.selectedCharacter, App.selectedWallpaper);
+      Game.startStage(sNum);
+    }
+
+    function updateHPUI() {
+      if (typeof Game !== 'undefined') {
+        Game.updateHPUI();
+      }
+    }
+
+    window.startStage = startStage;
+    window.updateHPUI = updateHPUI;
   </script>
 </body>
 </html>

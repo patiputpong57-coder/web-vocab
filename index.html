@@ -2692,10 +2692,11 @@
         this.isGameOver = false;
         this.isPlaying = true;
 
+        const cw = this.canvas.width || 800;
+        const spawnX = Math.max(cw - 70, 680);
         if (this.enemies.length > 0) {
-          const spawnX = Math.max(this.canvas.width || 800, window.innerWidth || 800) + 300;
           this.enemies.forEach((e, idx) => {
-            e.x = spawnX + (idx * 80);
+            e.x = spawnX + (idx * 65);
             e.speed = e.baseSpeed;
           });
         }
@@ -2731,9 +2732,11 @@
         if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName;
         if (qIconEl) qIconEl.textContent = isBoss ? '👑' : '🎮';
 
-        // Spawn Wave of 2-3 Roblox Beasts in formation
-        const speed = isBoss ? 0.55 : 0.68;
-        const spawnX = Math.max(this.canvas.width || 800, window.innerWidth || 800) + 300;
+        // 1. Immediate Monster Spawn with Slow Initial Speed (Manageable reading time)
+        const speed = isBoss ? 0.28 : 0.35;
+        const cw = this.canvas.width || 800;
+        // Spawn immediately visible on right side of canvas
+        const spawnX = Math.max(cw - 70, 680);
         const centerY = (this.canvas.height || 420) / 2;
 
         this.enemies = [
@@ -2751,7 +2754,7 @@
           },
           // 2. Wingman Minion Beast 1
           {
-            x: spawnX + 85,
+            x: spawnX + 65,
             y: centerY - 42,
             size: isBoss ? 48 : 38,
             isBoss: false,
@@ -2766,7 +2769,7 @@
         // 3. Optional 3rd Minion Beast in Stage 5 or High Streak
         if (this.stageId === 5 || idx >= 4) {
           this.enemies.push({
-            x: spawnX + 165,
+            x: spawnX + 130,
             y: centerY + 42,
             size: isBoss ? 44 : 36,
             isBoss: false,
@@ -2849,7 +2852,7 @@
         this.combo++;
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-        // Reset monster speeds back to normal baseline upon correct answer
+        // Reset monster speeds back to normal slow baseline upon correct answer
         this.enemies.forEach(e => { e.speed = e.baseSpeed; });
 
         AudioEngine.playCoinChime();
@@ -2903,9 +2906,9 @@
         this.combo = 0;
         AudioEngine.playRobloxOof();
 
-        // ⚡ DYNAMIC SPEED PENALTY: Instantly accelerate all active monsters!
+        // ⚡ DYNAMIC SPEED PENALTY: Instantly accelerate all active monsters by +1.5!
         this.enemies.forEach(e => {
-          e.speed = Math.min(e.speed + 1.25, 4.8);
+          e.speed = Math.min(e.speed + 1.5, 4.5);
         });
 
         const targetX = this.enemies[0] ? this.enemies[0].x : this.player.x + 100;
@@ -3059,9 +3062,11 @@
                 this.createFloatingText("-1 HP! 💥", this.player.x + 30, this.player.y - 30, '#ef4444');
                 this.createExplosion(this.player.x + 30, this.player.y, '#ef4444', 20);
 
-                // KNOCKBACK EFFECT: Bounce all monsters in wave backward!
+                // KNOCKBACK EFFECT: Bounce all monsters in wave backward to right side!
+                const cw = this.canvas.width || 800;
+                const resetX = Math.max(cw - 70, 680);
                 this.enemies.forEach((en, idx) => {
-                  en.x = Math.max(this.player.x + 350 + (idx * 80), (this.canvas.width || 800) * 0.65);
+                  en.x = resetX + (idx * 65);
                   en.speed = en.baseSpeed; // Reset speed on collision
                 });
 

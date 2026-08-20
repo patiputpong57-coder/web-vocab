@@ -301,6 +301,9 @@
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .character-card:hover {
@@ -314,9 +317,11 @@
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     }
 
-    .character-avatar-box {
-      font-size: 2.2rem;
-      margin-bottom: 0.2rem;
+    .character-avatar-svg {
+      width: 48px;
+      height: 56px;
+      margin-bottom: 0.3rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
     }
 
     .character-name {
@@ -345,6 +350,9 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .wallpaper-card:hover {
@@ -357,15 +365,18 @@
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
     }
 
-    .wallpaper-icon {
-      font-size: 1.3rem;
+    .wallpaper-thumb-svg {
+      width: 42px;
+      height: 32px;
+      border-radius: 4px;
+      overflow: hidden;
     }
 
     .wallpaper-title {
       font-size: 0.72rem;
       font-weight: 600;
       color: #e2e8f0;
-      margin-top: 0.15rem;
+      margin-top: 0.2rem;
     }
 
     /* Registration Input Fields */
@@ -964,8 +975,8 @@
     }
 
     .question-prompt-text {
-      font-size: 20px; /* EXACTLY >= 20px readable */
-      font-weight: 500; /* Regular clean font-weight */
+      font-size: 20px;
+      font-weight: 500;
       color: #ffffff;
       line-height: 1.35;
       flex: 1;
@@ -1214,52 +1225,136 @@
               <span style="color: #94a3b8; font-size: 0.75rem;" id="home-total-reviews-count">(จาก 48 รีวิว)</span>
             </div>
 
-            <!-- 1. Character Selection (3 Models) -->
+            <!-- 1. Code-based SVG Character Selection (3 Roblox Models) -->
             <div>
               <div class="form-label-title" style="margin-bottom: 0.4rem;">
-                <span>👤 เลือกตัวละคร Roblox (3 โมเดล)</span>
+                <span>👤 เลือกตัวละคร Roblox (3 โมเดล SVG)</span>
                 <span id="char-selected-label" style="color: var(--blox-yellow); font-size: 0.8rem;">Classic Blox Hero</span>
               </div>
               <div class="character-picker-grid">
+                <!-- Model 1: Classic Hero -->
                 <div class="character-card selected" id="char-card-1" onclick="App.selectCharacter(1)">
-                  <div class="character-avatar-box">👦</div>
+                  <svg class="character-avatar-svg" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="14" y="6" width="20" height="18" rx="2" fill="#FFD700" stroke="#CCAA00" stroke-width="1.5"/>
+                    <rect x="16" y="8" width="16" height="3" fill="#FFE55C" opacity="0.6"/>
+                    <rect x="18" y="13" width="3" height="3" rx="0.5" fill="#000"/>
+                    <rect x="27" y="13" width="3" height="3" rx="0.5" fill="#000"/>
+                    <path d="M21 19C22.5 20.5 25.5 20.5 27 19" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+                    <rect x="12" y="24" width="24" height="18" rx="2" fill="#0077FF" stroke="#0055B3" stroke-width="1.5"/>
+                    <polygon points="24,25 27,29 25.5,35 24,37 22.5,35 21,29" fill="#FFD700"/>
+                    <rect x="4" y="25" width="8" height="16" rx="2" fill="#FFD700" stroke="#CCAA00" stroke-width="1.2"/>
+                    <rect x="36" y="25" width="8" height="16" rx="2" fill="#FFD700" stroke="#CCAA00" stroke-width="1.2"/>
+                    <rect x="13" y="42" width="10" height="13" rx="1.5" fill="#10B981" stroke="#057A55" stroke-width="1.2"/>
+                    <rect x="25" y="42" width="10" height="13" rx="1.5" fill="#10B981" stroke="#057A55" stroke-width="1.2"/>
+                    <rect x="41" y="20" width="2.5" height="22" fill="#C084FC"/>
+                    <polygon points="42.2,16 44,20 48,20.5 45,23 46,27 42.2,25 38.4,27 39.4,23 36.4,20.5 40.4,20" fill="#00F0FF"/>
+                  </svg>
                   <div class="character-name">Classic Hero</div>
                   <div class="character-trait">🛡️ โล่คอนกรีต</div>
                 </div>
+
+                <!-- Model 2: Cyber Knight -->
                 <div class="character-card" id="char-card-2" onclick="App.selectCharacter(2)">
-                  <div class="character-avatar-box">🥷</div>
+                  <svg class="character-avatar-svg" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="13" y="6" width="22" height="18" rx="3" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+                    <rect x="15" y="11" width="18" height="6" rx="1" fill="#00F0FF"/>
+                    <rect x="17" y="13" width="5" height="2" fill="#FFFFFF"/>
+                    <rect x="26" y="13" width="5" height="2" fill="#FFFFFF"/>
+                    <polygon points="12,8 9,3 15,6" fill="#9D4EDD"/>
+                    <polygon points="36,8 39,3 33,6" fill="#9D4EDD"/>
+                    <rect x="11" y="24" width="26" height="18" rx="2" fill="#0F172A" stroke="#9D4EDD" stroke-width="1.5"/>
+                    <circle cx="24" cy="33" r="3" fill="#00F0FF"/>
+                    <rect x="3" y="24" width="8" height="16" rx="2" fill="#312E81" stroke="#6366F1" stroke-width="1.2"/>
+                    <rect x="37" y="24" width="8" height="16" rx="2" fill="#312E81" stroke="#6366F1" stroke-width="1.2"/>
+                    <polygon points="3,24 11,21 11,25 3,27" fill="#00F0FF"/>
+                    <polygon points="45,24 37,21 37,25 45,27" fill="#00F0FF"/>
+                    <rect x="13" y="42" width="10" height="13" rx="1.5" fill="#0284C7" stroke="#0369A1" stroke-width="1.2"/>
+                    <rect x="25" y="42" width="10" height="13" rx="1.5" fill="#0284C7" stroke="#0369A1" stroke-width="1.2"/>
+                    <rect x="42" y="12" width="3" height="30" rx="1.5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="1"/>
+                  </svg>
                   <div class="character-name">Cyber Knight</div>
                   <div class="character-trait">⚡ เลเซอร์ไซเบอร์</div>
                 </div>
+
+                <!-- Model 3: Neon Princess -->
                 <div class="character-card" id="char-card-3" onclick="App.selectCharacter(3)">
-                  <div class="character-avatar-box">👸</div>
+                  <svg class="character-avatar-svg" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="17,6 19,2 24,5 29,2 31,6" fill="#FFD700" stroke="#B38600" stroke-width="1"/>
+                    <rect x="14" y="8" width="20" height="17" rx="2" fill="#FFD1DC" stroke="#FF8DA1" stroke-width="1.2"/>
+                    <rect x="13" y="8" width="4" height="15" fill="#FF2A85"/>
+                    <rect x="31" y="8" width="4" height="15" fill="#FF2A85"/>
+                    <rect x="14" y="6" width="20" height="4" fill="#FF2A85"/>
+                    <circle cx="19" cy="16" r="1.8" fill="#4A0E4E"/>
+                    <circle cx="29" cy="16" r="1.8" fill="#4A0E4E"/>
+                    <path d="M22 20C23 21 25 21 26 20" stroke="#FF2A85" stroke-width="1.5" stroke-linecap="round"/>
+                    <rect x="12" y="25" width="24" height="17" rx="2" fill="#FF2A85" stroke="#B30052" stroke-width="1.5"/>
+                    <polygon points="24,27 27,31 24,35 21,31" fill="#FFD700"/>
+                    <rect x="4" y="25" width="8" height="16" rx="2" fill="#FFD1DC" stroke="#FF8DA1" stroke-width="1.2"/>
+                    <rect x="36" y="25" width="8" height="16" rx="2" fill="#FFD1DC" stroke="#FF8DA1" stroke-width="1.2"/>
+                    <rect x="13" y="42" width="10" height="13" rx="1.5" fill="#FFD700" stroke="#CCAA00" stroke-width="1.2"/>
+                    <rect x="25" y="42" width="10" height="13" rx="1.5" fill="#FFD700" stroke="#CCAA00" stroke-width="1.2"/>
+                    <rect x="41" y="18" width="2.5" height="24" fill="#FFD700"/>
+                    <circle cx="42.2" cy="17" r="4" fill="#00F0FF" stroke="#FFFFFF" stroke-width="1"/>
+                  </svg>
                   <div class="character-name">Neon Princess</div>
                   <div class="character-trait">✨ ออร่าพลังงาน</div>
                 </div>
               </div>
             </div>
 
-            <!-- 2. Wallpaper Switcher (4 Scenes) -->
+            <!-- 2. Code-based SVG Wallpaper Switcher (4 Scenes) -->
             <div>
               <div class="form-label-title" style="margin-bottom: 0.4rem;">
-                <span>🌌 เลือกฉากพื้นหลัง (Wallpaper Switcher)</span>
+                <span>🌌 เลือกฉากพื้นหลัง (Wallpaper Switcher SVG)</span>
                 <span id="wallpaper-selected-label" style="color: var(--blox-cyan); font-size: 0.8rem;">Cyber City</span>
               </div>
               <div class="wallpaper-picker-grid">
+                <!-- Theme 1: Cyber City -->
                 <div class="wallpaper-card selected" id="wp-card-1" onclick="App.selectWallpaper(1)">
-                  <div class="wallpaper-icon">🏙️</div>
+                  <svg class="wallpaper-thumb-svg" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="32" rx="4" fill="#0A0E2A"/>
+                    <rect x="4" y="10" width="8" height="22" fill="#1E1B4B" stroke="#00F0FF" stroke-width="0.8"/>
+                    <rect x="14" y="6" width="12" height="26" fill="#312E81" stroke="#9D4EDD" stroke-width="0.8"/>
+                    <rect x="28" y="12" width="8" height="20" fill="#1E1B4B" stroke="#00F0FF" stroke-width="0.8"/>
+                    <line x1="0" y1="28" x2="40" y2="28" stroke="#00F0FF" stroke-width="1"/>
+                  </svg>
                   <div class="wallpaper-title">Cyber City</div>
                 </div>
+
+                <!-- Theme 2: Meadow -->
                 <div class="wallpaper-card" id="wp-card-2" onclick="App.selectWallpaper(2)">
-                  <div class="wallpaper-icon">🌲</div>
+                  <svg class="wallpaper-thumb-svg" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="32" rx="4" fill="#38BDF8"/>
+                    <circle cx="32" cy="8" r="5" fill="#FFD700"/>
+                    <rect x="0" y="20" width="40" height="12" fill="#10B981"/>
+                    <rect x="6" y="16" width="14" height="6" rx="2" fill="#059669"/>
+                    <rect x="24" y="14" width="12" height="8" rx="2" fill="#047857"/>
+                  </svg>
                   <div class="wallpaper-title">Meadow</div>
                 </div>
+
+                <!-- Theme 3: Space Void -->
                 <div class="wallpaper-card" id="wp-card-3" onclick="App.selectWallpaper(3)">
-                  <div class="wallpaper-icon">🌌</div>
+                  <svg class="wallpaper-thumb-svg" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="32" rx="4" fill="#030712"/>
+                    <circle cx="20" cy="16" r="8" fill="#9D4EDD" opacity="0.4"/>
+                    <circle cx="8" cy="8" r="1" fill="#FFFFFF"/>
+                    <circle cx="32" cy="10" r="1.5" fill="#00F0FF"/>
+                    <circle cx="28" cy="24" r="1" fill="#FFD700"/>
+                    <circle cx="12" cy="22" r="1.2" fill="#FFFFFF"/>
+                  </svg>
                   <div class="wallpaper-title">Space Void</div>
                 </div>
+
+                <!-- Theme 4: Lava Core -->
                 <div class="wallpaper-card" id="wp-card-4" onclick="App.selectWallpaper(4)">
-                  <div class="wallpaper-icon">🌋</div>
+                  <svg class="wallpaper-thumb-svg" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="32" rx="4" fill="#450A0A"/>
+                    <rect x="0" y="22" width="40" height="10" fill="#EF4444"/>
+                    <rect x="8" y="24" width="24" height="6" fill="#F59E0B"/>
+                    <rect x="4" y="8" width="10" height="14" fill="#292524" stroke="#78716C" stroke-width="0.8"/>
+                    <rect x="26" y="6" width="10" height="16" fill="#292524" stroke="#78716C" stroke-width="0.8"/>
+                  </svg>
                   <div class="wallpaper-title">Lava Core</div>
                 </div>
               </div>
@@ -2968,81 +3063,340 @@
         ctx.restore();
       }
 
-      // Enforce 100% Procedural SVG / Canvas Blocky Sprites (Zero External Image Dependency)
+      // Enforce 100% Procedural Canvas 2D/3D Blocky Sprites (Zero External Image Dependency)
       renderPlayerModel(x, y) {
         const { ctx } = this;
         ctx.save();
 
+        const t = Date.now() / 150;
+        const legSwing = Math.sin(t) * 5;
+        const armSwing = -Math.sin(t) * 6;
+
+        // 1. Powerup Visuals: Concrete Shield or Aura Pulse
         if (this.vfxAuraFrames > 0) {
           ctx.strokeStyle = '#ffd700';
           ctx.lineWidth = 4;
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 15;
           ctx.beginPath();
           ctx.arc(x, y, 42, 0, Math.PI * 2);
           ctx.stroke();
+          ctx.shadowBlur = 0;
         }
         if (this.vfxShieldFrames > 0) {
-          ctx.fillStyle = 'rgba(0, 240, 255, 0.35)';
-          ctx.fillRect(x + 22, y - 30, 12, 60);
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+          ctx.strokeStyle = '#00f0ff';
+          ctx.lineWidth = 2;
+          ctx.fillRect(x + 22, y - 32, 14, 64);
+          ctx.strokeRect(x + 22, y - 32, 14, 64);
         }
 
-        const headColor = this.characterId === 2 ? '#b339eb' : (this.characterId === 3 ? '#ffb6c1' : '#ffd700');
-        const torsoColor = this.characterId === 2 ? '#1e1b4b' : (this.characterId === 3 ? '#ff2a85' : '#0077ff');
-        const pantsColor = this.characterId === 2 ? '#00f0ff' : (this.characterId === 3 ? '#ffd700' : '#10b981');
+        if (this.characterId === 1) {
+          // ==========================================
+          // MODEL 1: CLASSIC BLOX HERO
+          // ==========================================
+          // Yellow Head with 3D Bevel & Happy Smile
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(x - 15, y - 38, 30, 24);
+          ctx.fillStyle = '#FFE55C';
+          ctx.fillRect(x - 15, y - 38, 30, 4); // Top Bevel
+          ctx.fillStyle = '#CCAA00';
+          ctx.fillRect(x - 15, y - 16, 30, 2); // Bottom Shading
 
-        // Head
-        ctx.fillStyle = headColor;
-        ctx.fillRect(x - 14, y - 36, 28, 22);
+          // Eyes & Smile
+          ctx.fillStyle = '#111';
+          ctx.fillRect(x - 8, y - 29, 4, 5);
+          ctx.fillRect(x + 4, y - 29, 4, 5);
+          ctx.beginPath();
+          ctx.arc(x, y - 21, 5, 0.2, Math.PI - 0.2);
+          ctx.strokeStyle = '#111';
+          ctx.lineWidth = 2;
+          ctx.stroke();
 
-        // Face Eyes
-        ctx.fillStyle = '#000';
-        ctx.fillRect(x - 8, y - 28, 4, 4);
-        ctx.fillRect(x + 4, y - 28, 4, 4);
+          // Blue Torso with Gold Emblem
+          ctx.fillStyle = '#0070E0';
+          ctx.fillRect(x - 18, y - 14, 36, 30);
+          ctx.fillStyle = '#3399FF';
+          ctx.fillRect(x - 18, y - 14, 36, 4);
+          // Gold Tie
+          ctx.fillStyle = '#FFD700';
+          ctx.beginPath();
+          ctx.moveTo(x, y - 14); ctx.lineTo(x + 4, y - 8); ctx.lineTo(x + 2, y + 4);
+          ctx.lineTo(x, y + 8); ctx.lineTo(x - 2, y + 4); ctx.lineTo(x - 4, y - 8);
+          ctx.closePath(); ctx.fill();
 
-        // Torso
-        ctx.fillStyle = torsoColor;
-        ctx.fillRect(x - 16, y - 14, 32, 28);
+          // Arms
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(x - 28, y - 12 + armSwing, 10, 24);
+          ctx.fillRect(x + 18, y - 12 - armSwing, 10, 24);
 
-        // Arms
-        ctx.fillStyle = headColor;
-        ctx.fillRect(x - 26, y - 12, 10, 24);
-        ctx.fillRect(x + 16, y - 12, 10, 24);
+          // Star Wand in Right Hand
+          ctx.fillStyle = '#A855F7';
+          ctx.fillRect(x + 22, y - 26 - armSwing, 3, 26);
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 10;
+          ctx.beginPath(); ctx.arc(x + 23.5, y - 28 - armSwing, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur = 0;
 
-        // Legs
-        ctx.fillStyle = pantsColor;
-        ctx.fillRect(x - 14, y + 14, 12, 22);
-        ctx.fillRect(x + 2, y + 14, 12, 22);
+          // Green Legs
+          ctx.fillStyle = '#10B981';
+          ctx.fillRect(x - 16, y + 16 + legSwing, 14, 24);
+          ctx.fillRect(x + 2, y + 16 - legSwing, 14, 24);
+
+        } else if (this.characterId === 2) {
+          // ==========================================
+          // MODEL 2: CYBER HACKER KNIGHT
+          // ==========================================
+          // Visor Helmet
+          ctx.fillStyle = '#1E1B4B';
+          ctx.fillRect(x - 16, y - 40, 32, 26);
+          ctx.fillStyle = '#4338CA';
+          ctx.fillRect(x - 16, y - 40, 32, 4);
+          // Neon Visor
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 12;
+          ctx.fillRect(x - 12, y - 32, 24, 7);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#FFF';
+          ctx.fillRect(x - 8, y - 30, 6, 3);
+          ctx.fillRect(x + 2, y - 30, 6, 3);
+
+          // Cyber Antenna
+          ctx.fillStyle = '#9D4EDD';
+          ctx.beginPath(); ctx.moveTo(x - 16, y - 38); ctx.lineTo(x - 22, y - 48); ctx.lineTo(x - 12, y - 40); ctx.closePath(); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(x + 16, y - 38); ctx.lineTo(x + 22, y - 48); ctx.lineTo(x + 12, y - 40); ctx.closePath(); ctx.fill();
+
+          // Dark Armor Torso & Matrix Core
+          ctx.fillStyle = '#0F172A';
+          ctx.fillRect(x - 18, y - 14, 36, 30);
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 10;
+          ctx.beginPath(); ctx.arc(x, y + 2, 5, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Pauldrons & Arms
+          ctx.fillStyle = '#9D4EDD';
+          ctx.fillRect(x - 30, y - 16 + armSwing, 12, 6);
+          ctx.fillRect(x + 18, y - 16 - armSwing, 12, 6);
+          ctx.fillStyle = '#312E81';
+          ctx.fillRect(x - 28, y - 10 + armSwing, 10, 22);
+          ctx.fillRect(x + 18, y - 10 - armSwing, 10, 22);
+
+          // Plasma Katana
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 16;
+          ctx.fillRect(x + 22, y - 36 - armSwing, 4, 38);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#FFF';
+          ctx.fillRect(x + 23, y - 34 - armSwing, 2, 34);
+
+          // Legs
+          ctx.fillStyle = '#0284C7';
+          ctx.fillRect(x - 16, y + 16 + legSwing, 14, 24);
+          ctx.fillRect(x + 2, y + 16 - legSwing, 14, 24);
+
+        } else {
+          // ==========================================
+          // MODEL 3: NEON BUILDER PRINCESS
+          // ==========================================
+          // Golden Crown
+          ctx.fillStyle = '#FFD700';
+          ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.moveTo(x - 14, y - 42); ctx.lineTo(x - 10, y - 50); ctx.lineTo(x - 4, y - 44);
+          ctx.lineTo(x + 4, y - 50); ctx.lineTo(x + 10, y - 44); ctx.lineTo(x + 14, y - 42);
+          ctx.closePath(); ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Pink Block Hair & Face
+          ctx.fillStyle = '#FF2A85';
+          ctx.fillRect(x - 16, y - 40, 32, 26);
+          ctx.fillStyle = '#FFE4E6';
+          ctx.fillRect(x - 12, y - 36, 24, 20);
+
+          // Sparkle Eyes & Smile
+          ctx.fillStyle = '#831843';
+          ctx.beginPath(); ctx.arc(x - 6, y - 28, 3, 0, Math.PI * 2); ctx.arc(x + 6, y - 28, 3, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#FFF';
+          ctx.fillRect(x - 7, y - 30, 2, 2); ctx.fillRect(x + 5, y - 30, 2, 2);
+          ctx.beginPath(); ctx.arc(x, y - 21, 3.5, 0.2, Math.PI - 0.2); ctx.strokeStyle = '#E11D48'; ctx.lineWidth = 1.5; ctx.stroke();
+
+          // Magenta Tech Dress Torso
+          ctx.fillStyle = '#FF2A85';
+          ctx.fillRect(x - 18, y - 14, 36, 30);
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(x - 18, y + 10, 36, 6);
+
+          // Arms & Scepter
+          ctx.fillStyle = '#FFE4E6';
+          ctx.fillRect(x - 28, y - 12 + armSwing, 10, 22);
+          ctx.fillRect(x + 18, y - 12 - armSwing, 10, 22);
+
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(x + 22, y - 24 - armSwing, 3, 26);
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 12;
+          ctx.beginPath(); ctx.arc(x + 23.5, y - 28 - armSwing, 7, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Legs
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(x - 16, y + 16 + legSwing, 14, 24);
+          ctx.fillRect(x + 2, y + 16 - legSwing, 14, 24);
+        }
 
         ctx.restore();
       }
 
+      // Enforce 100% Procedural Monster Sprites (Glitch, Golem, Spider, 404, Titan Boss)
       renderEnemyModel(enemy) {
         const { ctx } = this;
         ctx.save();
 
-        ctx.fillStyle = enemy.color;
-        ctx.shadowColor = enemy.color;
-        ctx.shadowBlur = enemy.isBoss ? 25 : 12;
+        const ex = enemy.x;
+        const ey = enemy.y;
+        const s = enemy.size;
 
-        const size = enemy.size;
-        ctx.fillRect(enemy.x - size / 2, enemy.y - size / 2, size, size);
-
-        // Monster Eyes
-        ctx.fillStyle = '#000';
-        ctx.fillRect(enemy.x - size / 4, enemy.y - size / 4, 6, 6);
-        ctx.fillRect(enemy.x + size / 4 - 6, enemy.y - size / 4, 6, 6);
-
-        // Boss Crown
         if (enemy.isBoss) {
-          ctx.font = "26px sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText("👑", enemy.x, enemy.y - size / 2 - 8);
+          // ==========================================
+          // BOSS: TITAN BUG BOSS 👑
+          // ==========================================
+          ctx.fillStyle = '#78350F';
+          ctx.fillRect(ex - s/2, ey - s/2, s, s);
+          ctx.strokeStyle = '#F59E0B';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(ex - s/2, ey - s/2, s, s);
+
+          // Magma Horns
+          ctx.fillStyle = '#EF4444';
+          ctx.beginPath(); ctx.moveTo(ex - s/2, ey - s/3); ctx.lineTo(ex - s/2 - 14, ey - s/2 - 12); ctx.lineTo(ex - s/3, ey - s/2); ctx.closePath(); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(ex + s/2, ey - s/3); ctx.lineTo(ex + s/2 + 14, ey - s/2 - 12); ctx.lineTo(ex + s/3, ey - s/2); ctx.closePath(); ctx.fill();
+
+          // Glowing Magma Core
+          ctx.fillStyle = '#FFD700';
+          ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 20;
+          ctx.beginPath(); ctx.arc(ex, ey + 4, 12, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Fierce Red Laser Eyes
+          ctx.fillStyle = '#EF4444';
+          ctx.fillRect(ex - 16, ey - 14, 8, 5);
+          ctx.fillRect(ex + 8, ey - 14, 8, 5);
+
+          // Royal Crown
+          ctx.fillStyle = '#FFD700';
+          ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.moveTo(ex - 22, ey - s/2); ctx.lineTo(ex - 20, ey - s/2 - 18);
+          ctx.lineTo(ex - 10, ey - s/2 - 8); ctx.lineTo(ex, ey - s/2 - 22);
+          ctx.lineTo(ex + 10, ey - s/2 - 8); ctx.lineTo(ex + 20, ey - s/2 - 18);
+          ctx.lineTo(ex + 22, ey - s/2); ctx.closePath(); ctx.fill();
+          ctx.shadowBlur = 0;
+
+        } else if (this.stageId === 1) {
+          // ==========================================
+          // STAGE 1: GLITCH WEBPAGE ⬛
+          // ==========================================
+          ctx.fillStyle = '#1E293B';
+          ctx.fillRect(ex - s/2, ey - s/2, s, s);
+          ctx.strokeStyle = '#00F0FF';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(ex - s/2, ey - s/2, s, s);
+
+          // Browser Title Bar
+          ctx.fillStyle = '#0F172A';
+          ctx.fillRect(ex - s/2, ey - s/2, s, 12);
+          ctx.fillStyle = '#EF4444'; ctx.beginPath(); ctx.arc(ex - s/2 + 6, ey - s/2 + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#F59E0B'; ctx.beginPath(); ctx.arc(ex - s/2 + 13, ey - s/2 + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#10B981'; ctx.beginPath(); ctx.arc(ex - s/2 + 20, ey - s/2 + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+
+          // Glitch Code
+          ctx.fillStyle = '#00F0FF';
+          ctx.font = 'bold 10px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('<glitch>', ex, ey + 8);
+
+          // Blinking Eyes
+          ctx.fillStyle = '#00F0FF';
+          ctx.shadowColor = '#00F0FF'; ctx.shadowBlur = 8;
+          ctx.fillRect(ex - 10, ey - 6, 5, 5);
+          ctx.fillRect(ex + 5, ey - 6, 5, 5);
+          ctx.shadowBlur = 0;
+
+        } else if (this.stageId === 2) {
+          // ==========================================
+          // STAGE 2: UNSTYLED GOLEM 🗿
+          // ==========================================
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(ex - s/2, ey - s/2, s, s);
+          ctx.strokeStyle = '#334155';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(ex - s/2, ey - s/2, s, s);
+
+          // Brick texture
+          ctx.beginPath(); ctx.moveTo(ex - s/2, ey); ctx.lineTo(ex + s/2, ey); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(ex, ey - s/2); ctx.lineTo(ex, ey); ctx.stroke();
+
+          // Glowing Purple Eyes
+          ctx.fillStyle = '#A855F7';
+          ctx.shadowColor = '#A855F7'; ctx.shadowBlur = 10;
+          ctx.beginPath(); ctx.moveTo(ex - 12, ey - 8); ctx.lineTo(ex - 3, ey - 5); ctx.lineTo(ex - 12, ey - 2); ctx.closePath(); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(ex + 12, ey - 8); ctx.lineTo(ex + 3, ey - 5); ctx.lineTo(ex + 12, ey - 2); ctx.closePath(); ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Stone Fists
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(ex - s/2 - 8, ey + 4, 8, 14);
+          ctx.fillRect(ex + s/2, ey + 4, 8, 14);
+
+        } else if (this.stageId === 3) {
+          // ==========================================
+          // STAGE 3: BUG SPIDER BOT 🕷️
+          // ==========================================
+          const legMove = Math.sin(Date.now() / 120) * 6;
+          ctx.strokeStyle = '#FF2A85';
+          ctx.lineWidth = 2.5;
+          for (let i = -1; i <= 1; i++) {
+            ctx.beginPath(); ctx.moveTo(ex - s/4, ey + i * 8); ctx.lineTo(ex - s/2 - 10, ey + i * 12 + legMove * (i || 1)); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(ex + s/4, ey + i * 8); ctx.lineTo(ex + s/2 + 10, ey + i * 12 - legMove * (i || 1)); ctx.stroke();
+          }
+
+          // Cyber Body & Glowing Core
+          ctx.fillStyle = '#1E1B4B';
+          ctx.fillRect(ex - s/3, ey - s/3, (s * 2)/3, (s * 2)/3);
+          ctx.fillStyle = '#FF2A85';
+          ctx.shadowColor = '#FF2A85'; ctx.shadowBlur = 12;
+          ctx.beginPath(); ctx.arc(ex, ey, 7, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur = 0;
+
+        } else {
+          // ==========================================
+          // STAGE 4: 404 ERROR BANNER ❌
+          // ==========================================
+          ctx.fillStyle = '#18181B';
+          ctx.fillRect(ex - s/2, ey - s/2, s, s);
+          ctx.strokeStyle = '#EF4444';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(ex - s/2, ey - s/2, s, s);
+
+          // LED status dots
+          ctx.fillStyle = '#10B981'; ctx.beginPath(); ctx.arc(ex - s/2 + 7, ey - s/2 + 7, 2.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = (Date.now() % 600 > 300) ? '#EF4444' : '#7F1D1D'; ctx.beginPath(); ctx.arc(ex - s/2 + 15, ey - s/2 + 7, 2.5, 0, Math.PI * 2); ctx.fill();
+
+          // 404 Red Neon Text
+          ctx.fillStyle = '#EF4444';
+          ctx.shadowColor = '#EF4444'; ctx.shadowBlur = 10;
+          ctx.font = '900 15px Orbitron, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('404', ex, ey + 6);
+          ctx.shadowBlur = 0;
         }
 
         // Enemy Label
         ctx.font = "bold 12px 'Orbitron', sans-serif";
         ctx.fillStyle = '#fff';
         ctx.textAlign = "center";
-        ctx.fillText(enemy.name, enemy.x, enemy.y + size / 2 + 16);
+        ctx.fillText(enemy.name, ex, ey + s / 2 + 16);
 
         ctx.restore();
       }

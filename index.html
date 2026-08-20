@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Roblox Vocab Regent: การผจญภัยพิชิตคำศัพท์การพัฒนาเว็บสไตล์ Roblox 3D Blocky พร้อมระบบ Supabase, TTS สองภาษา, และ Teacher Dashboard">
+  <meta name="description" content="Roblox Vocab Regent: เกมการศึกษาเรียนรู้ศัพท์เว็บสไตล์ Roblox 3D Blocky พร้อมระบบ Supabase, TTS สองภาษา และ Teacher Dashboard">
   <title>Roblox Vocab Regent | ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</title>
 
   <!-- Google Fonts: Prompt, Fredoka, Orbitron, Titan One -->
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&family=Orbitron:wght@600;800;900&family=Prompt:wght@300;400;500;600;700;800&family=Titan+One&display=swap" rel="stylesheet">
 
-  <!-- Canvas Confetti for Victory Celebrations -->
+  <!-- Canvas Confetti for Celebrations -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -72,7 +72,7 @@
       position: relative;
     }
 
-    /* Floating Block Particles */
+    /* Floating Background Blocks */
     .floating-blocks-bg {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -216,7 +216,7 @@
       box-shadow: 0 1px 0 #12192d;
     }
 
-    /* Views / Screen Panels Container */
+    /* Views / Screen Panels */
     .views-viewport {
       flex: 1;
       position: relative;
@@ -282,6 +282,7 @@
       font-weight: 700;
       color: #fff;
       width: fit-content;
+      cursor: pointer;
     }
 
     /* 3D Character Selector Cards */
@@ -692,12 +693,6 @@
       background: rgba(0, 240, 255, 0.06);
     }
 
-    .trophy-badge {
-      font-size: 1.25rem;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
     /* ==========================================================================
        TAB 4: TEACHER DASHBOARD (Password Protected)
        ========================================================================== */
@@ -769,7 +764,6 @@
       color: var(--blox-cyan);
     }
 
-    /* Visual Item-Level Answer Tracker */
     .answer-tracker-pill-group {
       display: flex;
       gap: 3px;
@@ -797,7 +791,7 @@
     }
 
     /* ==========================================================================
-       BATTLE GAMEPLAY VIEWPORT (CANVAS & HUD)
+       VIEW 5: GAMEPLAY BATTLEFIELD (Canvas + Physics + 3D HUD)
        ========================================================================== */
     #view-gameplay {
       padding: 0;
@@ -948,7 +942,7 @@
       border-radius: 10px;
     }
 
-    /* Question & Choice Buttons Deck (Typography: Clean 400/500 Weight) */
+    /* Question & Choice Buttons Deck */
     .question-deck-panel {
       background: rgba(12, 18, 44, 0.98);
       border-top: 3px solid var(--blox-cyan);
@@ -1000,8 +994,8 @@
       border-radius: 14px;
       color: #ffffff;
       font-family: var(--font-code), var(--font-ui);
-      font-size: 19px; /* Bold & clear 19px */
-      font-weight: 500; /* Clean & non-bold */
+      font-size: 19px;
+      font-weight: 500;
       padding: 0.75rem 1rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #0f152d;
@@ -1821,7 +1815,7 @@
     };
 
     /* ==========================================================================
-       1. WEB DEVELOPMENT DETAILED SCENARIO-BASED VOCABULARY DATABASE
+       1. WEB DEVELOPMENT VOCABULARY DATASET
        ========================================================================== */
     const VOCAB_DATABASE = [
       // --- STAGE 1: HTML & Structural Tags ---
@@ -2162,7 +2156,7 @@
     ];
 
     /* ==========================================================================
-       2. SUPABASE REST API CLIENT (No Google API / Fallback Caching)
+       2. SUPABASE REST API CLIENT
        ========================================================================== */
     class SupabaseService {
       constructor() {
@@ -2177,23 +2171,17 @@
       }
 
       async saveScore(payload) {
-        // Save to LocalStorage first for guaranteed resilience
         let localScores = JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
         localScores.unshift(payload);
         localStorage.setItem('roblox_regent_scores', JSON.stringify(localScores));
 
         try {
-          const res = await fetch(`${this.url}/rest/v1/scores`, {
+          await fetch(`${this.url}/rest/v1/scores`, {
             method: 'POST',
             headers: this.headers,
             body: JSON.stringify(payload)
           });
-          if (res.ok) {
-            console.log('Score saved to Supabase successfully!');
-          }
-        } catch (e) {
-          console.warn('Offline mode: Saved score to LocalStorage cache');
-        }
+        } catch (e) {}
       }
 
       async fetchScores() {
@@ -2203,12 +2191,9 @@
           });
           if (res.ok) {
             const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              return data;
-            }
+            if (Array.isArray(data) && data.length > 0) return data;
           }
         } catch (e) {}
-        // Fallback to local
         return JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
       }
 
@@ -2233,9 +2218,7 @@
           });
           if (res.ok) {
             const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              return data;
-            }
+            if (Array.isArray(data) && data.length > 0) return data;
           }
         } catch (e) {}
         return JSON.parse(localStorage.getItem('roblox_regent_reviews') || JSON.stringify(DEFAULT_REVIEWS));
@@ -2245,7 +2228,7 @@
     const Supabase = new SupabaseService();
 
     /* ==========================================================================
-       3. WEB AUDIO API PROCEDURAL SYNTHESIZER & BILINGUAL TTS ENGINE
+       3. WEB AUDIO API SYNTHESIZER & BILINGUAL TTS ENGINE
        ========================================================================== */
     class AudioSynthesisEngine {
       constructor() {
@@ -2307,7 +2290,6 @@
         } catch(e) {}
       }
 
-      // Classic Roblox Oof Sound on Damage
       playRobloxOof() {
         if (this.sfxMuted) return;
         this.initCtx();
@@ -2372,17 +2354,14 @@
         });
       }
 
-      // CRITICAL: BILINGUAL TTS (Step 1: en-US Vocabulary -> Step 2: th-TH Explanation)
       speakBilingual(enText, thText) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
 
-        // 1. Speak English Vocabulary
         const enUtter = new SpeechSynthesisUtterance(enText);
         enUtter.lang = 'en-US';
         enUtter.rate = 0.95;
 
-        // 2. Immediately Follow with Thai Explanation
         enUtter.onend = () => {
           if (thText) {
             const thUtter = new SpeechSynthesisUtterance(thText);
@@ -2438,13 +2417,16 @@
         this.characterId = 1; // 1: Hero, 2: Knight, 3: Princess
         this.wallpaperId = 1; // 1: Cyber, 2: Meadow, 3: Space, 4: Lava
 
-        // Gameplay State
+        // Gameplay State Flags
         this.stageQuestions = [];
         this.currentQIdx = 0;
         this.activeQuestion = null;
         this.choicesList = [];
-        this.answersHistory = []; // Array of boolean (true/false) for item-level tracker
+        this.answersHistory = [];
+        this.isPlaying = false;
         this.isGameOver = false;
+        this.isTransitioning = false;
+        this.animFrameId = null;
 
         // Player HP & Stats
         this.playerHP = 3;
@@ -2455,13 +2437,13 @@
         this.correctCount = 0;
         this.startTime = 0;
 
-        // Power-ups Inventory (Unlocked via combo streaks)
+        // Power-ups Inventory
         this.powerups = { cut: 0, freeze: 0, destroy: 0, fix: 0 };
         this.freezeFrames = 0;
         this.shieldActive = false;
 
         // Canvas Entities
-        this.player = { x: 80, y: 0, size: 55 };
+        this.player = { x: 80, y: 180, size: 55 };
         this.activeEnemy = null;
         this.projectiles = [];
         this.particles = [];
@@ -2474,81 +2456,99 @@
 
       initCanvasSize() {
         const resize = () => {
-          if (!this.canvas.parentElement) return;
-          const rect = this.canvas.parentElement.getBoundingClientRect();
-          this.canvas.width = rect.width;
-          this.canvas.height = rect.height;
-          this.player.y = this.canvas.height / 2;
+          if (!this.canvas) return;
+          const container = this.canvas.parentElement;
+          const rect = container ? container.getBoundingClientRect() : null;
+          const w = (rect && rect.width > 200) ? rect.width : (window.innerWidth > 0 ? Math.min(window.innerWidth - 30, 1200) : 900);
+          const h = (rect && rect.height > 150) ? rect.height : 420;
+          this.canvas.width = w;
+          this.canvas.height = h;
+          this.player.x = 80;
+          this.player.y = h / 2;
         };
         resize();
         window.addEventListener('resize', resize);
       }
 
       startSession(studentId, studentName, classLevel, stageId, characterId, wallpaperId) {
-        this.studentId = studentId;
-        this.studentName = studentName;
-        this.classLevel = classLevel;
-        this.stageId = stageId;
-        this.characterId = characterId;
-        this.wallpaperId = wallpaperId;
+        this.studentId = studentId || 'Robloxian';
+        this.studentName = studentName || 'Robloxian';
+        this.classLevel = classLevel || 'ปวช. 2/1';
+        this.stageId = stageId || 1;
+        this.characterId = characterId || 1;
+        this.wallpaperId = wallpaperId || 1;
 
-        // Reset Game Values
+        // 1. Reset Game Values
         this.playerHP = 3;
+        this.maxHP = 3;
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
         this.correctCount = 0;
         this.answersHistory = [];
+        this.isPlaying = true;
         this.isGameOver = false;
+        this.isTransitioning = false;
         this.startTime = Date.now();
         this.powerups = { cut: 0, freeze: 0, destroy: 0, fix: 0 };
         this.freezeFrames = 0;
         this.shieldActive = false;
+        this.projectiles = [];
+        this.particles = [];
+        this.floatingTexts = [];
 
         // Prepare Questions Pool
         let pool = [];
-        if (stageId === 5) {
-          // Stage 5: 20 Questions randomly picked from ALL categories
+        if (this.stageId === 5) {
           pool = App.shuffleArray([...VOCAB_DATABASE]).slice(0, 20);
         } else {
-          // Stages 1-4: 10 Questions from selected stage
-          pool = App.shuffleArray(VOCAB_DATABASE.filter(q => q.stage === stageId)).slice(0, 10);
+          pool = App.shuffleArray(VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
         }
 
         this.stageQuestions = pool;
         this.currentQIdx = 0;
 
-        // Update HUD display
+        // Ensure canvas size is updated after screen change
+        App.showView('gameplay');
+        this.initCanvasSize();
+
+        // Update HUD
         document.getElementById('hud-player-name').textContent = this.studentName;
         document.getElementById('hud-char-icon').textContent = this.characterId === 1 ? '👦' : (this.characterId === 2 ? '🥷' : '👸');
         document.getElementById('hud-total-questions').textContent = this.stageQuestions.length;
         this.updateHUD();
         this.updatePowerupDock();
 
-        // Switch Screen to Gameplay View
-        App.showView('gameplay');
         AudioEngine.startBGM();
 
+        // 2. Load First Question with safe Monster Spawn far to the right
         this.loadQuestion(this.currentQIdx);
+
+        // 3. Start Game Loop
+        if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
         this.loop();
       }
 
       startStage(stageNumber) {
+        this.stageId = stageNumber || this.stageId || 1;
         // 1. คืนค่าพลังชีวิตและคะแนน
         this.playerHP = 3;
         this.score = 0;
         this.isGameOver = false;
+        this.isPlaying = true;
 
         // 2. ตั้งตำแหน่งมอนสเตอร์ให้อยู่ขวาสุดของจอ (ห่างจากตัวละคร)
         if (this.activeEnemy) {
-          this.activeEnemy.x = (this.canvas ? this.canvas.width : window.innerWidth) + 200;
+          const spawnX = Math.max(this.canvas.width || 800, window.innerWidth || 800) + 300;
+          this.activeEnemy.x = spawnX;
         }
 
         // 3. อัปเดตการแสดงผลหัวใจบนจอ
         this.updateHPUI();
 
         // 4. เริ่มรัน Game Loop
-        requestAnimationFrame(() => this.loop());
+        if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+        this.loop();
       }
 
       updateHPUI() {
@@ -2557,12 +2557,13 @@
 
       loadQuestion(idx) {
         if (idx >= this.stageQuestions.length) {
-          this.finishLevel(true); // Victory!
+          this.finishLevel(true);
           return;
         }
 
+        this.isTransitioning = false;
         this.activeQuestion = this.stageQuestions[idx];
-        const isBoss = (idx === 4 || idx === 9 || idx === 19); // Boss monster on Q5, Q10, Q20
+        const isBoss = (idx === 4 || idx === 9 || idx === 19);
 
         // Update Question Banner
         const qIdxEl = document.getElementById('hud-question-idx');
@@ -2577,9 +2578,11 @@
 
         // Spawn Themed Enemy far to the right (offscreen)
         const speed = isBoss ? 0.55 : 0.68;
+        const spawnX = Math.max(this.canvas.width || 800, window.innerWidth || 800) + 300;
+
         this.activeEnemy = {
-          x: (this.canvas ? this.canvas.width : window.innerWidth) + 200,
-          y: this.canvas.height / 2,
+          x: spawnX,
+          y: (this.canvas.height || 400) / 2,
           size: isBoss ? 70 : 48,
           isBoss: isBoss,
           speed: speed,
@@ -2588,12 +2591,11 @@
           name: this.getMonsterName(this.activeQuestion.stage, isBoss)
         };
 
-        // Prepare Choices (1 Correct + 3 Distinct Wrong STRICTLY from Same Stage)
+        // Prepare Choices
         const sameStageOthers = App.shuffleArray(
           VOCAB_DATABASE.filter(v => v.stage === this.activeQuestion.stage && v.term !== this.activeQuestion.term)
         ).slice(0, 3).map(v => v.term);
 
-        // Fill up to 3 wrong choices if category has fewer
         const otherCategories = App.shuffleArray(
           VOCAB_DATABASE.filter(v => v.term !== this.activeQuestion.term)
         ).slice(0, 3 - sameStageOthers.length).map(v => v.term);
@@ -2605,7 +2607,7 @@
           ...wrongOptions.map(t => ({ term: t, correct: false }))
         ]);
 
-        // CRITICAL REQUIREMENT: Render choice buttons using element.textContent to prevent <a>, <html>, <p> vanishing
+        // CRITICAL REQUIREMENT: Render choice buttons using element.textContent (NEVER innerHTML)
         const container = document.getElementById('choices-container');
         if (container) {
           container.innerHTML = '';
@@ -2613,7 +2615,7 @@
             const btn = document.createElement('button');
             btn.className = 'blox-choice-btn';
             btn.setAttribute('data-idx', i);
-            btn.textContent = choice.term; // CRITICAL: 100% visible text rendering
+            btn.textContent = choice.term; // CRITICAL: 100% visible text rendering for <a>, <html>, <p>
             btn.onclick = () => Game.handleChoiceClick(i);
             container.appendChild(btn);
           });
@@ -2637,20 +2639,18 @@
       }
 
       handleChoiceClick(choiceIdx) {
-        if (!this.activeQuestion || this.isGameOver) return;
+        if (!this.activeQuestion || this.isGameOver || !this.isPlaying || this.isTransitioning) return;
         const choice = this.choicesList[choiceIdx];
         const buttons = document.querySelectorAll('.blox-choice-btn');
 
         if (choice.correct) {
-          // Correct Answer!
           if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('correct');
           this.answersHistory.push(true);
           this.processCorrectAnswer();
         } else {
-          // Wrong Answer!
           if (buttons[choiceIdx]) {
             buttons[choiceIdx].classList.add('wrong');
-            buttons[choiceIdx].classList.add('locked'); // Lock clicked wrong choice
+            buttons[choiceIdx].classList.add('locked');
           }
           this.answersHistory.push(false);
           this.processWrongAnswer();
@@ -2663,42 +2663,34 @@
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
         AudioEngine.playCoinChime();
-
-        // Trigger Bilingual TTS (Step 1: English -> Step 2: Thai)
         AudioEngine.speakBilingual(this.activeQuestion.ttsEn, this.activeQuestion.ttsTh);
 
-        // Visual FX based on Stage Category
         if (this.activeQuestion.stage === 1) {
-          // HTML: Concrete Shield Spawn
           this.vfxShieldFrames = 40;
           AudioEngine.playShieldSpawn();
           this.createFloatingText("SHIELD DEFENSE! 🛡️", this.player.x + 30, this.player.y - 30, '#00f0ff');
         } else if (this.activeQuestion.stage === 2) {
-          // CSS: Glowing Aura Pulse
           this.vfxAuraFrames = 40;
           this.createFloatingText("AURA PULSE! ✨", this.player.x + 30, this.player.y - 30, '#ffd700');
         } else {
-          // JS & Server: Cyber Laser Beam
           AudioEngine.playLaserBlast();
           if (this.activeEnemy) {
             this.projectiles.push({
               x: this.player.x + 30,
               y: this.player.y,
               target: this.activeEnemy,
-              speed: 20,
+              speed: 22,
               color: '#00f0ff'
             });
           }
         }
 
-        // Calculate Points
         let pts = (this.activeEnemy && this.activeEnemy.isBoss) ? 350 : 180;
         pts += this.combo * 25;
         this.score += pts;
 
         this.createFloatingText(`+${pts} 🪙`, this.player.x + 40, this.player.y - 20, '#ffd700');
 
-        // Unlock Power-ups on Streak 2, 3, 4
         if (this.combo === 2) this.grantPowerup('cut');
         if (this.combo === 3) this.grantPowerup('freeze');
         if (this.combo === 4) this.grantPowerup('destroy');
@@ -2706,10 +2698,12 @@
 
         this.updateHUD();
 
-        // Advance to Next Question
+        this.isTransitioning = true;
         setTimeout(() => {
-          this.currentQIdx++;
-          this.loadQuestion(this.currentQIdx);
+          if (this.isPlaying && !this.isGameOver) {
+            this.currentQIdx++;
+            this.loadQuestion(this.currentQIdx);
+          }
         }, 1100);
       }
 
@@ -2729,34 +2723,34 @@
       }
 
       usePowerup(type) {
-        if (this.powerups[type] <= 0 || this.isGameOver) return;
+        if (this.powerups[type] <= 0 || this.isGameOver || !this.isPlaying) return;
         this.powerups[type]--;
         AudioEngine.playPowerupJingle();
 
         if (type === 'cut') {
-          // Cut 2 Wrong Choices
           const wrongButtons = Array.from(document.querySelectorAll('.blox-choice-btn'))
             .filter((btn, i) => !this.choicesList[i].correct);
           wrongButtons.slice(0, 2).forEach(b => b.classList.add('faded'));
           this.createFloatingText("50:50 CUT CHOICES! ✂️", this.canvas.width / 2, 60, '#00f0ff');
         } else if (type === 'freeze') {
-          // Freeze Monster for 6 seconds (360 frames)
           this.freezeFrames = 360;
           this.createFloatingText("MONSTER FROZEN! ❄️", this.canvas.width / 2, 60, '#38bdf8');
         } else if (type === 'destroy') {
-          // Instantly blast monster away
           if (this.activeEnemy) {
             this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ef4444', 30);
             this.activeEnemy = null;
             this.score += 200;
             this.createFloatingText("BLAST DESTROYED! 💥", this.canvas.width / 2, 60, '#ef4444');
-            this.currentQIdx++;
-            this.loadQuestion(this.currentQIdx);
+            this.isTransitioning = true;
+            setTimeout(() => {
+              if (this.isPlaying && !this.isGameOver) {
+                this.currentQIdx++;
+                this.loadQuestion(this.currentQIdx);
+              }
+            }, 600);
           }
         } else if (type === 'fix') {
-          // Fix previous wrong answer & recover 1 HP
           if (this.playerHP < this.maxHP) this.playerHP++;
-          // Change most recent false to true
           const lastWrongIdx = this.answersHistory.lastIndexOf(false);
           if (lastWrongIdx !== -1) {
             this.answersHistory[lastWrongIdx] = true;
@@ -2815,10 +2809,10 @@
 
       // --- MAIN 60 FPS GAME LOOP ---
       loop() {
-        if (this.isGameOver) return;
+        if (!this.isPlaying || this.isGameOver) return;
         this.update();
         this.render();
-        requestAnimationFrame(() => this.loop());
+        this.animFrameId = requestAnimationFrame(() => this.loop());
       }
 
       update() {
@@ -2847,27 +2841,31 @@
           }
         }
 
-        // Active Monster Marching & Knockback Collision Physics
+        // Active Monster Marching & Safe Knockback Collision
         if (this.activeEnemy && this.freezeFrames <= 0) {
           this.activeEnemy.x -= this.activeEnemy.speed;
 
-          // KNOCKBACK COLLISION: When monster reaches the player
-          if (this.activeEnemy.x <= this.player.x + 30) {
-            AudioEngine.playRobloxOof();
-            this.playerHP--;
-            this.combo = 0;
-            this.updateHUD();
+          // SAFE COLLISION CHECK: ONLY when actively playing and not transitioning
+          if (this.isPlaying && !this.isGameOver && !this.isTransitioning) {
+            if (this.activeEnemy.x <= this.player.x + 35 && this.activeEnemy.x > 0) {
+              AudioEngine.playRobloxOof();
+              this.playerHP--;
+              this.combo = 0;
+              this.updateHUD();
 
-            this.createFloatingText("-1 HP! 💥", this.player.x + 20, this.player.y - 20, '#ef4444');
-            this.createExplosion(this.player.x + 20, this.player.y, '#ef4444', 15);
+              this.createFloatingText("-1 HP! 💥", this.player.x + 20, this.player.y - 20, '#ef4444');
+              this.createExplosion(this.player.x + 20, this.player.y, '#ef4444', 15);
 
-            // MONSTER BOUNCES BACK (KNOCKBACK 38% of canvas)
-            this.activeEnemy.x = this.canvas.width * 0.55;
+              // KNOCKBACK EFFECT: Bounce monster backward by 350px
+              this.activeEnemy.x = Math.max(this.player.x + 350, (this.canvas.width || 800) * 0.65);
 
-            // Check Game Over
-            if (this.playerHP <= 0) {
-              this.finishLevel(false); // Defeat!
-              return;
+              // Trigger Game Over only when HP reaches 0
+              if (this.playerHP <= 0) {
+                this.isPlaying = false;
+                this.isGameOver = true;
+                this.finishLevel(false);
+                return;
+              }
             }
           }
         }
@@ -2892,15 +2890,16 @@
 
       render() {
         const { ctx, canvas } = this;
+        if (!ctx || !canvas) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. Draw Wallpaper Scene Theme
+        // 1. Draw Procedural Wallpaper Scene
         this.renderWallpaperBackground();
 
-        // 2. Draw Robloxian Character Model
+        // 2. Draw Procedural 3D Blocky Roblox Character
         this.renderPlayerModel(this.player.x, this.player.y);
 
-        // 3. Draw Active Enemy
+        // 3. Draw Procedural Themed Enemy
         if (this.activeEnemy) {
           this.renderEnemyModel(this.activeEnemy);
         }
@@ -2942,7 +2941,7 @@
         ctx.save();
 
         if (this.wallpaperId === 1) {
-          // Cyber City: Neon Grid
+          // Cyber City Grid
           ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
           ctx.lineWidth = 1;
           for (let x = 0; x < canvas.width; x += 40) {
@@ -2951,17 +2950,17 @@
             ctx.stroke();
           }
         } else if (this.wallpaperId === 2) {
-          // Green Meadow: Pixel Grass Horizon
+          // Green Meadow
           ctx.fillStyle = '#10b981';
           ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
         } else if (this.wallpaperId === 3) {
-          // Space Void: Distant Stars
+          // Space Void Stars
           ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
           ctx.fillRect(100, 40, 2, 2);
           ctx.fillRect(300, 90, 3, 3);
           ctx.fillRect(500, 30, 2, 2);
         } else if (this.wallpaperId === 4) {
-          // Lava Core: Glowing Red Floor
+          // Lava Core Floor
           ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
           ctx.fillRect(0, canvas.height - 25, canvas.width, 25);
         }
@@ -2969,11 +2968,11 @@
         ctx.restore();
       }
 
+      // Enforce 100% Procedural SVG / Canvas Blocky Sprites (Zero External Image Dependency)
       renderPlayerModel(x, y) {
         const { ctx } = this;
         ctx.save();
 
-        // Visual Aura / Shield Glow
         if (this.vfxAuraFrames > 0) {
           ctx.strokeStyle = '#ffd700';
           ctx.lineWidth = 4;
@@ -2986,7 +2985,6 @@
           ctx.fillRect(x + 22, y - 30, 12, 60);
         }
 
-        // Model 1: Classic Hero | Model 2: Cyber Knight | Model 3: Neon Princess
         const headColor = this.characterId === 2 ? '#b339eb' : (this.characterId === 3 ? '#ffb6c1' : '#ffd700');
         const torsoColor = this.characterId === 2 ? '#1e1b4b' : (this.characterId === 3 ? '#ff2a85' : '#0077ff');
         const pantsColor = this.characterId === 2 ? '#00f0ff' : (this.characterId === 3 ? '#ffd700' : '#10b981');
@@ -3033,14 +3031,14 @@
         ctx.fillRect(enemy.x - size / 4, enemy.y - size / 4, 6, 6);
         ctx.fillRect(enemy.x + size / 4 - 6, enemy.y - size / 4, 6, 6);
 
-        // Boss Crown 👑
+        // Boss Crown
         if (enemy.isBoss) {
           ctx.font = "26px sans-serif";
           ctx.textAlign = "center";
           ctx.fillText("👑", enemy.x, enemy.y - size / 2 - 8);
         }
 
-        // Enemy Name
+        // Enemy Label
         ctx.font = "bold 12px 'Orbitron', sans-serif";
         ctx.fillStyle = '#fff';
         ctx.textAlign = "center";
@@ -3050,6 +3048,7 @@
       }
 
       finishLevel(isVictory) {
+        this.isPlaying = false;
         this.isGameOver = true;
         AudioEngine.stopBGM();
 
@@ -3064,9 +3063,8 @@
 
         const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
         const totalQ = this.stageQuestions.length;
-        const accuracy = Math.round((this.correctCount / totalQ) * 100);
+        const accuracy = Math.round((this.correctCount / (totalQ || 1)) * 100);
 
-        // Prepare Item Pills Breakdown (Green / Red)
         const pillsContainer = document.getElementById('res-item-pills');
         if (pillsContainer) {
           pillsContainer.innerHTML = '';
@@ -3079,7 +3077,6 @@
           }
         }
 
-        // Update Modal Texts
         document.getElementById('res-icon').textContent = isVictory ? '🎉🏆' : '💀';
         document.getElementById('res-title').textContent = isVictory ? 'STAGE CLEARED!' : 'GAME OVER!';
         document.getElementById('res-subtitle').textContent = isVictory ? 'ยินดีด้วย! คุณพิชิตคำศัพท์ครบทุกข้อแล้ว' : 'พลังชีวิตหมด! พยายามใหม่อีกครั้งนะ';
@@ -3087,7 +3084,6 @@
         document.getElementById('res-accuracy-text').textContent = `${accuracy}%`;
         document.getElementById('res-time-text').textContent = `${timeUsedSec}s`;
 
-        // Save Score Payload to Supabase & LocalStorage
         const scorePayload = {
           student_id: this.studentId,
           student_name: this.studentName,
@@ -3103,8 +3099,6 @@
         };
 
         Supabase.saveScore(scorePayload);
-
-        // Show Modal
         document.getElementById('modal-stage-result').classList.add('show');
       }
 
@@ -3116,7 +3110,6 @@
       returnHomeAndReview() {
         document.getElementById('modal-stage-result').classList.remove('show');
         App.showView('home');
-        // Open review feedback popup after returning home
         setTimeout(() => {
           App.openReviewModal();
         }, 400);
@@ -3124,6 +3117,7 @@
 
       exitGameToHome() {
         if (confirm('คุณต้องการออกจากเกมและกลับสู่หน้าหลักใช่หรือไม่?')) {
+          this.isPlaying = false;
           this.isGameOver = true;
           AudioEngine.stopBGM();
           App.showView('home');
@@ -3134,7 +3128,7 @@
     const Game = new RobloxRegentGameEngine();
 
     /* ==========================================================================
-       5. MAIN APPLICATION CONTROLLER (Tabs, Customization, Teacher Dashboard)
+       5. MAIN APPLICATION CONTROLLER
        ========================================================================== */
     class MainAppController {
       constructor() {
@@ -3184,7 +3178,6 @@
         if (viewName === 'teacher' && this.teacherAuthenticated) this.renderTeacherDashboard();
       }
 
-      // Character & Wallpaper Selectors
       selectCharacter(id) {
         this.selectedCharacter = id;
         document.querySelectorAll('.character-card').forEach((c, idx) => {
@@ -3264,7 +3257,7 @@
 
           const badge = document.createElement('div');
           badge.className = 'lesson-term-badge';
-          badge.textContent = v.term; // Safe text rendering
+          badge.textContent = v.term;
 
           const audioBtn = document.createElement('button');
           audioBtn.className = 'lesson-audio-btn';
@@ -3350,7 +3343,7 @@
         this.loadLeaderboard(filter);
       }
 
-      // Teacher Dashboard Protected Auth
+      // Teacher Dashboard
       openTeacherAuth() {
         if (this.teacherAuthenticated) {
           this.showView('teacher');
@@ -3416,7 +3409,6 @@
         document.getElementById('t-stat-avg-score').textContent = `${avgScore}%`;
         document.getElementById('t-stat-clear-rate').textContent = `${clearRate}%`;
 
-        // Class breakdown
         const classMap = {};
         scores.forEach(s => {
           const cl = s.class_level || 'ปวช. 2/1';

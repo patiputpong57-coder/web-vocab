@@ -2675,13 +2675,77 @@
 
       cleanSpeechText(raw) {
         if (!raw) return '';
-        return String(raw)
-          .replace(/<[^>]*>?/gm, ' ')
-          .replace(/[*_`~#]/g, ' ')
+        let str = String(raw).trim();
+
+        // 1. Explicit Dictionary Mapping for Common HTML Tags & Code Symbols
+        const htmlTagMap = {
+          '<html>': 'HTML root tag',
+          '</html>': 'closing HTML tag',
+          '<head>': 'Head tag',
+          '</head>': 'closing Head tag',
+          '<body>': 'Body tag',
+          '</body>': 'closing Body tag',
+          '<h1>': 'H 1 heading tag',
+          '<h2>': 'H 2 heading tag',
+          '<h3>': 'H 3 heading tag',
+          '<h4>': 'H 4 heading tag',
+          '<h5>': 'H 5 heading tag',
+          '<h6>': 'H 6 heading tag',
+          '<p>': 'Paragraph tag',
+          '</p>': 'closing Paragraph tag',
+          '<a>': 'Anchor hyperlink tag',
+          '</a>': 'closing Anchor tag',
+          '<img>': 'Image tag',
+          '<button>': 'Button tag',
+          '</button>': 'closing Button tag',
+          '<div>': 'Division container tag',
+          '</div>': 'closing Division tag',
+          '<span>': 'Span inline tag',
+          '</span>': 'closing Span tag',
+          '<ul>': 'Unordered list tag',
+          '<ol>': 'Ordered list tag',
+          '<li>': 'List item tag',
+          '<form>': 'Form tag',
+          '<input>': 'Input tag',
+          '<table>': 'Table tag',
+          '<tr>': 'Table row tag',
+          '<td>': 'Table cell data tag',
+          '<th>': 'Table header tag',
+          '<header>': 'Header tag',
+          '<footer>': 'Footer tag',
+          '<nav>': 'Navigation tag',
+          '<section>': 'Section tag',
+          '<article>': 'Article tag',
+          '<title>': 'Title tag',
+          '<style>': 'Style tag',
+          '<script>': 'Script tag',
+          '<link>': 'Link tag',
+          '<meta>': 'Meta tag',
+          '<br>': 'Break line tag',
+          '<hr>': 'Horizontal rule tag'
+        };
+
+        const lowerStr = str.toLowerCase();
+        if (htmlTagMap[lowerStr]) {
+          return htmlTagMap[lowerStr];
+        }
+
+        // 2. Generic HTML Tag Sanitization: Extract tag name (e.g. `<audio>` -> "audio tag")
+        if (/^<\/?([a-z0-9_-]+)(\s[^>]*)?>$/i.test(str)) {
+          const match = str.match(/^<\/?([a-z0-9_-]+)/i);
+          if (match && match[1]) {
+            return `${match[1]} tag`;
+          }
+        }
+
+        // 3. General cleaning: Remove HTML/XML brackets safely by transforming `<` to space and `>` to space
+        return str
+          .replace(/&lt;/g, ' ')
+          .replace(/&gt;/g, ' ')
+          .replace(/&amp;/g, ' and ')
           .replace(/&nbsp;/g, ' ')
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-          .replace(/&amp;/g, '&')
+          .replace(/[<>]/g, ' ')
+          .replace(/[*_`~#={}\[\]();:/\\]/g, ' ')
           .replace(/\s+/g, ' ')
           .trim();
       }
@@ -2689,13 +2753,18 @@
       speakEnglish(enText) {
         if (!('speechSynthesis' in window) || !enText) return;
         try {
+          // 1. Cancel previous speech and resume if paused to prevent speech queue deadlock
           window.speechSynthesis.cancel();
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+
           const cleanEn = this.cleanSpeechText(enText);
           if (!cleanEn) return;
 
           const enUtter = new SpeechSynthesisUtterance(cleanEn);
           enUtter.lang = 'en-US';
-          enUtter.rate = 0.92;
+          enUtter.rate = 0.90;
           enUtter.pitch = 1.0;
 
           const voices = window.speechSynthesis.getVoices() || [];
@@ -3049,7 +3118,7 @@
         this.enemies.forEach(e => { e.speed = e.baseSpeed; });
 
         // 1. Immediately play English audio pronunciation of vocabulary word
-        AudioEngine.speakEnglish(this.activeQuestion.term || this.activeQuestion.ttsEn);
+        AudioEngine.speakEnglish(this.activeQuestion.ttsEn || this.activeQuestion.term);
 
         // 2. Display centered explanation popup overlay (Modal 6)
         const expModal = document.getElementById('modal-question-explanation');
@@ -3799,15 +3868,14 @@
         if (detailedList) {
           detailedList.innerHTML = this.stageQuestions.map((q, idx) => {
             const isOk = this.answersHistory[idx] === true;
-            const safeTerm = (q.term || '').replace(/'/g, "\\'");
-            const safeTh = (q.ttsTh || '').replace(/'/g, "\\'");
+            const safeAudio = (q.ttsEn || q.term || '').replace(/'/g, "\\'");
             return `
               <div style="background: rgba(0,0,0,0.35); border-left: 3.5px solid ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; padding: 0.45rem 0.65rem; border-radius: 6px; font-size: 0.78rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; margin-bottom: 2px;">
                   <span style="font-family: var(--font-code); color: var(--blox-yellow);">ข้อ ${idx + 1}: ${q.term}</span>
                   <div style="display: flex; align-items: center; gap: 0.35rem;">
                     <span style="color: ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; font-weight: 700; font-size: 0.75rem;">${isOk ? '✓ ถูกต้อง' : '✗ ตอบผิด'}</span>
-                    <button class="icon-toggle-btn" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="AudioEngine.speakEnglish('${safeTerm}')">🔊 ฟังศัพท์ (EN)</button>
+                    <button class="icon-toggle-btn" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="AudioEngine.speakEnglish('${safeAudio}')">🔊 ฟังศัพท์ (EN)</button>
                   </div>
                 </div>
                 <div style="color: #e2e8f0; font-size: 0.74rem; margin-bottom: 2px;">${q.scenario}</div>
@@ -4031,7 +4099,7 @@
           const audioBtn = document.createElement('button');
           audioBtn.className = 'lesson-audio-btn';
           audioBtn.innerHTML = '<span>🔊</span> ฟัง (EN)';
-          audioBtn.onclick = () => AudioEngine.speakEnglish(v.term);
+          audioBtn.onclick = () => AudioEngine.speakEnglish(v.ttsEn || v.term);
 
           top.appendChild(badge);
           top.appendChild(audioBtn);

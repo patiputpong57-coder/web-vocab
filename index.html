@@ -1738,10 +1738,13 @@
             <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
           </div>
 
-          <!-- Real-Time In-Game Thai Explanation Banner -->
-          <div class="question-explanation-banner" id="question-explanation-banner" style="display: none; background: rgba(0, 240, 255, 0.15); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.5rem 0.9rem; font-size: 0.9rem; color: #fff; align-items: center; gap: 0.6rem; box-shadow: 0 0 15px rgba(0,240,255,0.25);">
-            <span style="font-size: 1.25rem;">💡</span>
-            <span id="question-explanation-text" style="font-weight: 600; line-height: 1.35;"></span>
+          <!-- Real-Time In-Game Thai Explanation Banner with Audio TTS Button -->
+          <div class="question-explanation-banner" id="question-explanation-banner" style="display: none; background: rgba(0, 240, 255, 0.15); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.5rem 0.9rem; font-size: 0.9rem; color: #fff; align-items: center; justify-content: space-between; gap: 0.6rem; box-shadow: 0 0 15px rgba(0,240,255,0.25);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+              <span style="font-size: 1.25rem;">💡</span>
+              <span id="question-explanation-text" style="font-weight: 600; line-height: 1.35;"></span>
+            </div>
+            <button class="icon-toggle-btn" id="btn-replay-explanation-tts" style="white-space: nowrap; font-size: 0.78rem; padding: 0.3rem 0.6rem; background: var(--blox-cyan); color: #000; font-weight: 700; border-color: var(--blox-cyan);" onclick="Game.speakCurrentExplanation()">🔊 ฟังเสียงไทย</button>
           </div>
 
           <div class="choices-grid-layout" id="choices-container">
@@ -2561,24 +2564,47 @@
         });
       }
 
+      speakThai(thText) {
+        if (!('speechSynthesis' in window) || !thText) return;
+        try {
+          window.speechSynthesis.cancel();
+          const cleanText = thText.replace(/<[^>]*>?/gm, '');
+          const thUtter = new SpeechSynthesisUtterance(cleanText);
+          thUtter.lang = 'th-TH';
+          thUtter.rate = 1.0;
+          thUtter.pitch = 1.0;
+          window.speechSynthesis.speak(thUtter);
+        } catch(e) {}
+      }
+
       speakBilingual(enText, thText) {
         if (!('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
+        try {
+          window.speechSynthesis.cancel();
 
-        const enUtter = new SpeechSynthesisUtterance(enText);
-        enUtter.lang = 'en-US';
-        enUtter.rate = 0.95;
-
-        enUtter.onend = () => {
-          if (thText) {
-            const thUtter = new SpeechSynthesisUtterance(thText);
-            thUtter.lang = 'th-TH';
-            thUtter.rate = 1.0;
-            window.speechSynthesis.speak(thUtter);
+          if (!enText && thText) {
+            this.speakThai(thText);
+            return;
           }
-        };
 
-        window.speechSynthesis.speak(enUtter);
+          const cleanEn = (enText || '').replace(/<[^>]*>?/gm, '');
+          const enUtter = new SpeechSynthesisUtterance(cleanEn);
+          enUtter.lang = 'en-US';
+          enUtter.rate = 0.95;
+
+          enUtter.onend = () => {
+            if (thText) {
+              const cleanTh = thText.replace(/<[^>]*>?/gm, '');
+              const thUtter = new SpeechSynthesisUtterance(cleanTh);
+              thUtter.lang = 'th-TH';
+              thUtter.rate = 1.0;
+              thUtter.pitch = 1.0;
+              window.speechSynthesis.speak(thUtter);
+            }
+          };
+
+          window.speechSynthesis.speak(enUtter);
+        } catch(e) {}
       }
 
       startBGM() {
@@ -2983,11 +3009,20 @@
           expBanner.style.display = 'flex';
         }
 
+        // Automatic Thai TTS explanation for incorrect answer
+        AudioEngine.speakBilingual(this.activeQuestion.ttsEn, `คำตอบที่ถูกต้องคือ ${this.activeQuestion.term} ${this.activeQuestion.ttsTh}`);
+
         const targetX = this.enemies[0] ? this.enemies[0].x : this.player.x + 100;
         this.createFloatingText("WRONG! ✗", this.player.x + 30, this.player.y - 30, '#ef4444');
         this.createFloatingText("SPEED UP! ⚡⚡", targetX, (this.canvas.height / 2) - 60, '#ff3366');
 
         this.updateHUD();
+      }
+
+      speakCurrentExplanation() {
+        if (this.activeQuestion) {
+          AudioEngine.speakBilingual(this.activeQuestion.term, this.activeQuestion.ttsTh);
+        }
       }
 
       grantPowerup(type) {
@@ -3634,16 +3669,21 @@
           }
         }
 
-        // Render Comprehensive Thai Explanations Breakdown
+        // Render Comprehensive Thai Explanations Breakdown with Audio Button
         const detailedList = document.getElementById('res-detailed-breakdown-list');
         if (detailedList) {
           detailedList.innerHTML = this.stageQuestions.map((q, idx) => {
             const isOk = this.answersHistory[idx] === true;
+            const safeTerm = (q.term || '').replace(/'/g, "\\'");
+            const safeTh = (q.ttsTh || '').replace(/'/g, "\\'");
             return `
               <div style="background: rgba(0,0,0,0.35); border-left: 3.5px solid ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; padding: 0.45rem 0.65rem; border-radius: 6px; font-size: 0.78rem;">
-                <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 2px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; margin-bottom: 2px;">
                   <span style="font-family: var(--font-code); color: var(--blox-yellow);">ข้อ ${idx + 1}: ${q.term}</span>
-                  <span style="color: ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; font-weight: 700;">${isOk ? '✓ ถูกต้อง' : '✗ ตอบผิด'}</span>
+                  <div style="display: flex; align-items: center; gap: 0.35rem;">
+                    <span style="color: ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; font-weight: 700; font-size: 0.75rem;">${isOk ? '✓ ถูกต้อง' : '✗ ตอบผิด'}</span>
+                    <button class="icon-toggle-btn" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="AudioEngine.speakBilingual('${safeTerm}', '${safeTh}')">🔊 ฟัง</button>
+                  </div>
                 </div>
                 <div style="color: #e2e8f0; font-size: 0.74rem; margin-bottom: 2px;">${q.scenario}</div>
                 <div style="color: var(--blox-cyan); font-size: 0.74rem;"><strong>💡 คำอธิบายเฉลย (ไทย):</strong> ${q.ttsTh}</div>

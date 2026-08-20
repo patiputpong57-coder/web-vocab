@@ -2088,9 +2088,9 @@
     };
 
     /* ==========================================================================
-       1. WEB DEVELOPMENT VOCABULARY DATASET
+       1. WEB DEVELOPMENT VOCABULARY DATASET (IMMUTABLE FALLBACK DATASET)
        ========================================================================== */
-    let VOCAB_DATABASE = [
+    const DEFAULT_VOCAB_DATABASE = [
       // --- STAGE 1: HTML & Structural Tags ---
       {
         id: 1, stage: 1, stageName: "HTML Tags",
@@ -2420,6 +2420,9 @@
       }
     ];
 
+    /* Active Dynamic VOCAB_DATABASE (Initialized with Default Fallback) */
+    let VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
+
     /* Initial Demo Reviews Dataset */
     const DEFAULT_REVIEWS = [
       { student_id: "6601001", rating_stars: 5, comment: "เกมสนุกมากครับ เข้าใจแท็ก HTML กับ Flexbox ชัดเจนขึ้นเยอะเลย!", created_at: "2026-08-20 18:30" },
@@ -2441,6 +2444,25 @@
           "Content-Type": "application/json",
           "Prefer": "return=representation"
         };
+        this.hasSeededQuestions = false;
+      }
+
+      // Safe fetch with timeout to prevent network lockup
+      async fetchWithTimeout(resource, options = {}) {
+        const { timeout = 3500 } = options;
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        try {
+          const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal
+          });
+          clearTimeout(id);
+          return response;
+        } catch (error) {
+          clearTimeout(id);
+          throw error;
+        }
       }
 
       async saveScore(payload) {
@@ -2457,21 +2479,23 @@
           accuracy: Number(payload.accuracy !== undefined ? payload.accuracy : (payload.percentage || 0))
         };
 
-        // 1. Send data directly to 'leaderboard' table as required
+        // 1. Send data directly to 'leaderboard' table
         try {
-          await fetch(`${this.url}/rest/v1/leaderboard`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/leaderboard`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(leaderboardPayload)
+            body: JSON.stringify(leaderboardPayload),
+            timeout: 4000
           });
         } catch (e) {}
 
         // 2. Also keep 'scores' table synchronized for backward compatibility
         try {
-          await fetch(`${this.url}/rest/v1/scores`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/scores`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            timeout: 4000
           });
         } catch (e) {}
       }
@@ -2479,8 +2503,9 @@
       async fetchScores() {
         // 1. Fetch from 'leaderboard' table first
         try {
-          const res = await fetch(`${this.url}/rest/v1/leaderboard?select=student_id,student_name,grade,stage,score,accuracy,created_at&order=score.desc`, {
-            headers: this.headers
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/leaderboard?select=student_id,student_name,grade,stage,score,accuracy,created_at&order=score.desc`, {
+            headers: this.headers,
+            timeout: 3500
           });
           if (res.ok) {
             const data = await res.json();
@@ -2492,8 +2517,9 @@
 
         // 2. Fallback to 'scores' table if leaderboard table is not ready
         try {
-          const res = await fetch(`${this.url}/rest/v1/scores?select=*&order=score.desc`, {
-            headers: this.headers
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/scores?select=*&order=score.desc`, {
+            headers: this.headers,
+            timeout: 3500
           });
           if (res.ok) {
             const data = await res.json();
@@ -2519,18 +2545,20 @@
         };
 
         try {
-          await fetch(`${this.url}/rest/v1/reviews`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/reviews`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(reviewPayload)
+            body: JSON.stringify(reviewPayload),
+            timeout: 4000
           });
         } catch (e) {}
       }
 
       async fetchReviews() {
         try {
-          const res = await fetch(`${this.url}/rest/v1/reviews?select=id,rating,comment,student_id,created_at&order=created_at.desc`, {
-            headers: this.headers
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/reviews?select=id,rating,comment,student_id,created_at&order=created_at.desc`, {
+            headers: this.headers,
+            timeout: 3500
           });
           if (res.ok) {
             const data = await res.json();
@@ -2543,15 +2571,68 @@
       // Questions Management (category, question, option_a, option_b, option_c, option_d, correct_option, explanation)
       async fetchQuestions() {
         try {
-          const res = await fetch(`${this.url}/rest/v1/questions?select=id,category,question,option_a,option_b,option_c,option_d,correct_option,explanation,created_at&order=id.asc`, {
-            headers: this.headers
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/questions?select=id,category,question,option_a,option_b,option_c,option_d,correct_option,explanation,created_at&order=id.asc`, {
+            headers: this.headers,
+            timeout: 3500
           });
           if (res.ok) {
             const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) return data;
+            if (Array.isArray(data)) {
+              if (data.length === 0) {
+                // Table exists but empty -> Seed initial questions into Supabase
+                this.seedDefaultQuestionsToSupabase();
+                return DEFAULT_VOCAB_DATABASE;
+              }
+              return data;
+            }
           }
-        } catch (e) {}
-        return JSON.parse(localStorage.getItem('roblox_regent_custom_questions') || 'null');
+        } catch (e) {
+          console.warn('Supabase fetchQuestions fallback:', e);
+        }
+
+        const local = JSON.parse(localStorage.getItem('roblox_regent_custom_questions') || 'null');
+        return (Array.isArray(local) && local.length > 0) ? local : DEFAULT_VOCAB_DATABASE;
+      }
+
+      // Auto-Seed Initial Questions to Supabase
+      async seedDefaultQuestionsToSupabase() {
+        if (this.hasSeededQuestions) return;
+        this.hasSeededQuestions = true;
+
+        try {
+          const payload = DEFAULT_VOCAB_DATABASE.map(q => {
+            const stageOthers = DEFAULT_VOCAB_DATABASE
+              .filter(o => o.stage === q.stage && o.term !== q.term)
+              .map(o => o.term);
+            const otherStages = DEFAULT_VOCAB_DATABASE
+              .filter(o => o.term !== q.term)
+              .map(o => o.term);
+            const pool = [...stageOthers, ...otherStages];
+
+            return {
+              category: q.stageName || `Stage ${q.stage}`,
+              question: q.scenario,
+              option_a: q.term,
+              option_b: pool[0] || '<div>',
+              option_c: pool[1] || '<span>',
+              option_d: pool[2] || '<p>',
+              correct_option: 'a',
+              explanation: q.ttsTh
+            };
+          });
+
+          await fetch(`${this.url}/rest/v1/questions`, {
+            method: 'POST',
+            headers: {
+              ...this.headers,
+              "Prefer": "return=minimal"
+            },
+            body: JSON.stringify(payload)
+          });
+          console.log('Successfully seeded 40 default questions to Supabase!');
+        } catch (e) {
+          console.warn('Auto-seed questions to Supabase notice:', e);
+        }
       }
 
       async saveQuestion(q) {
@@ -2567,10 +2648,11 @@
         };
 
         try {
-          await fetch(`${this.url}/rest/v1/questions`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/questions`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(questionPayload)
+            body: JSON.stringify(questionPayload),
+            timeout: 4000
           });
         } catch (e) {}
       }
@@ -2588,19 +2670,21 @@
         };
 
         try {
-          await fetch(`${this.url}/rest/v1/questions?id=eq.${id}`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/questions?id=eq.${id}`, {
             method: 'PATCH',
             headers: this.headers,
-            body: JSON.stringify(questionPayload)
+            body: JSON.stringify(questionPayload),
+            timeout: 4000
           });
         } catch (e) {}
       }
 
       async deleteQuestion(id) {
         try {
-          await fetch(`${this.url}/rest/v1/questions?id=eq.${id}`, {
+          await this.fetchWithTimeout(`${this.url}/rest/v1/questions?id=eq.${id}`, {
             method: 'DELETE',
-            headers: this.headers
+            headers: this.headers,
+            timeout: 4000
           });
         } catch (e) {}
       }
@@ -2965,12 +3049,23 @@
         this.customBaseSpeed = (typeof App !== 'undefined' && typeof App.monsterBaseSpeed === 'number') ? App.monsterBaseSpeed : 0.35;
         this.customPenaltySpeed = (typeof App !== 'undefined' && typeof App.monsterPenaltySpeed === 'number') ? App.monsterPenaltySpeed : 1.5;
 
-        // Prepare Questions Pool
+        // Prepare Questions Pool with robust fallback guarantee
         let pool = [];
+        const sourceData = (Array.isArray(VOCAB_DATABASE) && VOCAB_DATABASE.length > 0) ? VOCAB_DATABASE : DEFAULT_VOCAB_DATABASE;
+        
         if (this.stageId === 5) {
-          pool = App.shuffleArray([...VOCAB_DATABASE]).slice(0, 20);
+          pool = App.shuffleArray([...sourceData]).slice(0, 20);
         } else {
-          pool = App.shuffleArray(VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
+          pool = App.shuffleArray(sourceData.filter(q => q.stage === this.stageId)).slice(0, 10);
+        }
+
+        // Failsafe: if filtered pool is empty, fallback to default stage questions
+        if (!pool || pool.length === 0) {
+          pool = App.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
+        }
+        // Double failsafe: if still empty, grab any questions
+        if (!pool || pool.length === 0) {
+          pool = App.shuffleArray([...DEFAULT_VOCAB_DATABASE]).slice(0, 10);
         }
 
         this.stageQuestions = pool;
@@ -3024,6 +3119,10 @@
       }
 
       loadQuestion(idx) {
+        if (!this.stageQuestions || this.stageQuestions.length === 0) {
+          this.stageQuestions = App.shuffleArray([...DEFAULT_VOCAB_DATABASE]).slice(0, 10);
+        }
+
         if (idx >= this.stageQuestions.length) {
           this.finishLevel(true);
           return;
@@ -3032,7 +3131,7 @@
         this.isAnswered = false;
         this.isTransitioning = false;
         document.getElementById('modal-question-explanation')?.classList.remove('show');
-        this.activeQuestion = this.stageQuestions[idx];
+        this.activeQuestion = this.stageQuestions[idx] || DEFAULT_VOCAB_DATABASE[0];
         const isBoss = (idx === 4 || idx === 9 || idx === 19);
 
         // Update Question Banner
@@ -3100,21 +3199,40 @@
         const expBanner = document.getElementById('question-explanation-banner');
         if (expBanner) expBanner.style.display = 'none';
 
-        // Prepare Choices
-        const sameStageOthers = App.shuffleArray(
-          VOCAB_DATABASE.filter(v => v.stage === this.activeQuestion.stage && v.term !== this.activeQuestion.term)
-        ).slice(0, 3).map(v => v.term);
+        // Prepare Choices: Support both pre-configured options and dynamic distractors
+        let choices = [];
+        const q = this.activeQuestion;
+        if (q.option_a && q.option_b && (q.option_b !== q.option_a)) {
+          const opts = [
+            { term: q.option_a, correct: (q.correct_option === 'a' || q.correct_option === 'option_a') },
+            { term: q.option_b, correct: (q.correct_option === 'b' || q.correct_option === 'option_b') },
+            { term: q.option_c || '<div>', correct: (q.correct_option === 'c' || q.correct_option === 'option_c') },
+            { term: q.option_d || '<p>', correct: (q.correct_option === 'd' || q.correct_option === 'option_d') }
+          ];
+          if (!opts.some(o => o.correct)) opts[0].correct = true;
+          choices = App.shuffleArray(opts);
+        } else {
+          const allPool = (Array.isArray(VOCAB_DATABASE) && VOCAB_DATABASE.length >= 4) ? VOCAB_DATABASE : DEFAULT_VOCAB_DATABASE;
+          const sameStageOthers = App.shuffleArray(
+            allPool.filter(v => v.stage === q.stage && v.term !== q.term)
+          ).slice(0, 3).map(v => v.term);
 
-        const otherCategories = App.shuffleArray(
-          VOCAB_DATABASE.filter(v => v.term !== this.activeQuestion.term)
-        ).slice(0, 3 - sameStageOthers.length).map(v => v.term);
+          const otherCategories = App.shuffleArray(
+            allPool.filter(v => v.term !== q.term && !sameStageOthers.includes(v.term))
+          ).slice(0, 3 - sameStageOthers.length).map(v => v.term);
 
-        const wrongOptions = [...sameStageOthers, ...otherCategories];
+          const wrongOptions = [...sameStageOthers, ...otherCategories];
+          while (wrongOptions.length < 3) {
+            wrongOptions.push(`Option ${wrongOptions.length + 2}`);
+          }
 
-        this.choicesList = App.shuffleArray([
-          { term: this.activeQuestion.term, correct: true },
-          ...wrongOptions.map(t => ({ term: t, correct: false }))
-        ]);
+          choices = App.shuffleArray([
+            { term: q.term, correct: true },
+            ...wrongOptions.map(t => ({ term: t, correct: false }))
+          ]);
+        }
+
+        this.choicesList = choices;
 
         // CRITICAL REQUIREMENT: Render choice buttons using element.textContent (NEVER innerHTML)
         const container = document.getElementById('choices-container');
@@ -4017,61 +4135,75 @@
       async init() {
         this.initBackgroundBlocks();
         this.loadMonsterSpeedConfig();
-        await this.loadQuestionsFromSupabase();
+        try {
+          await this.loadQuestionsFromSupabase();
+        } catch (e) {
+          console.warn('Init question loading fallback:', e);
+        }
         this.renderLessons();
         this.loadLeaderboard();
         this.loadRatingSummary();
       }
 
       async loadQuestionsFromSupabase() {
-        const customQ = await Supabase.fetchQuestions();
-        if (customQ && Array.isArray(customQ) && customQ.length > 0) {
-          const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
-          const normalized = customQ.map((q, idx) => {
-            const catStr = String(q.category || q.stage || '1');
-            let stageNum = 1;
-            if (/html/i.test(catStr) || catStr === '1') stageNum = 1;
-            else if (/css/i.test(catStr) || catStr === '2') stageNum = 2;
-            else if (/js|javascript|dom/i.test(catStr) || catStr === '3') stageNum = 3;
-            else if (/server|database|cloud/i.test(catStr) || catStr === '4') stageNum = 4;
-            else stageNum = parseInt(catStr, 10) || 1;
+        try {
+          const customQ = await Supabase.fetchQuestions();
+          if (customQ && Array.isArray(customQ) && customQ.length > 0) {
+            const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
+            const normalized = customQ.map((q, idx) => {
+              const catStr = String(q.category || q.stage || '1');
+              let stageNum = 1;
+              if (/html/i.test(catStr) || catStr === '1') stageNum = 1;
+              else if (/css/i.test(catStr) || catStr === '2') stageNum = 2;
+              else if (/js|javascript|dom/i.test(catStr) || catStr === '3') stageNum = 3;
+              else if (/server|database|cloud/i.test(catStr) || catStr === '4') stageNum = 4;
+              else stageNum = parseInt(catStr, 10) || 1;
 
-            const stageName = stageNames[stageNum] || catStr || "Web Development";
+              const stageName = stageNames[stageNum] || catStr || "Web Development";
 
-            let term = q.term || '';
-            const correctOpt = String(q.correct_option || '').toLowerCase();
-            if (correctOpt === 'a' || correctOpt === 'option_a') term = q.option_a || term;
-            else if (correctOpt === 'b' || correctOpt === 'option_b') term = q.option_b || term;
-            else if (correctOpt === 'c' || correctOpt === 'option_c') term = q.option_c || term;
-            else if (correctOpt === 'd' || correctOpt === 'option_d') term = q.option_d || term;
-            else if (!term && q.option_a) term = q.option_a;
+              let term = q.term || '';
+              const correctOpt = String(q.correct_option || '').toLowerCase();
+              if (correctOpt === 'a' || correctOpt === 'option_a') term = q.option_a || term;
+              else if (correctOpt === 'b' || correctOpt === 'option_b') term = q.option_b || term;
+              else if (correctOpt === 'c' || correctOpt === 'option_c') term = q.option_c || term;
+              else if (correctOpt === 'd' || correctOpt === 'option_d') term = q.option_d || term;
+              else if (!term && q.option_a) term = q.option_a;
+              if (!term) term = (DEFAULT_VOCAB_DATABASE[idx % DEFAULT_VOCAB_DATABASE.length] || {}).term || 'Code';
 
-            const scenario = q.question || q.scenario || 'โจทย์คำถาม';
-            const explanation = q.explanation || q.ttsTh || `เฉลย: ${term}`;
+              const scenario = q.question || q.scenario || 'โจทย์คำถามการพัฒนาเว็บไซต์';
+              const explanation = q.explanation || q.ttsTh || `เฉลย: ${term}`;
 
-            return {
-              id: q.id || (idx + 1),
-              stage: stageNum,
-              stageName: stageName,
-              term: term,
-              ttsEn: q.ttsEn || term,
-              ttsTh: explanation,
-              scenario: scenario,
-              codeExample: q.codeExample || `// ${term}`,
-              option_a: q.option_a || term,
-              option_b: q.option_b || '',
-              option_c: q.option_c || '',
-              option_d: q.option_d || '',
-              correct_option: correctOpt || 'a',
-              explanation: explanation,
-              category: q.category || stageName,
-              question: scenario
-            };
-          });
+              return {
+                id: q.id || (idx + 1),
+                stage: stageNum,
+                stageName: stageName,
+                term: term,
+                ttsEn: q.ttsEn || term,
+                ttsTh: explanation,
+                scenario: scenario,
+                codeExample: q.codeExample || `// ${term}`,
+                option_a: q.option_a || term,
+                option_b: q.option_b || '',
+                option_c: q.option_c || '',
+                option_d: q.option_d || '',
+                correct_option: correctOpt || 'a',
+                explanation: explanation,
+                category: q.category || stageName,
+                question: scenario
+              };
+            });
 
-          if (normalized.length > 0) {
-            VOCAB_DATABASE = normalized;
+            if (normalized.length > 0) {
+              VOCAB_DATABASE = normalized;
+            } else {
+              VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
+            }
+          } else {
+            VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
           }
+        } catch (e) {
+          console.warn('Error loading questions from Supabase, using default dataset:', e);
+          VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
         }
       }
 

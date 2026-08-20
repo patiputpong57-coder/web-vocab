@@ -1216,7 +1216,7 @@
 
     <!-- TOP NAVIGATION BAR (4 TABS) -->
     <nav class="top-nav-bar">
-      <div class="nav-brand">
+      <div class="nav-brand" style="cursor: pointer;" onclick="App.showView('home')" title="กลับหน้าแรก">
         <span>🧱</span>
         <span>ROBLOX VOCAB REGENT</span>
         <span class="nav-brand-badge">EDTECH</span>
@@ -3839,6 +3839,19 @@
       }
 
       showView(viewName) {
+        // Confirmation check when navigating away from an active in-progress game
+        if (viewName !== 'gameplay' && typeof Game !== 'undefined' && Game.isPlaying && !Game.isGameOver) {
+          const leave = confirm("เกมกำลังดำเนินอยู่ คุณต้องการออกจากเกมหรือไม่?");
+          if (!leave) {
+            // Keep player on active gameplay screen
+            return;
+          }
+          // Player confirmed leaving: Gracefully cleanup active game
+          Game.isPlaying = false;
+          AudioEngine.stopBGM();
+          if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
         document.querySelectorAll('.view-screen').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
 
@@ -4034,6 +4047,14 @@
 
       // Teacher Dashboard
       openTeacherAuth() {
+        if (typeof Game !== 'undefined' && Game.isPlaying && !Game.isGameOver) {
+          const leave = confirm("เกมกำลังดำเนินอยู่ คุณต้องการออกจากเกมหรือไม่?");
+          if (!leave) return;
+          Game.isPlaying = false;
+          AudioEngine.stopBGM();
+          if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
         if (this.teacherAuthenticated) {
           this.showView('teacher');
           return;

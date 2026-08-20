@@ -1766,18 +1766,6 @@
             <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
           </div>
 
-          <!-- Real-Time In-Game Thai Explanation Banner (18px Light Font, Manual Next Question Progression) -->
-          <div class="question-explanation-banner" id="question-explanation-banner">
-            <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
-              <span style="font-size: 1.1rem; opacity: 0.9;">💡</span>
-              <span id="question-explanation-text"></span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <button class="icon-toggle-btn" id="btn-replay-term-en" style="white-space: nowrap; font-size: 0.8rem; padding: 0.4rem 0.7rem; background: rgba(0, 240, 255, 0.15); color: var(--blox-cyan); border: 1px solid var(--blox-cyan); border-radius: 8px;" onclick="Game.speakCurrentTermEN()">🔊 ฟังคำศัพท์ (EN)</button>
-              <button class="big-blox-action-btn" id="btn-next-question" style="white-space: nowrap; font-size: 0.88rem; padding: 0.4rem 0.95rem; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); box-shadow: var(--btn-shadow-green);" onclick="Game.proceedToNextQuestion()">ข้อถัดไป ➡️</button>
-            </div>
-          </div>
-
           <div class="choices-grid-layout" id="choices-container">
             <!-- 4 Choice buttons safely rendered with textContent -->
           </div>
@@ -1927,6 +1915,27 @@
         <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closePublicReviewsModal()">ปิดหน้าต่าง</button>
         <button class="big-blox-action-btn" style="flex: 1; font-size: 1.05rem; padding: 0.75rem; border-radius: 12px;" onclick="App.switchToSubmitReviewModal()">✍️ ส่งรีวิวของคุณ ⭐</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 6: QUESTION FEEDBACK & EXPLANATION (CENTERED POPUP OVERLAY)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-question-explanation">
+    <div class="blox-modal-card" style="max-width: 520px; text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 0.2rem;" id="modal-exp-icon">✅</div>
+      <h2 class="modal-title" id="modal-exp-title" style="font-size: 1.45rem; margin-bottom: 0.2rem;">ถูกต้อง! (Correct)</h2>
+      <div style="font-family: var(--font-code); font-size: 1.25rem; color: var(--blox-yellow); margin-bottom: 0.8rem;" id="modal-exp-term"></div>
+      
+      <!-- Clean Thai Explanation Text at 18px, Light/Regular Font Weight 300, No heavy highlights -->
+      <div style="background: rgba(10, 16, 38, 0.65); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 1.2rem; text-align: left;">
+        <div style="font-size: 0.8rem; color: var(--blox-cyan); margin-bottom: 0.35rem; font-weight: 600;">📖 คำอธิบายเฉลยภาษาไทย (Explanation):</div>
+        <div id="modal-exp-text" style="font-family: var(--font-ui); font-size: 18px; font-weight: 300; line-height: 1.5; color: #ffffff; text-shadow: none;"></div>
+      </div>
+
+      <button class="big-blox-action-btn" style="width: 100%; font-size: 1.15rem; padding: 0.85rem; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); box-shadow: var(--btn-shadow-green);" onclick="Game.proceedToNextQuestion()">
+        ข้อถัดไป (Next Question) ➡️
+      </button>
     </div>
   </div>
 
@@ -2818,6 +2827,7 @@
 
         this.isAnswered = false;
         this.isTransitioning = false;
+        document.getElementById('modal-question-explanation')?.classList.remove('show');
         this.activeQuestion = this.stageQuestions[idx];
         const isBoss = (idx === 4 || idx === 9 || idx === 19);
 
@@ -2964,12 +2974,21 @@
         // Reset monster speeds back to normal slow baseline upon correct answer
         this.enemies.forEach(e => { e.speed = e.baseSpeed; });
 
-        // Display In-Game Real-Time Thai Explanation (18px Light Font, Manual Next Question Progression)
-        const expBanner = document.getElementById('question-explanation-banner');
-        const expText = document.getElementById('question-explanation-text');
-        if (expBanner && expText) {
-          expText.textContent = `ถูกต้อง! "${this.activeQuestion.term}" — ${this.activeQuestion.ttsTh}`;
-          expBanner.style.display = 'flex';
+        // 1. Immediately play English audio pronunciation of vocabulary word
+        AudioEngine.speakEnglish(this.activeQuestion.term || this.activeQuestion.ttsEn);
+
+        // 2. Display centered explanation popup overlay (Modal 6)
+        const expModal = document.getElementById('modal-question-explanation');
+        if (expModal) {
+          document.getElementById('modal-exp-icon').textContent = '✅';
+          const titleEl = document.getElementById('modal-exp-title');
+          if (titleEl) {
+            titleEl.textContent = 'ถูกต้อง! (Correct)';
+            titleEl.style.color = 'var(--blox-green)';
+          }
+          document.getElementById('modal-exp-term').textContent = this.activeQuestion.term;
+          document.getElementById('modal-exp-text').textContent = this.activeQuestion.ttsTh;
+          expModal.classList.add('show');
         }
 
         AudioEngine.playCoinChime();
@@ -3008,7 +3027,7 @@
         if (this.combo === 5) this.grantPowerup('fix');
 
         this.updateHUD();
-        // NOTE: No auto-progression setTimeout. The player reads at their own pace and clicks "Next Question".
+        // NOTE: Modal stays open centered on screen until player clicks "Next Question".
       }
 
       processWrongAnswer() {
@@ -3020,12 +3039,18 @@
           e.speed = Math.min(e.speed + 1.5, 4.5);
         });
 
-        // Display In-Game Real-Time Thai Explanation Banner for incorrect answer (18px Light Font)
-        const expBanner = document.getElementById('question-explanation-banner');
-        const expText = document.getElementById('question-explanation-text');
-        if (expBanner && expText) {
-          expText.textContent = `เฉลย: "${this.activeQuestion.term}" — ${this.activeQuestion.ttsTh}`;
-          expBanner.style.display = 'flex';
+        // Display centered explanation popup overlay (Modal 6) with correct answer & Thai explanation
+        const expModal = document.getElementById('modal-question-explanation');
+        if (expModal) {
+          document.getElementById('modal-exp-icon').textContent = '❌';
+          const titleEl = document.getElementById('modal-exp-title');
+          if (titleEl) {
+            titleEl.textContent = 'ตอบผิด! (Incorrect)';
+            titleEl.style.color = '#f87171';
+          }
+          document.getElementById('modal-exp-term').textContent = `เฉลยที่ถูกต้อง: ${this.activeQuestion.term}`;
+          document.getElementById('modal-exp-text').textContent = this.activeQuestion.ttsTh;
+          expModal.classList.add('show');
         }
 
         const targetX = this.enemies[0] ? this.enemies[0].x : this.player.x + 100;
@@ -3033,13 +3058,13 @@
         this.createFloatingText("SPEED UP! ⚡⚡", targetX, (this.canvas.height / 2) - 60, '#ff3366');
 
         this.updateHUD();
-        // NOTE: No auto-progression setTimeout. The player reads at their own pace and clicks "Next Question".
+        // NOTE: Modal stays open centered on screen until player clicks "Next Question".
       }
 
       proceedToNextQuestion() {
         if (!this.isPlaying || this.isGameOver) return;
-        const expBanner = document.getElementById('question-explanation-banner');
-        if (expBanner) expBanner.style.display = 'none';
+        const expModal = document.getElementById('modal-question-explanation');
+        if (expModal) expModal.classList.remove('show');
 
         AudioEngine.playCoinChime();
         this.currentQIdx++;
@@ -3047,12 +3072,6 @@
           this.finishLevel(true);
         } else {
           this.loadQuestion(this.currentQIdx);
-        }
-      }
-
-      speakCurrentTermEN() {
-        if (this.activeQuestion) {
-          AudioEngine.speakEnglish(this.activeQuestion.term || this.activeQuestion.ttsEn);
         }
       }
 

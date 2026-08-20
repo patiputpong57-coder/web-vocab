@@ -139,7 +139,19 @@
     .blox-stats-group {
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 0.9rem;
+    }
+
+    .stat-hp-box {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 56, 56, 0.15);
+      border: 2px solid var(--blox-red);
+      border-radius: 20px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.95rem;
+      color: #fff;
     }
 
     .level-stage-badge {
@@ -349,17 +361,17 @@
 
     .scenario-text {
       font-size: 20px; /* EXACTLY >= 20px as required */
-      font-weight: 800;
+      font-weight: 500; /* Regular/medium weight (clean and less stiff) */
       color: #ffffff;
-      line-height: 1.35;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+      line-height: 1.4;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
       flex: 1;
     }
 
     .scenario-tag {
       background: var(--blox-cyan);
       color: #030a1c;
-      font-weight: 800;
+      font-weight: 700;
       font-size: 0.8rem;
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
@@ -387,7 +399,7 @@
       color: #ffffff;
       font-family: var(--font-code), var(--font-ui);
       font-size: 19px; /* Bold 18px-20px font size */
-      font-weight: 800;
+      font-weight: 500; /* Regular/medium weight (clean and readable) */
       padding: 0.85rem 1rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #121a36;
@@ -644,6 +656,12 @@
       </div>
 
       <div class="blox-stats-group">
+        <!-- Player HP System -->
+        <div class="stat-hp-box" title="พลังชีวิต (HP Hearts)">
+          <span style="font-size: 0.8rem; color: #ff9999; font-weight: 700;">HP:</span>
+          <span id="hud-hp-hearts" style="font-size: 1.15rem; letter-spacing: 2px;">❤️❤️❤️</span>
+        </div>
+
         <!-- Stage Progress: 10 Questions Strict -->
         <div class="level-stage-badge">
           <span>🚩 QUESTION</span>
@@ -802,12 +820,18 @@
           📡 กำลังบันทึกคะแนนเข้าสู่ระบบ...
         </div>
 
-        <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
-          <button class="big-blox-btn" style="flex: 1; margin-top: 0;" onclick="Game.restartLevel()">
-            🔄 เล่นด่านนี้ใหม่อีกครั้ง
-          </button>
-          <button class="header-ctrl-btn" style="padding: 0.8rem 1rem; border-radius: 16px; font-weight: 800;" onclick="Game.manualSyncSheet()">
-            📤 ส่งคะแนนซ้ำ
+        <!-- 3 ACTION BUTTONS PER REQUIREMENT 3 -->
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem;">
+          <div style="display: flex; gap: 0.6rem;">
+            <button class="big-blox-btn" style="flex: 1; margin-top: 0; padding: 0.8rem 0.5rem; font-size: 1.1rem;" onclick="Game.restartLevel()">
+              🔄 PLAY AGAIN / เล่นอีกครั้ง
+            </button>
+            <button class="header-ctrl-btn" style="flex: 1; padding: 0.8rem 0.5rem; border-radius: 16px; font-weight: 700; font-size: 1.05rem; background: var(--blox-blue); border-color: var(--blox-cyan);" onclick="Game.manualSyncSheet()">
+              📤 SUBMIT SCORE / ส่งคะแนน
+            </button>
+          </div>
+          <button class="header-ctrl-btn" style="width: 100%; padding: 0.75rem; border-radius: 16px; font-weight: 700; font-size: 1rem; background: #2a3556; border-color: #485885;" onclick="Game.exitToHome()">
+            🚪 EXIT GAME / จบเกม (กลับหน้าแรก)
           </button>
         </div>
       </div>

@@ -1564,6 +1564,7 @@
           <button class="teacher-subnav-btn" id="tsub-btn-tracker" onclick="App.showTeacherSubscreen('tracker')">📋 ติดตามผลรายข้อ (Item Tracker)</button>
           <button class="teacher-subnav-btn" id="tsub-btn-questions" onclick="App.showTeacherSubscreen('questions')">✏️ คลังข้อสอบ</button>
           <button class="teacher-subnav-btn" id="tsub-btn-reviews" onclick="App.showTeacherSubscreen('reviews')">⭐ รายงานประเมินเกม</button>
+          <button class="teacher-subnav-btn" id="tsub-btn-settings" onclick="App.showTeacherSubscreen('settings')">⚙️ ตั้งค่าความเร็วมอนสเตอร์</button>
         </div>
 
         <!-- Subscreen 1: Analytics -->
@@ -1680,6 +1681,61 @@
                 <!-- User reviews rendered here -->
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Subscreen 5: Monster Speed & Gameplay Config -->
+        <div class="teacher-subscreen" id="tscreen-settings">
+          <div style="background: rgba(14, 22, 48, 0.9); border: 2px solid rgba(0, 240, 255, 0.2); border-radius: 14px; padding: 1.2rem; max-width: 650px; margin: 0 auto; text-align: left;">
+            <h3 style="font-size: 1.1rem; color: var(--blox-yellow); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>⚙️</span> กำหนดความเร็วและการลงโทษของมอนสเตอร์ (Monster Speed Settings)
+            </h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1.2rem;">
+              คุณครูสามารถปรับระดับความเร็วพื้นฐานและอัตราเร่งความเร็วเมื่อนักเรียนตอบผิด เพื่อปรับให้เหมาะสมกับระดับชั้นเรียน
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- 1. Base Monster Speed Control -->
+              <div class="form-group-box">
+                <label class="form-label-title" style="display: flex; justify-content: space-between;">
+                  <span>1. ความเร็วพื้นฐานของมอนสเตอร์ (Base Monster Speed):</span>
+                  <span id="label-cfg-base-speed" style="color: var(--blox-cyan); font-weight: 700;">ช้าปานกลาง (0.35x)</span>
+                </label>
+                <select id="cfg-base-speed-select" class="form-input-control" onchange="App.onMonsterSpeedConfigChange()">
+                  <option value="0.20">ช้ามากพิเศษ (0.20x - เหมาะสำหรับประถม / เริ่มต้น)</option>
+                  <option value="0.35" selected>ช้าปานกลาง (0.35x - ค่ามาตรฐาน แนะนำสำหรับ ปวช.)</option>
+                  <option value="0.55">ความเร็วปานกลาง (0.55x - ปานกลาง)</option>
+                  <option value="0.80">ความเร็วเร็ว (0.80x - ท้าทาย)</option>
+                  <option value="1.20">โหมดยากพิเศษ (1.20x - Hardcore)</option>
+                </select>
+              </div>
+
+              <!-- 2. Wrong Answer Speed Penalty Control -->
+              <div class="form-group-box">
+                <label class="form-label-title" style="display: flex; justify-content: space-between;">
+                  <span>2. อัตราเร่งความเร็วเมื่อตอบผิด (Wrong Answer Speed Penalty):</span>
+                  <span id="label-cfg-penalty-speed" style="color: #f87171; font-weight: 700;">+1.5x Speed Boost</span>
+                </label>
+                <select id="cfg-penalty-speed-select" class="form-input-control" onchange="App.onMonsterSpeedConfigChange()">
+                  <option value="0.5">+0.5x (เร่งเบาๆ ไม่กดดัน)</option>
+                  <option value="1.0">+1.0x (เร่งระดับปานกลาง)</option>
+                  <option value="1.5" selected>+1.5x (ค่ามาตรฐาน เร่งเร็วตื่นเต้น)</option>
+                  <option value="2.5">+2.5x (เร่งเร็วมาก กดดันสูง)</option>
+                  <option value="0.0">0.0x (ปิดการเร่งความเร็วเมื่อตอบผิด)</option>
+                </select>
+              </div>
+
+              <!-- Quick Status Banner -->
+              <div style="background: rgba(0, 240, 255, 0.1); border: 1px dashed var(--blox-cyan); border-radius: 8px; padding: 0.65rem 0.85rem; font-size: 0.8rem; color: #cbd5e1;">
+                💡 <strong>สถานะปัจจุบัน:</strong> เมื่อเริ่มเล่น มอนสเตอร์จะเดินด้วยความเร็ว <span id="summary-cfg-base" style="color: var(--blox-cyan); font-weight: 700;">0.35</span> และหากตอบผิด ความเร็วจะเพิ่มขึ้นทีละ <span id="summary-cfg-penalty" style="color: #f87171; font-weight: 700;">+1.5</span>
+              </div>
+
+              <!-- Save / Reset Buttons -->
+              <div style="display: flex; gap: 0.6rem; margin-top: 0.4rem;">
+                <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 10px; justify-content: center;" onclick="App.resetMonsterSpeedConfig()">🔄 รีเซ็ตค่าเริ่มต้น</button>
+                <button class="big-blox-action-btn" style="flex: 1.4; font-size: 1.05rem; padding: 0.75rem; border-radius: 10px;" onclick="App.saveMonsterSpeedConfig()">💾 บันทึกการตั้งค่าความเร็ว</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2761,6 +2817,10 @@
         this.floatingTexts = [];
         this.enemies = [];
 
+        // Apply Teacher Configured Monster Speeds
+        this.customBaseSpeed = (typeof App !== 'undefined' && typeof App.monsterBaseSpeed === 'number') ? App.monsterBaseSpeed : 0.35;
+        this.customPenaltySpeed = (typeof App !== 'undefined' && typeof App.monsterPenaltySpeed === 'number') ? App.monsterPenaltySpeed : 1.5;
+
         // Prepare Questions Pool
         let pool = [];
         if (this.stageId === 5) {
@@ -2842,8 +2902,9 @@
         if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName;
         if (qIconEl) qIconEl.textContent = isBoss ? '👑' : '🎮';
 
-        // 1. Immediate Monster Spawn with Slow Initial Speed (Manageable reading time)
-        const speed = isBoss ? 0.28 : 0.35;
+        // 1. Immediate Monster Spawn with Teacher Configured Speed
+        const baseMultiplier = (this.customBaseSpeed !== undefined) ? this.customBaseSpeed : ((typeof App !== 'undefined' && App.monsterBaseSpeed) ? App.monsterBaseSpeed : 0.35);
+        const speed = isBoss ? (baseMultiplier * 0.8) : baseMultiplier;
         const cw = this.canvas.width || 800;
         // Spawn immediately visible on right side of canvas
         const spawnX = Math.max(cw - 70, 680);
@@ -3034,9 +3095,10 @@
         this.combo = 0;
         AudioEngine.playRobloxOof();
 
-        // ⚡ DYNAMIC SPEED PENALTY: Instantly accelerate all active monsters by +1.5!
+        // ⚡ DYNAMIC SPEED PENALTY: Configurable boost when answering incorrectly!
+        const penalty = (this.customPenaltySpeed !== undefined) ? this.customPenaltySpeed : ((typeof App !== 'undefined' && App.monsterPenaltySpeed) ? App.monsterPenaltySpeed : 1.5);
         this.enemies.forEach(e => {
-          e.speed = Math.min(e.speed + 1.5, 4.5);
+          e.speed = Math.min(e.speed + penalty, 5.0);
         });
 
         // Display centered explanation popup overlay (Modal 6) with correct answer & Thai explanation
@@ -3808,6 +3870,7 @@
 
       async init() {
         this.initBackgroundBlocks();
+        this.loadMonsterSpeedConfig();
         await this.loadQuestionsFromSupabase();
         this.renderLessons();
         this.loadLeaderboard();
@@ -4098,6 +4161,70 @@
         if (screenName === 'tracker') this.renderItemTrackerTable();
         if (screenName === 'questions') this.renderTeacherQuestionsTable();
         if (screenName === 'reviews') this.renderTeacherReviewsTable();
+        if (screenName === 'settings') this.loadMonsterSpeedConfig();
+      }
+
+      loadMonsterSpeedConfig() {
+        const saved = JSON.parse(localStorage.getItem('roblox_monster_speed_config') || '{}');
+        this.monsterBaseSpeed = typeof saved.baseSpeed === 'number' ? saved.baseSpeed : 0.35;
+        this.monsterPenaltySpeed = typeof saved.penaltySpeed === 'number' ? saved.penaltySpeed : 1.5;
+
+        if (typeof Game !== 'undefined') {
+          Game.customBaseSpeed = this.monsterBaseSpeed;
+          Game.customPenaltySpeed = this.monsterPenaltySpeed;
+        }
+
+        const selBase = document.getElementById('cfg-base-speed-select');
+        const selPen = document.getElementById('cfg-penalty-speed-select');
+        if (selBase) selBase.value = this.monsterBaseSpeed.toFixed(2);
+        if (selPen) selPen.value = this.monsterPenaltySpeed.toFixed(1);
+        this.updateSpeedConfigLabels();
+      }
+
+      onMonsterSpeedConfigChange() {
+        const selBase = document.getElementById('cfg-base-speed-select');
+        const selPen = document.getElementById('cfg-penalty-speed-select');
+        if (selBase) this.monsterBaseSpeed = parseFloat(selBase.value);
+        if (selPen) this.monsterPenaltySpeed = parseFloat(selPen.value);
+        this.updateSpeedConfigLabels();
+      }
+
+      updateSpeedConfigLabels() {
+        const lblBase = document.getElementById('label-cfg-base-speed');
+        const lblPen = document.getElementById('label-cfg-penalty-speed');
+        const sumBase = document.getElementById('summary-cfg-base');
+        const sumPen = document.getElementById('summary-cfg-penalty');
+
+        if (lblBase) lblBase.textContent = `${this.monsterBaseSpeed.toFixed(2)}x`;
+        if (lblPen) lblPen.textContent = `+${this.monsterPenaltySpeed.toFixed(1)}x Speed Boost`;
+        if (sumBase) sumBase.textContent = `${this.monsterBaseSpeed.toFixed(2)}`;
+        if (sumPen) sumPen.textContent = `+${this.monsterPenaltySpeed.toFixed(1)}`;
+      }
+
+      saveMonsterSpeedConfig() {
+        const config = {
+          baseSpeed: this.monsterBaseSpeed,
+          penaltySpeed: this.monsterPenaltySpeed,
+          updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem('roblox_monster_speed_config', JSON.stringify(config));
+        if (typeof Game !== 'undefined') {
+          Game.customBaseSpeed = this.monsterBaseSpeed;
+          Game.customPenaltySpeed = this.monsterPenaltySpeed;
+        }
+        alert('บันทึกการตั้งค่าความเร็วมอนสเตอร์เรียบร้อยแล้ว! ⚙️');
+        AudioEngine.playCoinChime();
+      }
+
+      resetMonsterSpeedConfig() {
+        this.monsterBaseSpeed = 0.35;
+        this.monsterPenaltySpeed = 1.5;
+        const selBase = document.getElementById('cfg-base-speed-select');
+        const selPen = document.getElementById('cfg-penalty-speed-select');
+        if (selBase) selBase.value = "0.35";
+        if (selPen) selPen.value = "1.5";
+        this.updateSpeedConfigLabels();
+        this.saveMonsterSpeedConfig();
       }
 
       async renderTeacherDashboard() {

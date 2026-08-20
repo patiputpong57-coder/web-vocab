@@ -1005,15 +1005,15 @@
       white-space: nowrap;
     }
 
-    /* Clean 18px Regular Font Explanation Banner (No glow, plain and easy to read) */
+    /* Clean 18px Light Font Explanation Banner (font-weight: 300, No glow, plain and easy to read) */
     .question-explanation-banner {
       background: rgba(10, 16, 38, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 10px;
-      padding: 0.5rem 0.85rem;
+      padding: 0.55rem 0.9rem;
       font-family: var(--font-ui);
       font-size: 18px;
-      font-weight: 400;
+      font-weight: 300;
       color: #ffffff;
       text-shadow: none;
       box-shadow: none;
@@ -1026,8 +1026,8 @@
     #question-explanation-text {
       font-family: var(--font-ui);
       font-size: 18px;
-      font-weight: 400;
-      line-height: 1.4;
+      font-weight: 300;
+      line-height: 1.45;
       color: #ffffff;
       text-shadow: none;
       background: transparent;
@@ -2592,15 +2592,38 @@
         });
       }
 
+      cleanSpeechText(raw) {
+        if (!raw) return '';
+        return String(raw)
+          .replace(/<[^>]*>?/gm, ' ')
+          .replace(/[*_`~#]/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
       speakThai(thText) {
         if (!('speechSynthesis' in window) || !thText) return;
         try {
           window.speechSynthesis.cancel();
-          const cleanText = thText.replace(/<[^>]*>?/gm, '');
+          const cleanText = this.cleanSpeechText(thText);
+          if (!cleanText) return;
+
           const thUtter = new SpeechSynthesisUtterance(cleanText);
           thUtter.lang = 'th-TH';
           thUtter.rate = 1.0;
           thUtter.pitch = 1.0;
+
+          // Find and assign available Thai voice
+          const voices = window.speechSynthesis.getVoices() || [];
+          const thaiVoice = voices.find(v => (v.lang && (v.lang === 'th-TH' || v.lang.startsWith('th'))) || (v.name && (v.name.includes('Thai') || v.name.includes('ไทย'))));
+          if (thaiVoice) {
+            thUtter.voice = thaiVoice;
+          }
+
           window.speechSynthesis.speak(thUtter);
         } catch(e) {}
       }
@@ -2615,19 +2638,18 @@
             return;
           }
 
-          const cleanEn = (enText || '').replace(/<[^>]*>?/gm, '');
+          const cleanEn = this.cleanSpeechText(enText || '');
           const enUtter = new SpeechSynthesisUtterance(cleanEn);
           enUtter.lang = 'en-US';
           enUtter.rate = 0.95;
 
+          const voices = window.speechSynthesis.getVoices() || [];
+          const enVoice = voices.find(v => v.lang && (v.lang === 'en-US' || v.lang.startsWith('en')));
+          if (enVoice) enUtter.voice = enVoice;
+
           enUtter.onend = () => {
             if (thText) {
-              const cleanTh = thText.replace(/<[^>]*>?/gm, '');
-              const thUtter = new SpeechSynthesisUtterance(cleanTh);
-              thUtter.lang = 'th-TH';
-              thUtter.rate = 1.0;
-              thUtter.pitch = 1.0;
-              window.speechSynthesis.speak(thUtter);
+              this.speakThai(thText);
             }
           };
 
@@ -3711,7 +3733,7 @@
                   <span style="font-family: var(--font-code); color: var(--blox-yellow);">ข้อ ${idx + 1}: ${q.term}</span>
                   <div style="display: flex; align-items: center; gap: 0.35rem;">
                     <span style="color: ${isOk ? 'var(--blox-green)' : 'var(--blox-red)'}; font-weight: 700; font-size: 0.75rem;">${isOk ? '✓ ถูกต้อง' : '✗ ตอบผิด'}</span>
-                    <button class="icon-toggle-btn" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="AudioEngine.speakBilingual('${safeTerm}', '${safeTh}')">🔊 ฟัง</button>
+                    <button class="icon-toggle-btn" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="speakThai('${safeTh}')">🔊 ฟัง</button>
                   </div>
                 </div>
                 <div style="color: #e2e8f0; font-size: 0.74rem; margin-bottom: 2px;">${q.scenario}</div>
@@ -4416,8 +4438,15 @@
       }
     }
 
+    function speakThai(text) {
+      if (typeof AudioEngine !== 'undefined') {
+        AudioEngine.speakThai(text);
+      }
+    }
+
     window.startStage = startStage;
     window.updateHPUI = updateHPUI;
+    window.speakThai = speakThai;
   </script>
 </body>
 </html>

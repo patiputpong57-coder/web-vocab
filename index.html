@@ -3,50 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Roblox Vocab Legends: Web Quest - เกมการศึกษาเรียนรู้ศัพท์เว็บไซเบอร์สไตล์ Roblox 3D Blocky">
-  <title>Roblox Vocab Legends: Web Quest | ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</title>
+  <meta name="description" content="Roblox Vocab Regent: การผจญภัยพิชิตคำศัพท์การพัฒนาเว็บสไตล์ Roblox 3D Blocky พร้อมระบบ Supabase, TTS สองภาษา, และ Teacher Dashboard">
+  <title>Roblox Vocab Regent | ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</title>
 
-  <!-- Google Fonts: Fredoka, Prompt, Orbitron, Titan One -->
+  <!-- Google Fonts: Prompt, Fredoka, Orbitron, Titan One -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Prompt:wght@400;500;600;700;800;900&family=Titan+One&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&family=Orbitron:wght@600;800;900&family=Prompt:wght@300;400;500;600;700;800&family=Titan+One&display=swap" rel="stylesheet">
 
-  <!-- Canvas Confetti Library -->
+  <!-- Canvas Confetti for Victory Celebrations -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     /* ==========================================================================
-       ROBLOX BRIGHT & BLOCKY 3D DESIGN SYSTEM
+       ROBLOX VOCAB REGENT - ULTRA-POLISHED 3D BLOCKY DESIGN SYSTEM
        ========================================================================== */
     :root {
-      --blox-bg-1: #0a1128;
-      --blox-bg-2: #1c2541;
+      --blox-bg-1: #0a1026;
+      --blox-bg-2: #162044;
       --blox-yellow: #ffd700;
-      --blox-gold: #ffaa00;
+      --blox-gold: #ff9900;
       --blox-cyan: #00f0ff;
       --blox-blue: #0077ff;
       --blox-pink: #ff2a85;
-      --blox-purple: #b339eb;
-      --blox-green: #2ecc71;
-      --blox-red: #ff3838;
-      --blox-dark: #121829;
-      --blox-card-bg: rgba(20, 28, 55, 0.92);
-      
+      --blox-purple: #9d4edd;
+      --blox-green: #10b981;
+      --blox-red: #ef4444;
+      --blox-dark: #0d1326;
+      --blox-card-bg: rgba(18, 26, 56, 0.94);
+      --blox-glass-border: rgba(0, 240, 255, 0.35);
+
       --font-blox-title: 'Titan One', 'Fredoka', cursive, sans-serif;
-      --font-ui: 'Prompt', 'Fredoka', sans-serif;
+      --font-ui: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-code: 'Orbitron', monospace;
 
       --radius-sm: 8px;
       --radius-md: 14px;
       --radius-lg: 22px;
-      --radius-xl: 30px;
+      --radius-xl: 32px;
 
       /* 3D Button Shadows */
-      --btn-shadow-blue: 0 6px 0 #0055b3, 0 10px 15px rgba(0, 0, 0, 0.4);
-      --btn-shadow-green: 0 6px 0 #1b8a47, 0 10px 15px rgba(0, 0, 0, 0.4);
-      --btn-shadow-yellow: 0 6px 0 #c28200, 0 10px 15px rgba(0, 0, 0, 0.4);
-      --btn-shadow-pink: 0 6px 0 #b30050, 0 10px 15px rgba(0, 0, 0, 0.4);
-      --btn-shadow-purple: 0 6px 0 #7312a1, 0 10px 15px rgba(0, 0, 0, 0.4);
+      --btn-shadow-blue: 0 5px 0 #0052b3, 0 8px 16px rgba(0, 0, 0, 0.4);
+      --btn-shadow-green: 0 5px 0 #057a55, 0 8px 16px rgba(0, 0, 0, 0.4);
+      --btn-shadow-yellow: 0 5px 0 #b36b00, 0 8px 16px rgba(0, 0, 0, 0.4);
+      --btn-shadow-pink: 0 5px 0 #b30052, 0 8px 16px rgba(0, 0, 0, 0.4);
+      --btn-shadow-purple: 0 5px 0 #671ca6, 0 8px 16px rgba(0, 0, 0, 0.4);
+      --btn-shadow-dark: 0 5px 0 #182035, 0 8px 16px rgba(0, 0, 0, 0.4);
     }
 
     * {
@@ -58,20 +60,21 @@
     }
 
     body {
-      background: linear-gradient(135deg, #0a1128 0%, #1c2541 50%, #2e1065 100%);
+      background: linear-gradient(135deg, var(--blox-bg-1) 0%, var(--blox-bg-2) 50%, #241142 100%);
       color: #ffffff;
       font-family: var(--font-ui);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      overflow: hidden;
+      justify-content: center;
+      overflow-x: hidden;
       position: relative;
     }
 
-    /* Floating Block Particles in Background */
+    /* Floating Block Particles */
     .floating-blocks-bg {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
       z-index: 0;
@@ -80,151 +83,790 @@
 
     .bg-block {
       position: absolute;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
       border: 2px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
-      animation: floatUp 15s linear infinite;
+      animation: floatUp 16s linear infinite;
     }
 
     @keyframes floatUp {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
+      0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
       100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
     }
 
-    /* ==========================================================================
-       MAIN GAME FRAMEWORK
-       ========================================================================== */
-    #game-container {
-      width: 100vw;
-      height: 100vh;
-      max-width: 1240px;
-      max-height: 760px;
+    /* App Container Frame */
+    #app-container {
+      width: 98vw;
+      max-width: 1260px;
+      height: 94vh;
+      max-height: 820px;
       background: var(--blox-card-bg);
-      border: 4px solid var(--blox-cyan);
+      border: 3px solid var(--blox-glass-border);
       border-radius: var(--radius-lg);
-      box-shadow: 0 0 40px rgba(0, 240, 255, 0.35), inset 0 0 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.25), inset 0 0 25px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
       position: relative;
-      z-index: 1;
+      z-index: 2;
       overflow: hidden;
     }
 
-    /* Top Roblox Status Bar */
-    .blox-header {
+    /* Top Navigation Bar (4 Tabs) */
+    .top-nav-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.7rem 1.4rem;
-      background: rgba(14, 21, 45, 0.98);
-      border-bottom: 3px solid rgba(0, 240, 255, 0.4);
-      z-index: 20;
+      padding: 0.6rem 1.2rem;
+      background: rgba(11, 16, 36, 0.98);
+      border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+      z-index: 30;
+      gap: 0.5rem;
     }
 
-    .player-tag-pill {
+    .nav-brand {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      background: rgba(0, 240, 255, 0.15);
-      border: 2px solid var(--blox-cyan);
-      border-radius: 50px;
-      padding: 0.35rem 0.9rem;
-      font-weight: 800;
-      font-size: 0.95rem;
-      color: #fff;
-    }
-
-    .blox-stats-group {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-    }
-
-    .stat-hp-box {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(255, 56, 56, 0.15);
-      border: 2px solid var(--blox-red);
-      border-radius: 20px;
-      padding: 0.3rem 0.75rem;
-      font-size: 0.95rem;
-      color: #fff;
-    }
-
-    .level-stage-badge {
-      background: var(--blox-pink);
-      color: #fff;
-      font-family: var(--font-blox-title);
-      padding: 0.3rem 0.9rem;
-      border-radius: 20px;
-      font-size: 0.95rem;
-      box-shadow: var(--btn-shadow-pink);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .stat-coin-box {
       font-family: var(--font-blox-title);
       font-size: 1.25rem;
-      color: var(--blox-yellow);
+      color: var(--blox-cyan);
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-brand-badge {
+      background: linear-gradient(135deg, var(--blox-yellow), var(--blox-gold));
+      color: #000;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 800;
+      text-shadow: none;
+    }
+
+    .nav-tabs-group {
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      text-shadow: 0 2px 0 #996600;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem;
+      border-radius: 14px;
     }
 
-    .rush-hour-tag {
-      display: none;
-      background: linear-gradient(90deg, #ff0055, #ff5500);
-      color: #fff;
-      font-family: var(--font-blox-title);
-      font-size: 0.85rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 12px;
-      animation: pulseAlert 0.7s infinite alternate;
-    }
-
-    @keyframes pulseAlert {
-      from { transform: scale(0.95); }
-      to { transform: scale(1.08); filter: drop-shadow(0 0 10px #ff0055); }
-    }
-
-    .header-ctrl-btn {
-      background: #2a3556;
-      border: 2px solid #485885;
-      color: #fff;
-      padding: 0.35rem 0.75rem;
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0.45rem 0.9rem;
       border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.85rem;
       cursor: pointer;
-      box-shadow: 0 3px 0 #182035;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .nav-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-tab-btn.active {
+      color: #000;
+      background: var(--blox-cyan);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .nav-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .icon-toggle-btn {
+      background: #1f2a48;
+      border: 1.5px solid #3d4f7c;
+      color: #fff;
+      padding: 0.35rem 0.65rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 3px 0 #12192d;
       transition: all 0.1s;
     }
 
-    .header-ctrl-btn:hover {
+    .icon-toggle-btn:hover {
       background: var(--blox-cyan);
       color: #000;
       border-color: var(--blox-cyan);
     }
 
-    .header-ctrl-btn:active {
+    .icon-toggle-btn:active {
       transform: translateY(2px);
-      box-shadow: 0 1px 0 #182035;
+      box-shadow: 0 1px 0 #12192d;
+    }
+
+    /* Views / Screen Panels Container */
+    .views-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .view-screen {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 1.2rem;
+      z-index: 5;
+    }
+
+    .view-screen.active {
+      display: flex;
     }
 
     /* ==========================================================================
-       2D CANVAS BATTLEFIELD
+       TAB 1: HOME SCREEN (Customization, Rating, Play)
        ========================================================================== */
-    .battle-canvas-wrapper {
+    .home-grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 1.2rem;
+      height: 100%;
+    }
+
+    .home-card-panel {
+      background: rgba(14, 21, 46, 0.85);
+      border: 2px solid rgba(0, 240, 255, 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .home-title-hero {
+      font-family: var(--font-blox-title);
+      font-size: 2rem;
+      background: linear-gradient(135deg, #00f0ff, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+      line-height: 1.2;
+    }
+
+    .home-rating-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 215, 0, 0.15);
+      border: 1.5px solid var(--blox-yellow);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      width: fit-content;
+    }
+
+    /* 3D Character Selector Cards */
+    .character-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+    }
+
+    .character-card {
+      background: rgba(25, 36, 70, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.6rem 0.4rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .character-card:hover {
+      border-color: var(--blox-cyan);
+      transform: translateY(-2px);
+    }
+
+    .character-card.selected {
+      border-color: var(--blox-yellow);
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .character-avatar-box {
+      font-size: 2.2rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .character-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .character-trait {
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+
+    /* Wallpaper Theme Selector */
+    .wallpaper-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .wallpaper-card {
+      background: rgba(25, 36, 70, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 0.45rem 0.3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .wallpaper-card:hover {
+      border-color: var(--blox-cyan);
+    }
+
+    .wallpaper-card.selected {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.18);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .wallpaper-icon {
+      font-size: 1.3rem;
+    }
+
+    .wallpaper-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 0.15rem;
+    }
+
+    /* Registration Input Fields */
+    .form-group-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .form-label-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-input-control {
+      background: rgba(9, 14, 32, 0.95);
+      border: 2px solid #2e3d67;
+      border-radius: 10px;
+      padding: 0.6rem 0.8rem;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input-control:focus {
+      border-color: var(--blox-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Stage Levels Grid */
+    .stages-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .stage-select-btn {
+      background: rgba(22, 33, 66, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .stage-select-btn:hover {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    .stage-select-btn.selected {
+      border-color: var(--blox-yellow);
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.25);
+    }
+
+    .stage-btn-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stage-btn-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #fff;
+    }
+
+    .stage-btn-count {
+      font-size: 0.7rem;
+      background: var(--blox-pink);
+      color: #fff;
+      padding: 0.15rem 0.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .stage-btn-desc {
+      font-size: 0.74rem;
+      color: #94a3b8;
+    }
+
+    .big-blox-action-btn {
+      background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
+      border: none;
+      border-radius: 16px;
+      padding: 0.95rem 1.4rem;
+      font-family: var(--font-blox-title);
+      font-size: 1.35rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow-blue);
+      transition: all 0.1s;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      letter-spacing: 0.5px;
+    }
+
+    .big-blox-action-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .big-blox-action-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #0052b3;
+    }
+
+    /* ==========================================================================
+       TAB 2: LESSONS / STUDY GUIDE
+       ========================================================================== */
+    .lessons-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.9rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .lessons-search-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(10, 16, 38, 0.9);
+      border: 2px solid #2e3d67;
+      border-radius: 12px;
+      padding: 0.6rem 0.9rem;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .lessons-search-input:focus {
+      border-color: var(--blox-cyan);
+    }
+
+    .lessons-category-pills {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+    }
+
+    .lesson-cat-pill {
+      background: #19254c;
+      border: 1.5px solid #314275;
+      color: #cbd5e1;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .lesson-cat-pill.active {
+      background: var(--blox-cyan);
+      color: #000;
+      border-color: var(--blox-cyan);
+      font-weight: 700;
+    }
+
+    .lessons-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.8rem;
+      overflow-y: auto;
+      padding-bottom: 1rem;
+    }
+
+    .lesson-item-card {
+      background: rgba(15, 23, 52, 0.85);
+      border: 2px solid rgba(0, 240, 255, 0.2);
+      border-radius: 14px;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .lesson-item-card:hover {
+      border-color: var(--blox-cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 240, 255, 0.2);
+    }
+
+    .lesson-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lesson-term-badge {
+      font-family: var(--font-code);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--blox-yellow);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .lesson-audio-btn {
+      background: #25335e;
+      border: 1.5px solid #435691;
+      color: #fff;
+      padding: 0.25rem 0.55rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .lesson-audio-btn:hover {
+      background: var(--blox-cyan);
+      color: #000;
+    }
+
+    .lesson-desc-th {
+      font-size: 0.86rem;
+      color: #e2e8f0;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .lesson-example-code {
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: #00f0ff;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+
+    /* ==========================================================================
+       TAB 3: LEADERBOARD / อันดับยอดฝีมือ
+       ========================================================================== */
+    .leaderboard-filters-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-time-group {
+      display: flex;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.25rem;
+      border-radius: 12px;
+    }
+
+    .filter-time-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .filter-time-btn.active {
+      background: var(--blox-yellow);
+      color: #000;
+      font-weight: 800;
+    }
+
+    .leaderboard-table-wrap {
+      flex: 1;
+      overflow-y: auto;
+      background: rgba(12, 18, 42, 0.9);
+      border: 2px solid rgba(0, 240, 255, 0.2);
+      border-radius: 14px;
+    }
+
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .lb-table th {
+      background: rgba(20, 29, 64, 0.98);
+      padding: 0.75rem 0.9rem;
+      color: #94a3b8;
+      font-weight: 700;
+      border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .lb-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .lb-table tr:hover {
+      background: rgba(0, 240, 255, 0.06);
+    }
+
+    .trophy-badge {
+      font-size: 1.25rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ==========================================================================
+       TAB 4: TEACHER DASHBOARD (Password Protected)
+       ========================================================================== */
+    .teacher-subnav-bar {
+      display: flex;
+      gap: 0.4rem;
+      background: rgba(10, 16, 36, 0.9);
+      padding: 0.35rem;
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+      overflow-x: auto;
+    }
+
+    .teacher-subnav-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .teacher-subnav-btn.active {
+      background: var(--blox-purple);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: var(--btn-shadow-purple);
+    }
+
+    .teacher-subscreen {
+      display: none;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .teacher-subscreen.active {
+      display: flex;
+    }
+
+    .analytics-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+    }
+
+    .stat-metric-card {
+      background: rgba(20, 29, 64, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .stat-metric-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-metric-value {
+      font-family: var(--font-blox-title);
+      font-size: 1.6rem;
+      color: var(--blox-cyan);
+    }
+
+    /* Visual Item-Level Answer Tracker */
+    .answer-tracker-pill-group {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+
+    .tracker-box {
+      width: 19px;
+      height: 19px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .tracker-box.correct {
+      background: var(--blox-green);
+    }
+
+    .tracker-box.wrong {
+      background: var(--blox-red);
+    }
+
+    /* ==========================================================================
+       BATTLE GAMEPLAY VIEWPORT (CANVAS & HUD)
+       ========================================================================== */
+    #view-gameplay {
+      padding: 0;
+      background: #0d142d;
+    }
+
+    .gameplay-hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 1.2rem;
+      background: rgba(10, 15, 34, 0.98);
+      border-bottom: 2px solid rgba(0, 240, 255, 0.35);
+      z-index: 20;
+    }
+
+    .hud-player-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 240, 255, 0.15);
+      border: 1.5px solid var(--blox-cyan);
+      border-radius: 20px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .hud-stats-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .hud-hp-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1.5px solid var(--blox-red);
+      border-radius: 20px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .hud-stage-badge {
+      background: var(--blox-pink);
+      color: #fff;
+      font-family: var(--font-blox-title);
+      padding: 0.3rem 0.8rem;
+      border-radius: 16px;
+      font-size: 0.88rem;
+      box-shadow: var(--btn-shadow-pink);
+    }
+
+    .hud-score-badge {
+      font-family: var(--font-blox-title);
+      font-size: 1.2rem;
+      color: var(--blox-yellow);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .canvas-battle-wrapper {
       flex: 1;
       position: relative;
-      width: 100%;
-      background: radial-gradient(circle at 50% 50%, #1e294b 0%, #10172e 100%);
+      background: radial-gradient(circle at 50% 50%, #1c264a 0%, #0b1126 100%);
       overflow: hidden;
     }
 
@@ -234,388 +876,259 @@
       display: block;
     }
 
-    /* Floating Boss Alert */
-    #boss-alert-banner {
+    /* Live Mini-Leaderboard Overlay */
+    .mini-leaderboard-overlay {
       position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      background: linear-gradient(135deg, #ff0055, #9900ff);
-      border: 3px solid #ffd700;
-      padding: 0.6rem 1.8rem;
-      border-radius: 30px;
-      font-family: var(--font-blox-title);
-      font-size: 1.8rem;
-      color: #fff;
-      text-shadow: 0 3px 0 #000;
-      box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
+      top: 10px;
+      left: 10px;
+      background: rgba(10, 15, 36, 0.75);
+      border: 1.5px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.75rem;
       pointer-events: none;
-      z-index: 50;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
     }
 
-    #boss-alert-banner.show {
-      transform: translate(-50%, -50%) scale(1.1);
+    .mini-lb-item {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: space-between;
+      color: #cbd5e1;
+      font-weight: 600;
     }
 
-    /* ==========================================================================
-       ROBLOX POWER-UPS (CLICK ONLY CONTROL - NO KEYBOARD SHORTCUTS)
-       ========================================================================== */
+    .mini-lb-item:nth-child(1) { color: var(--blox-yellow); }
+    .mini-lb-item:nth-child(2) { color: #e2e8f0; }
+    .mini-lb-item:nth-child(3) { color: #ff9966; }
+
+    /* Conditional Power-up Dock */
     .blox-powerups-dock {
       display: flex;
       justify-content: center;
-      gap: 0.75rem;
-      padding: 0.45rem 1rem;
-      background: rgba(14, 21, 45, 0.95);
-      border-top: 2px solid rgba(255, 255, 255, 0.1);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-      z-index: 20;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(10, 16, 36, 0.95);
+      border-top: 2px solid rgba(0, 240, 255, 0.2);
     }
 
     .blox-powerup-btn {
+      background: rgba(22, 33, 68, 0.9);
+      border: 2px solid var(--pu-color, #00f0ff);
+      border-radius: 12px;
+      padding: 0.4rem 0.7rem;
+      color: #fff;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 0.85rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      color: #fff;
-      font-family: var(--font-ui);
+      gap: 0.35rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
-      transition: all 0.15s ease;
-    }
-
-    .blox-powerup-btn.ready {
-      border-color: var(--pu-color, var(--blox-yellow));
-      background: rgba(255, 215, 0, 0.15);
-      box-shadow: 0 4px 0 var(--pu-shadow, #886600);
-    }
-
-    .blox-powerup-btn.ready:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 var(--pu-shadow, #886600), 0 0 15px var(--pu-color, var(--blox-yellow));
-    }
-
-    .blox-powerup-btn.ready:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 var(--pu-shadow, #886600);
+      transition: all 0.15s;
+      position: relative;
     }
 
     .blox-powerup-btn.disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      filter: grayscale(0.9);
-      box-shadow: none;
+      border-color: #44547a;
     }
 
-    .pu-icon {
-      font-size: 1.25rem;
+    .blox-powerup-btn.ready:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--pu-color);
     }
 
     .pu-badge {
-      background: var(--blox-yellow);
+      background: var(--pu-color, #00f0ff);
       color: #000;
-      font-family: var(--font-blox-title);
-      font-size: 0.75rem;
-      padding: 0.1rem 0.4rem;
-      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.1rem 0.35rem;
+      border-radius: 10px;
     }
 
-    /* ==========================================================================
-       QUESTION BANNER & SPELL CASTING INTERFACE (FONT SIZE >= 20PX)
-       ========================================================================== */
+    /* Question & Choice Buttons Deck (Typography: Clean 400/500 Weight) */
     .question-deck-panel {
-      padding: 0.85rem 1.4rem;
-      background: rgba(9, 14, 30, 0.98);
+      background: rgba(12, 18, 44, 0.98);
       border-top: 3px solid var(--blox-cyan);
+      padding: 0.8rem 1.2rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      position: relative;
-      z-index: 30;
-      flex-shrink: 0;
-      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7);
+      gap: 0.6rem;
+      z-index: 20;
     }
 
-    /* High-contrast Large Question Banner (>= 20px) */
-    .scenario-question-banner {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(0, 240, 255, 0.15) 100%), #141c38;
-      border: 2px solid var(--blox-yellow);
-      border-radius: 12px;
-      padding: 0.7rem 1.2rem;
+    .question-prompt-banner {
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      position: relative;
-      z-index: 32;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(0, 240, 255, 0.3);
+      border-radius: 12px;
+      padding: 0.65rem 1rem;
     }
 
-    .scenario-icon {
-      font-size: 1.8rem;
-    }
-
-    .scenario-text {
-      font-size: 20px; /* EXACTLY >= 20px as required */
-      font-weight: 500; /* Regular/medium weight (clean and less stiff) */
+    .question-prompt-text {
+      font-size: 20px; /* EXACTLY >= 20px readable */
+      font-weight: 500; /* Regular clean font-weight */
       color: #ffffff;
-      line-height: 1.4;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      line-height: 1.35;
       flex: 1;
+      font-family: var(--font-ui);
     }
 
-    .scenario-tag {
+    .question-cat-tag {
       background: var(--blox-cyan);
-      color: #030a1c;
+      color: #000;
+      font-size: 0.75rem;
       font-weight: 700;
-      font-size: 0.8rem;
-      padding: 0.25rem 0.6rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 6px;
       white-space: nowrap;
     }
 
-    /* Choices Mode Buttons (Grid 2x2 Responsive) */
-    .blox-choices-grid {
+    .choices-grid-layout {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 35;
+      gap: 0.6rem;
     }
 
     .blox-choice-btn {
-      width: 100%;
-      min-height: 56px;
-      background: #1f2b54;
-      border: 3px solid #3d518c;
+      background: linear-gradient(180deg, #1c264a 0%, #121a36 100%);
+      border: 2px solid #384a7a;
       border-radius: 14px;
       color: #ffffff;
       font-family: var(--font-code), var(--font-ui);
-      font-size: 19px; /* Bold 18px-20px font size */
-      font-weight: 500; /* Regular/medium weight (clean and readable) */
-      padding: 0.85rem 1rem;
+      font-size: 19px; /* Bold & clear 19px */
+      font-weight: 500; /* Clean & non-bold */
+      padding: 0.75rem 1rem;
       cursor: pointer;
-      box-shadow: 0 4px 0 #121a36;
-      transition: all 0.12s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      box-shadow: 0 4px 0 #0f152d;
+      transition: all 0.12s;
       text-align: center;
-      position: relative;
-      z-index: 36;
-      box-sizing: border-box;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .blox-choice-btn:hover:not(:disabled) {
-      background: var(--blox-blue);
+    .blox-choice-btn:hover:not(.locked):not(.faded) {
       border-color: var(--blox-cyan);
-      box-shadow: var(--btn-shadow-blue);
+      background: #25335e;
       transform: translateY(-2px);
     }
 
-    .blox-choice-btn:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 2px 0 #121a36;
-    }
-
     .blox-choice-btn.correct {
-      background: var(--blox-green) !important;
-      border-color: #a8ffb2 !important;
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
+      border-color: #34d399 !important;
       box-shadow: var(--btn-shadow-green) !important;
-      color: #000 !important;
     }
 
     .blox-choice-btn.wrong {
-      background: var(--blox-red) !important;
-      border-color: #ff9999 !important;
-      box-shadow: 0 5px 0 #8a0e0e !important;
-      animation: shake 0.3s;
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%) !important;
+      border-color: #f87171 !important;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .blox-choice-btn.locked {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+      background: #141b30;
+      border-color: #242e4c;
+      box-shadow: none;
     }
 
     .blox-choice-btn.faded {
-      opacity: 0.25;
+      opacity: 0.15;
       pointer-events: none;
     }
 
-    /* Type Mode Input */
-    .blox-typing-wrap {
-      display: flex;
-      gap: 0.8rem;
-      align-items: center;
-      position: relative;
-      z-index: 35;
+    /* Bottom Developer Footer Credit */
+    .developer-footer-credit {
+      padding: 0.35rem 0.8rem;
+      background: #080c1d;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.78rem;
+      color: #94a3b8;
+      text-align: center;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      z-index: 30;
     }
 
-    .blox-type-input {
-      flex: 1;
-      background: #141c38;
-      border: 3px solid var(--blox-cyan);
-      border-radius: 12px;
-      padding: 0.8rem 1.2rem;
-      font-family: var(--font-code);
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--blox-yellow);
-      outline: none;
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
-      text-transform: uppercase;
-    }
-
-    .blox-type-input:focus {
-      border-color: var(--blox-yellow);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    .developer-footer-credit strong {
+      color: var(--blox-cyan);
+      font-weight: 700;
     }
 
     /* ==========================================================================
-       CHILD-FRIENDLY BRIGHT LOGIN SCREEN & MODALS
+       MODALS & DIALOGS
        ========================================================================== */
     .modal-backdrop {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(6, 10, 24, 0.88);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
+      background: rgba(6, 10, 24, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
       justify-content: center;
+      align-items: center;
       z-index: 100;
-      animation: fadeIn 0.3s ease;
+      padding: 1rem;
     }
 
-    .blox-dialog-card {
-      width: 90%;
-      max-width: 540px;
-      background: linear-gradient(180deg, #1d274c 0%, #121a36 100%);
-      border: 4px solid var(--blox-yellow);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.4);
-      padding: 2.2rem;
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .blox-modal-card {
+      background: #121b3b;
+      border: 3px solid var(--blox-cyan);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 480px;
       text-align: center;
-      position: relative;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .dialog-avatar-hero {
-      font-size: 4rem;
-      margin-bottom: 0.4rem;
-      animation: bounce 1.8s infinite ease-in-out;
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .dialog-title {
+    .modal-title {
       font-family: var(--font-blox-title);
-      font-size: 1.85rem;
+      font-size: 1.8rem;
       color: var(--blox-yellow);
-      text-shadow: 0 3px 0 #a36200, 0 0 20px rgba(255, 215, 0, 0.6);
       margin-bottom: 0.3rem;
     }
 
-    .dialog-subtitle {
-      font-size: 0.95rem;
-      color: #c4d1eb;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-    }
-
-    .form-group-field {
-      text-align: left;
-      margin-bottom: 1rem;
-    }
-
-    .field-label {
+    .modal-subtitle {
       font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--blox-cyan);
-      margin-bottom: 0.35rem;
-      display: block;
+      color: #94a3b8;
+      margin-bottom: 1.1rem;
     }
 
-    .field-input, .field-select {
-      width: 100%;
-      background: #0f162e;
-      border: 2px solid #364673;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      color: #fff;
-      font-family: var(--font-ui);
-      font-size: 1rem;
-      font-weight: 600;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .field-input:focus, .field-select:focus {
-      border-color: var(--blox-yellow);
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-    }
-
-    .field-select option {
-      background: #121a36;
-      color: #fff;
-    }
-
-    /* Big Chunky 3D Start Button */
-    .big-blox-btn {
-      width: 100%;
-      margin-top: 1.2rem;
-      padding: 1rem;
-      background: linear-gradient(180deg, #38ef7d 0%, #11998e 100%);
-      border: 3px solid #7dffb2;
-      border-radius: 18px;
-      color: #ffffff;
-      font-family: var(--font-blox-title);
-      font-size: 1.35rem;
-      cursor: pointer;
-      box-shadow: var(--btn-shadow-green);
-      transition: all 0.15s ease;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    .big-blox-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 9px 0 #1b8a47, 0 12px 20px rgba(0, 255, 102, 0.5);
-    }
-
-    .big-blox-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 #1b8a47;
-    }
-
-    /* Leaderboard Listing */
-    .leaderboard-container {
-      max-height: 180px;
-      overflow-y: auto;
-      background: #0c1226;
-      border: 2px solid #2a3761;
-      border-radius: 12px;
-      margin: 1rem 0;
-    }
-
-    .leaderboard-item {
+    /* Star Rating Selector */
+    .star-rating-row {
       display: flex;
-      justify-content: space-between;
-      padding: 0.55rem 0.9rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.9rem;
-      font-weight: 700;
+      justify-content: center;
+      gap: 0.4rem;
+      font-size: 2.2rem;
+      cursor: pointer;
+      margin: 0.8rem 0;
     }
 
-    .leaderboard-item:nth-child(1) { color: var(--blox-yellow); }
-    .leaderboard-item:nth-child(2) { color: #e2e8f0; }
-    .leaderboard-item:nth-child(3) { color: #ff9966; }
+    .star-item {
+      color: #475569;
+      transition: all 0.15s;
+    }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
+    .star-item.active {
+      color: var(--blox-yellow);
+      transform: scale(1.15);
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
     }
 
     @keyframes shake {
@@ -626,15 +1139,23 @@
       80% { transform: translateX(4px); }
     }
 
-    @media (max-width: 768px) {
-      .scenario-text {
-        font-size: 20px;
+    /* Responsive Queries */
+    @media (max-width: 820px) {
+      .home-grid-layout {
+        grid-template-columns: 1fr;
+        height: auto;
       }
-      .blox-choices-grid {
+      .question-prompt-text {
+        font-size: 18px;
+      }
+      .choices-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .analytics-stats-row {
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
       }
-      .blox-powerup-btn span.pu-name {
+      .nav-tab-btn span.tab-text {
         display: none;
       }
     }
@@ -645,491 +1166,1098 @@
   <!-- Floating Background Blocks -->
   <div class="floating-blocks-bg" id="bg-blocks"></div>
 
-  <!-- MAIN GAME CONTAINER -->
-  <div id="game-container">
+  <!-- MAIN APPLICATION CONTAINER -->
+  <div id="app-container">
 
-    <!-- TOP ROBLOX HUD -->
-    <header class="blox-header">
-      <div class="player-tag-pill">
-        <span>🤖</span>
-        <span id="hud-student-name">Robloxian</span>
+    <!-- TOP NAVIGATION BAR (4 TABS) -->
+    <nav class="top-nav-bar">
+      <div class="nav-brand">
+        <span>🧱</span>
+        <span>ROBLOX VOCAB REGENT</span>
+        <span class="nav-brand-badge">EDTECH</span>
       </div>
 
-      <div class="blox-stats-group">
-        <!-- Player HP System -->
-        <div class="stat-hp-box" title="พลังชีวิต (HP Hearts)">
-          <span style="font-size: 0.8rem; color: #ff9999; font-weight: 700;">HP:</span>
-          <span id="hud-hp-hearts" style="font-size: 1.15rem; letter-spacing: 2px;">❤️❤️❤️</span>
-        </div>
-
-        <!-- Stage Progress: 10 Questions Strict -->
-        <div class="level-stage-badge">
-          <span>🚩 QUESTION</span>
-          <span id="hud-question-idx">1</span>/10
-        </div>
-
-        <div class="rush-hour-tag" id="rush-hour-banner">
-          ⚡ RUSH HOUR (+30% SPEED)
-        </div>
-
-        <div class="stat-coin-box">
-          <span>🪙</span>
-          <span id="hud-score">0</span>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 0.5rem;">
-        <button class="header-ctrl-btn" id="btn-sound-toggle" onclick="AudioEngine.toggleMute()">🔊 SOUND</button>
-        <button class="header-ctrl-btn" onclick="Game.openLeaderboard()">🏆 TOP 10</button>
-      </div>
-    </header>
-
-    <!-- 2D BATTLE CANVAS -->
-    <main class="battle-canvas-wrapper">
-      <canvas id="gameCanvas"></canvas>
-      <div id="boss-alert-banner">👑 BOSS BATTLE INCOMING!</div>
-    </main>
-
-    <!-- ROBLOX POWER-UP DOCK (5 ITEMS - CLICK ONLY CONTROL) -->
-    <section class="blox-powerups-dock">
-      <!-- 1. Freeze Clock -->
-      <button class="blox-powerup-btn disabled" id="pu-freeze" style="--pu-color: #00f0ff; --pu-shadow: #0088b3;" onclick="Game.usePowerup('freeze')">
-        <span class="pu-icon">⏱️</span>
-        <span class="pu-name">Freeze (5s)</span>
-        <span class="pu-badge" id="count-freeze">0</span>
-      </button>
-
-      <!-- 2. Blox Nuke -->
-      <button class="blox-powerup-btn disabled" id="pu-nuke" style="--pu-color: #ff3838; --pu-shadow: #990000;" onclick="Game.usePowerup('nuke')">
-        <span class="pu-icon">💣</span>
-        <span class="pu-name">Blox Nuke</span>
-        <span class="pu-badge" id="count-nuke">0</span>
-      </button>
-
-      <!-- 3. Super Hint -->
-      <button class="blox-powerup-btn disabled" id="pu-hint" style="--pu-color: #ffd700; --pu-shadow: #996600;" onclick="Game.usePowerup('hint')">
-        <span class="pu-icon">💡</span>
-        <span class="pu-name">Super Hint</span>
-        <span class="pu-badge" id="count-hint">0</span>
-      </button>
-
-      <!-- 4. Roblox Shield -->
-      <button class="blox-powerup-btn disabled" id="pu-shield" style="--pu-color: #b339eb; --pu-shadow: #661188;" onclick="Game.usePowerup('shield')">
-        <span class="pu-icon">🛡️</span>
-        <span class="pu-name">Roblox Shield</span>
-        <span class="pu-badge" id="count-shield">0</span>
-      </button>
-
-      <!-- 5. 2x XP Boost -->
-      <button class="blox-powerup-btn disabled" id="pu-double" style="--pu-color: #2ecc71; --pu-shadow: #146633;" onclick="Game.usePowerup('double')">
-        <span class="pu-icon">⚡</span>
-        <span class="pu-name">2x Boost (10s)</span>
-        <span class="pu-badge" id="count-double">0</span>
-      </button>
-    </section>
-
-    <!-- QUESTION BANNER (FONT SIZE >= 20PX) & CHOICES -->
-    <footer class="question-deck-panel">
-      <!-- High-contrast Large Question Prompt (>= 20px) -->
-      <div class="scenario-question-banner">
-        <div class="scenario-icon" id="scenario-icon">🎮</div>
-        <div class="scenario-text" id="scenario-text">
-          กำลังเตรียมความท้าทายภารกิจสร้างเว็บ...
-        </div>
-        <div class="scenario-tag" id="scenario-category-badge">HTML TAGS</div>
-      </div>
-
-      <!-- Choice Mode Container -->
-      <div class="blox-choices-grid" id="choices-container">
-        <!-- 4 Bubbly Roblox Buttons -->
-      </div>
-
-      <!-- Type Mode Container -->
-      <div class="blox-typing-wrap" id="typing-container" style="display: none;">
-        <input type="text" id="blox-type-input" class="blox-type-input" placeholder="พิมพ์คำศัพท์ภาษาอังกฤษ เช่น <html> หรือ font-size แล้วกด ENTER..." autocomplete="off">
-      </div>
-    </footer>
-
-    <!-- MODAL 1: BRIGHT CHILD-FRIENDLY REGISTRATION SCREEN -->
-    <div class="modal-backdrop" id="modal-login">
-      <div class="blox-dialog-card">
-        <div class="dialog-avatar-hero">🧱✨</div>
-        <h1 class="dialog-title">ROBLOX VOCAB LEGENDS</h1>
-        <p class="dialog-subtitle">ภารกิจมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ 10 ข้อสุดมันส์!</p>
-
-        <div class="form-group-field">
-          <label class="field-label">รหัสผู้เรียน (Student ID)</label>
-          <input type="text" id="input-student-id" class="field-input" placeholder="กรอกรหัสนักเรียน เช่น 6601234" required>
-        </div>
-
-        <div class="form-group-field">
-          <label class="field-label">ชื่อ - นามสกุล (Student Name)</label>
-          <input type="text" id="input-student-name" class="field-input" placeholder="กรอกชื่อ-นามสกุล เช่น น้องบล็อกซ์ สายโค้ด" required>
-        </div>
-
-        <div style="display: flex; gap: 0.8rem; margin-bottom: 0.5rem;">
-          <div style="flex: 1;" class="form-group-field">
-            <label class="field-label">หมวดหมู่ด่าน</label>
-            <select id="select-category" class="field-select">
-              <option value="all">🌟 ทุกหมวดหมู่รวมกัน (40 คำ)</option>
-              <option value="1">1. HTML & Structural Tags</option>
-              <option value="2">2. CSS & Styling Attributes</option>
-              <option value="3">3. JavaScript & Logic</option>
-              <option value="4">4. Server, Database & Deploy</option>
-            </select>
-          </div>
-
-          <div style="flex: 1;" class="form-group-field">
-            <label class="field-label">โหมดการเล่น</label>
-            <select id="select-mode" class="field-select">
-              <option value="choice">🎯 Choice Mode (กดปุ่มช้อยส์)</option>
-              <option value="type">⌨️ Type Mode (พิมพ์คำศัพท์)</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="big-blox-btn" onclick="Game.submitRegistrationAndStart()">
-          🚀 START GAME / เข้าสู่เกม
+      <!-- 4 Core Tabs -->
+      <div class="nav-tabs-group">
+        <button class="nav-tab-btn active" id="tab-btn-home" onclick="App.showView('home')">
+          <span>🏠</span> <span class="tab-text">หน้าแรก (Home)</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-lessons" onclick="App.showView('lessons')">
+          <span>📖</span> <span class="tab-text">บทเรียน (Lessons)</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-leaderboard" onclick="App.showView('leaderboard')">
+          <span>🏆</span> <span class="tab-text">อันดับ (Leaderboard)</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-teacher" onclick="App.openTeacherAuth()">
+          <span>📊</span> <span class="tab-text">สำหรับครู (Teacher)</span>
         </button>
       </div>
-    </div>
 
-    <!-- MODAL 2: STAGE CLEAR / RESULTS MODAL (STRICT 10 QUESTIONS COMPLETE) -->
-    <div class="modal-backdrop" id="modal-stage-clear" style="display: none;">
-      <div class="blox-dialog-card">
-        <div style="font-size: 3.8rem; margin-bottom: 0.4rem;" id="results-avatar">🎉🏆</div>
-        <h2 class="dialog-title" id="results-title">STAGE CLEAR!</h2>
-        <p class="dialog-subtitle" id="results-subtitle">คุณตอบคำถามครบทั้ง 10 ข้อสำเร็จแล้ว!</p>
+      <!-- Audio Controls -->
+      <div class="nav-controls-group">
+        <button class="icon-toggle-btn" id="btn-bgm-toggle" onclick="AudioEngine.toggleBGM()">🎵 BGM: ON</button>
+        <button class="icon-toggle-btn" id="btn-sfx-toggle" onclick="AudioEngine.toggleSFX()">🔊 SFX: ON</button>
+      </div>
+    </nav>
 
-        <div style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem; margin: 1rem 0;">
-          <div>
-            <div style="font-size: 0.8rem; color: #a4b3d6;">SCORE (เหรียญ)</div>
-            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-yellow);" id="res-score">0</div>
+    <!-- VIEWS VIEWPORT CONTAINER -->
+    <div class="views-viewport">
+
+      <!-- ====================================================================
+           VIEW 1: HOME (Character Selection, Wallpaper, Rating, Registration)
+           ==================================================================== -->
+      <div class="view-screen active" id="view-home">
+        <div class="home-grid-layout">
+
+          <!-- Left Card: Customization & Ratings -->
+          <div class="home-card-panel">
+            <h1 class="home-title-hero">ศึกมหาเวทบล็อกซ์ พิชิตศัพท์เว็บ</h1>
+            
+            <!-- Live Supabase Star Rating Display -->
+            <div class="home-rating-pill" id="home-star-rating-pill" onclick="App.openReviewModal()">
+              <span>⭐</span>
+              <span id="home-avg-rating-val">4.9 / 5.0</span>
+              <span style="color: #94a3b8; font-size: 0.75rem;" id="home-total-reviews-count">(จาก 48 รีวิว)</span>
+            </div>
+
+            <!-- 1. Character Selection (3 Models) -->
+            <div>
+              <div class="form-label-title" style="margin-bottom: 0.4rem;">
+                <span>👤 เลือกตัวละคร Roblox (3 โมเดล)</span>
+                <span id="char-selected-label" style="color: var(--blox-yellow); font-size: 0.8rem;">Classic Blox Hero</span>
+              </div>
+              <div class="character-picker-grid">
+                <div class="character-card selected" id="char-card-1" onclick="App.selectCharacter(1)">
+                  <div class="character-avatar-box">👦</div>
+                  <div class="character-name">Classic Hero</div>
+                  <div class="character-trait">🛡️ โล่คอนกรีต</div>
+                </div>
+                <div class="character-card" id="char-card-2" onclick="App.selectCharacter(2)">
+                  <div class="character-avatar-box">🥷</div>
+                  <div class="character-name">Cyber Knight</div>
+                  <div class="character-trait">⚡ เลเซอร์ไซเบอร์</div>
+                </div>
+                <div class="character-card" id="char-card-3" onclick="App.selectCharacter(3)">
+                  <div class="character-avatar-box">👸</div>
+                  <div class="character-name">Neon Princess</div>
+                  <div class="character-trait">✨ ออร่าพลังงาน</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Wallpaper Switcher (4 Scenes) -->
+            <div>
+              <div class="form-label-title" style="margin-bottom: 0.4rem;">
+                <span>🌌 เลือกฉากพื้นหลัง (Wallpaper Switcher)</span>
+                <span id="wallpaper-selected-label" style="color: var(--blox-cyan); font-size: 0.8rem;">Cyber City</span>
+              </div>
+              <div class="wallpaper-picker-grid">
+                <div class="wallpaper-card selected" id="wp-card-1" onclick="App.selectWallpaper(1)">
+                  <div class="wallpaper-icon">🏙️</div>
+                  <div class="wallpaper-title">Cyber City</div>
+                </div>
+                <div class="wallpaper-card" id="wp-card-2" onclick="App.selectWallpaper(2)">
+                  <div class="wallpaper-icon">🌲</div>
+                  <div class="wallpaper-title">Meadow</div>
+                </div>
+                <div class="wallpaper-card" id="wp-card-3" onclick="App.selectWallpaper(3)">
+                  <div class="wallpaper-icon">🌌</div>
+                  <div class="wallpaper-title">Space Void</div>
+                </div>
+                <div class="wallpaper-card" id="wp-card-4" onclick="App.selectWallpaper(4)">
+                  <div class="wallpaper-icon">🌋</div>
+                  <div class="wallpaper-title">Lava Core</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <div style="font-size: 0.8rem; color: #a4b3d6;">ACCURACY</div>
-            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-green);" id="res-accuracy">100%</div>
+
+          <!-- Right Card: Traditional Registration & Stages -->
+          <div class="home-card-panel">
+            <h2 style="font-family: var(--font-blox-title); font-size: 1.35rem; color: #fff;">
+              📝 ลงทะเบียนผู้เรียน (Student Entry)
+            </h2>
+
+            <!-- Student ID (11 Digits) -->
+            <div class="form-group-box">
+              <label class="form-label-title">
+                <span>รหัสนักเรียน (Student ID 11 หลัก)</span>
+                <span id="entry-sequence-preview" style="color: var(--blox-cyan); font-size: 0.78rem;">เข้าเล่นครั้งที่ 1</span>
+              </label>
+              <input type="text" id="input-student-id" class="form-input-control" placeholder="เช่น 66012345678" maxlength="15" oninput="App.handleStudentIdInput(this.value)">
+            </div>
+
+            <!-- Student Name & Class -->
+            <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 0.6rem;">
+              <div class="form-group-box">
+                <label class="form-label-title">ชื่อ - นามสกุล</label>
+                <input type="text" id="input-student-name" class="form-input-control" placeholder="เช่น นายสมชาย สายโค้ด">
+              </div>
+              <div class="form-group-box">
+                <label class="form-label-title">ระดับชั้น / ห้องเรียน</label>
+                <input type="text" id="input-class-level" class="form-input-control" placeholder="เช่น ปวช. 2/1 ธด.">
+              </div>
+            </div>
+
+            <!-- Stage Categories (5 Stages) -->
+            <div class="form-group-box" style="flex: 1;">
+              <label class="form-label-title">เลือกด่านภารกิจ (Stage Selection)</label>
+              <div class="stages-selection-grid">
+                <!-- Stage 1: HTML -->
+                <div class="stage-select-btn selected" id="stage-card-1" onclick="App.selectStage(1)">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title">1. HTML Structure</span>
+                    <span class="stage-btn-count">10 ข้อ</span>
+                  </div>
+                  <span class="stage-btn-desc">มอนสเตอร์: กล่องดำ Glitch Webpage</span>
+                </div>
+
+                <!-- Stage 2: CSS -->
+                <div class="stage-select-btn" id="stage-card-2" onclick="App.selectStage(2)">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title">2. CSS Styling</span>
+                    <span class="stage-btn-count">10 ข้อ</span>
+                  </div>
+                  <span class="stage-btn-desc">มอนสเตอร์: Golem ไร้สไตล์ Unstyled</span>
+                </div>
+
+                <!-- Stage 3: JS -->
+                <div class="stage-select-btn" id="stage-card-3" onclick="App.selectStage(3)">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title">3. JavaScript & DOM</span>
+                    <span class="stage-btn-count">10 ข้อ</span>
+                  </div>
+                  <span class="stage-btn-desc">มอนสเตอร์: แมงมุมบั๊ก Bug Spider Bot</span>
+                </div>
+
+                <!-- Stage 4: Server -->
+                <div class="stage-select-btn" id="stage-card-4" onclick="App.selectStage(4)">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title">4. Server & Backend</span>
+                    <span class="stage-btn-count">10 ข้อ</span>
+                  </div>
+                  <span class="stage-btn-desc">มอนสเตอร์: 404 Server Error Banner</span>
+                </div>
+
+                <!-- Stage 5: Mixed All-Star Quest (20 Qs) -->
+                <div class="stage-select-btn" id="stage-card-5" onclick="App.selectStage(5)" style="grid-column: span 2; border-color: var(--blox-gold);">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title" style="color: var(--blox-yellow);">🌟 5. Random Mixed All-Star Quest</span>
+                    <span class="stage-btn-count" style="background: var(--blox-gold);">20 ข้อจัดเต็ม</span>
+                  </div>
+                  <span class="stage-btn-desc">สุ่มโจทย์รวมทุกหมวดหมู่ มอนสเตอร์บอสสุดโหดเกิดในข้อ 5, 10, และ 20!</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Big Start Button -->
+            <button class="big-blox-action-btn" onclick="App.startGameSession()">
+              🚀 START GAME / เริ่มการผจญภัย
+            </button>
           </div>
-          <div>
-            <div style="font-size: 0.8rem; color: #a4b3d6;">TIME USED</div>
-            <div style="font-size: 1.6rem; font-family: var(--font-blox-title); color: var(--blox-cyan);" id="res-time">0s</div>
+
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VIEW 2: LESSONS (Study Guide with TTS & Search)
+           ==================================================================== -->
+      <div class="view-screen" id="view-lessons">
+        <div class="lessons-header-bar">
+          <input type="text" id="lessons-search" class="lessons-search-input" placeholder="🔍 ค้นหาคำศัพท์, คำอธิบายภาษาไทย หรือโค้ดตัวอย่าง..." oninput="App.filterLessons()">
+          <div class="lessons-category-pills">
+            <button class="lesson-cat-pill active" onclick="App.filterLessonsCategory('all', this)">🌟 ทั้งหมด</button>
+            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(1, this)">🌐 1. HTML</button>
+            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(2, this)">🎨 2. CSS</button>
+            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(3, this)">⚡ 3. JavaScript</button>
+            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(4, this)">☁️ 4. Server & Cloud</button>
           </div>
         </div>
 
-        <div id="sync-status-msg" style="font-size: 0.85rem; color: var(--blox-cyan); margin: 0.6rem 0; font-weight: 700;">
-          📡 กำลังบันทึกคะแนนเข้าสู่ระบบ...
+        <div class="lessons-cards-grid" id="lessons-cards-container">
+          <!-- Populated by JavaScript with safe textContent -->
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VIEW 3: LEADERBOARD (Top Ranks with 🥇 🥈 🥉 Filters)
+           ==================================================================== -->
+      <div class="view-screen" id="view-leaderboard">
+        <div class="leaderboard-filters-bar">
+          <div style="font-family: var(--font-blox-title); font-size: 1.3rem; color: var(--blox-yellow);">
+            🏆 ตารางอันดับยอดฝีมือ (TOP LEADERBOARD)
+          </div>
+          <div class="filter-time-group">
+            <button class="filter-time-btn active" id="lb-filter-today" onclick="App.filterLeaderboard('today')">📅 วันนี้</button>
+            <button class="filter-time-btn" id="lb-filter-7days" onclick="App.filterLeaderboard('7days')">⚡ 7 วัน</button>
+            <button class="filter-time-btn" id="lb-filter-30days" onclick="App.filterLeaderboard('30days')">🌟 30 วัน</button>
+          </div>
         </div>
 
-        <!-- 3 ACTION BUTTONS PER REQUIREMENT 3 -->
-        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem;">
-          <div style="display: flex; gap: 0.6rem;">
-            <button class="big-blox-btn" style="flex: 1; margin-top: 0; padding: 0.8rem 0.5rem; font-size: 1.1rem;" onclick="Game.restartLevel()">
-              🔄 PLAY AGAIN / เล่นอีกครั้ง
-            </button>
-            <button class="header-ctrl-btn" style="flex: 1; padding: 0.8rem 0.5rem; border-radius: 16px; font-weight: 700; font-size: 1.05rem; background: var(--blox-blue); border-color: var(--blox-cyan);" onclick="Game.manualSyncSheet()">
-              📤 SUBMIT SCORE / ส่งคะแนน
-            </button>
+        <div class="leaderboard-table-wrap">
+          <table class="lb-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">อันดับ</th>
+                <th>รหัสนักเรียน</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>ระดับชั้น</th>
+                <th>ด่าน</th>
+                <th>คะแนน (🪙)</th>
+                <th>ความแม่นยำ</th>
+                <th>วันที่บันทึก</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <!-- Populated by Supabase & LocalStorage -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VIEW 4: TEACHER DASHBOARD (Password `Teacher`)
+           ==================================================================== -->
+      <div class="view-screen" id="view-teacher">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+          <h2 style="font-family: var(--font-blox-title); font-size: 1.4rem; color: var(--blox-purple);">
+            📊 สำหรับครูผู้สอน (TEACHER DASHBOARD)
+          </h2>
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="icon-toggle-btn" onclick="App.exportTeacherDataCSV()">📥 ส่งออก CSV</button>
+            <button class="icon-toggle-btn" style="background: #ef4444; border-color: #f87171;" onclick="App.lockTeacherDashboard()">🔒 ล็อกระบบ</button>
           </div>
-          <button class="header-ctrl-btn" style="width: 100%; padding: 0.75rem; border-radius: 16px; font-weight: 700; font-size: 1rem; background: #2a3556; border-color: #485885;" onclick="Game.exitToHome()">
-            🚪 EXIT GAME / จบเกม (กลับหน้าแรก)
+        </div>
+
+        <!-- Teacher Sub-Navigation Bar -->
+        <div class="teacher-subnav-bar">
+          <button class="teacher-subnav-btn active" id="tsub-btn-analytics" onclick="App.showTeacherSubscreen('analytics')">📈 ภาพรวม & วิเคราะห์</button>
+          <button class="teacher-subnav-btn" id="tsub-btn-tracker" onclick="App.showTeacherSubscreen('tracker')">📋 ติดตามผลรายข้อ (Item Tracker)</button>
+          <button class="teacher-subnav-btn" id="tsub-btn-questions" onclick="App.showTeacherSubscreen('questions')">✏️ คลังข้อสอบ</button>
+          <button class="teacher-subnav-btn" id="tsub-btn-reviews" onclick="App.showTeacherSubscreen('reviews')">⭐ รายงานประเมินเกม</button>
+        </div>
+
+        <!-- Subscreen 1: Analytics -->
+        <div class="teacher-subscreen active" id="tscreen-analytics">
+          <div class="analytics-stats-row">
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">จำนวนการเข้าเล่นทั้งหมด</div>
+              <div class="stat-metric-value" id="t-stat-entries">0</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">คะแนนเฉลี่ยรวม (%)</div>
+              <div class="stat-metric-value" id="t-stat-avg-score" style="color: var(--blox-green);">0%</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">อัตราผ่านด่านสำเร็จ</div>
+              <div class="stat-metric-value" id="t-stat-clear-rate" style="color: var(--blox-yellow);">0%</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">คะแนนรีวิวเฉลี่ย (⭐)</div>
+              <div class="stat-metric-value" id="t-stat-avg-rating" style="color: var(--blox-pink);">5.0</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(14, 22, 48, 0.9); border: 2px solid rgba(0, 240, 255, 0.2); border-radius: 12px; padding: 1rem;">
+            <h3 style="font-size: 0.95rem; color: #fff; margin-bottom: 0.6rem;">💡 ข้อมูลสรุปผลการเรียนรู้รายระดับชั้น</h3>
+            <div id="teacher-class-breakdown-list">
+              <!-- Class statistics rendered here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscreen 2: Item-Level Tracker (Green/Red boxes) -->
+        <div class="teacher-subscreen" id="tscreen-tracker">
+          <div style="display: flex; gap: 0.6rem; margin-bottom: 0.4rem;">
+            <input type="text" id="tracker-search-input" class="form-input-control" style="flex: 1;" placeholder="🔍 ค้นหารหัสนักเรียน หรือ ชื่อ-นามสกุล..." oninput="App.renderItemTrackerTable()">
+            <select id="tracker-class-filter" class="form-input-control" style="width: 180px;" onchange="App.renderItemTrackerTable()">
+              <option value="all">ทุกระดับชั้น</option>
+            </select>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="lb-table">
+              <thead>
+                <tr>
+                  <th>รหัส / ชื่อนักเรียน</th>
+                  <th>ระดับชั้น</th>
+                  <th>ด่าน</th>
+                  <th>คะแนน</th>
+                  <th>ผลตรวจรายข้อ (🟢 ถูก / 🔴 ผิด)</th>
+                  <th>วันที่</th>
+                </tr>
+              </thead>
+              <tbody id="tracker-tbody">
+                <!-- Visual Item Boxes rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subscreen 3: Question Management -->
+        <div class="teacher-subscreen" id="tscreen-questions">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.9rem; color: #cbd5e1;">จัดการโจทย์, ตัวเลือก A-B-C-D, เฉลย และคำอธิบาย</span>
+            <button class="icon-toggle-btn" onclick="App.openAddQuestionModal()">➕ เพิ่มข้อสอบใหม่</button>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="lb-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">ID</th>
+                  <th style="width: 90px;">ด่าน</th>
+                  <th>โจทย์คำถาม</th>
+                  <th>คำศัพท์ที่ถูกต้อง</th>
+                  <th style="width: 100px;">การจัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="questions-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subscreen 4: Game Evaluation & Reviews -->
+        <div class="teacher-subscreen" id="tscreen-reviews">
+          <div class="analytics-stats-row" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">จำนวนผู้ร่วมประเมิน</div>
+              <div class="stat-metric-value" id="t-reviews-count">0</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">ความพึงพอใจเฉลี่ย</div>
+              <div class="stat-metric-value" id="t-reviews-stars" style="color: var(--blox-yellow);">5.0 ⭐</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-label">การเชื่อมต่อ Supabase</div>
+              <div class="stat-metric-value" style="font-size: 1.1rem; color: var(--blox-cyan);">REST API Active</div>
+            </div>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="lb-table">
+              <thead>
+                <tr>
+                  <th style="width: 140px;">รหัสนักเรียน</th>
+                  <th style="width: 110px;">คะแนนดาว</th>
+                  <th>ความคิดเห็นและข้อเสนอแนะ</th>
+                  <th style="width: 140px;">เวลา</th>
+                </tr>
+              </thead>
+              <tbody id="reviews-tbody">
+                <!-- User reviews rendered here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VIEW 5: GAMEPLAY BATTLEFIELD (Canvas + Physics + 3D HUD)
+           ==================================================================== -->
+      <div class="view-screen" id="view-gameplay">
+        <!-- Top HUD -->
+        <header class="gameplay-hud-header">
+          <div class="hud-player-tag">
+            <span id="hud-char-icon">👦</span>
+            <span id="hud-player-name">Robloxian</span>
+          </div>
+
+          <div class="hud-stats-group">
+            <!-- 3 Hearts HP -->
+            <div class="hud-hp-badge" title="พลังชีวิตผู้เล่น (HP Hearts)">
+              <span style="font-size: 0.75rem; color: #ff9999;">HP:</span>
+              <span id="hud-hp-hearts" style="letter-spacing: 2px;">❤️❤️❤️</span>
+            </div>
+
+            <!-- Stage & Question Sequence (e.g. 1/10 or 1/20) -->
+            <div class="hud-stage-badge">
+              <span>🚩 QUESTION</span>
+              <span id="hud-question-idx">1</span>/<span id="hud-total-questions">10</span>
+            </div>
+
+            <div class="hud-score-badge">
+              <span>🪙</span>
+              <span id="hud-score-val">0</span>
+            </div>
+          </div>
+
+          <!-- Exit Game Button -->
+          <button class="icon-toggle-btn" style="background: #e11d48; border-color: #f43f5e;" onclick="Game.exitGameToHome()">
+            🚪 EXIT GAME / กลับหน้าแรก
           </button>
-        </div>
+        </header>
+
+        <!-- Canvas Battlefield -->
+        <main class="canvas-battle-wrapper">
+          <canvas id="gameCanvas"></canvas>
+          
+          <!-- Live Mini-Leaderboard Overlay -->
+          <div class="mini-leaderboard-overlay" id="mini-leaderboard">
+            <div style="font-size: 0.7rem; color: var(--blox-yellow); font-weight: 800; margin-bottom: 2px;">🏆 LIVE TOP 3</div>
+            <div class="mini-lb-item" id="mini-lb-1"><span>#1 สมชาย</span> <span>1,200</span></div>
+            <div class="mini-lb-item" id="mini-lb-2"><span>#2 ปฏิพัทธ์</span> <span>950</span></div>
+            <div class="mini-lb-item" id="mini-lb-3"><span>#3 ธันวา</span> <span>800</span></div>
+          </div>
+        </main>
+
+        <!-- Conditional Power-ups Dock (Unlocked on 2, 3, 4 streaks) -->
+        <section class="blox-powerups-dock">
+          <!-- 1. Cut Choices -->
+          <button class="blox-powerup-btn disabled" id="pu-cut" style="--pu-color: #00f0ff;" onclick="Game.usePowerup('cut')">
+            <span>✂️</span> <span>ตัดช้อยส์ 50:50</span> <span class="pu-badge" id="count-cut">0</span>
+          </button>
+
+          <!-- 2. Freeze Monster -->
+          <button class="blox-powerup-btn disabled" id="pu-freeze" style="--pu-color: #38bdf8;" onclick="Game.usePowerup('freeze')">
+            <span>❄️</span> <span>แช่แข็ง (6s)</span> <span class="pu-badge" id="count-freeze">0</span>
+          </button>
+
+          <!-- 3. Destroy Monster -->
+          <button class="blox-powerup-btn disabled" id="pu-destroy" style="--pu-color: #ef4444;" onclick="Game.usePowerup('destroy')">
+            <span>💥</span> <span>กำจัดมอนสเตอร์</span> <span class="pu-badge" id="count-destroy">0</span>
+          </button>
+
+          <!-- 4. Fix Previous Wrong Answer -->
+          <button class="blox-powerup-btn disabled" id="pu-fix" style="--pu-color: #10b981;" onclick="Game.usePowerup('fix')">
+            <span>🩹</span> <span>แก้ไขข้อผิด +1 HP</span> <span class="pu-badge" id="count-fix">0</span>
+          </button>
+        </section>
+
+        <!-- Question Prompt & Clean 4-Choice Buttons -->
+        <footer class="question-deck-panel">
+          <div class="question-prompt-banner">
+            <div style="font-size: 1.6rem;" id="q-icon-badge">🎮</div>
+            <div class="question-prompt-text" id="question-prompt-text">
+              กำลังเตรียมภารกิจสร้างเว็บ...
+            </div>
+            <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
+          </div>
+
+          <div class="choices-grid-layout" id="choices-container">
+            <!-- 4 Choice buttons safely rendered with textContent -->
+          </div>
+        </footer>
       </div>
+
     </div>
 
-    <!-- MODAL 3: LEADERBOARD MODAL -->
-    <div class="modal-backdrop" id="modal-leaderboard" style="display: none;">
-      <div class="blox-dialog-card">
-        <h2 class="dialog-title">🏆 TOP 10 LEADERBOARD</h2>
-        <p class="dialog-subtitle">ตารางอันดับยอดฝีมือนักสร้างเว็บ Robloxian</p>
-
-        <div class="leaderboard-container" id="leaderboard-list">
-          <!-- Populated dynamically -->
-        </div>
-
-        <button class="header-ctrl-btn" style="width: 100%; padding: 0.8rem; border-radius: 12px; font-size: 1rem;" onclick="Game.closeLeaderboard()">
-          ปิดหน้าต่าง (CLOSE)
-        </button>
-      </div>
-    </div>
+    <!-- PROMINENT DEVELOPER FOOTER CREDIT -->
+    <footer class="developer-footer-credit">
+      🎮 Roblox Vocab Regent | Developer: <strong>Patipatpong Sakdee | Nakhon Pathom Vocational College</strong>
+    </footer>
 
   </div>
 
   <!-- ==========================================================================
-       JAVASCRIPT GAME ENGINE & SCENARIO DATABASE
+       MODAL 1: TEACHER PASSWORD AUTH
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-teacher-auth">
+    <div class="blox-modal-card">
+      <div style="font-size: 3rem; margin-bottom: 0.4rem;">🔐</div>
+      <h2 class="modal-title">TEACHER ACCESS</h2>
+      <p class="modal-subtitle">กรุณากรอกรหัสผ่านสำหรับคุณครูผู้ดูแลระบบ</p>
+      
+      <input type="password" id="input-teacher-password" class="form-input-control" style="width: 100%; text-align: center; font-size: 1.1rem; margin-bottom: 1rem;" placeholder="กรอกรหัสผ่าน...">
+
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeTeacherAuth()">ยกเลิก (Cancel)</button>
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.75rem; border-radius: 12px;" onclick="App.verifyTeacherPassword()">เข้าสู่ระบบ 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: STAGE COMPLETE (VICTORY / DEFEAT) - EXACTLY 2 ACTION BUTTONS
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-stage-result">
+    <div class="blox-modal-card" style="max-width: 520px;">
+      <div style="font-size: 3.6rem; margin-bottom: 0.3rem;" id="res-icon">🎉</div>
+      <h2 class="modal-title" id="res-title">STAGE CLEARED!</h2>
+      <p class="modal-subtitle" id="res-subtitle">คุณตอบคำถามครบตามเป้าหมายของด่านแล้ว!</p>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(0,0,0,0.35); border-radius: 14px; padding: 0.8rem; margin-bottom: 0.8rem;">
+        <div>
+          <div style="font-size: 0.75rem; color: #94a3b8;">คะแนนรวม</div>
+          <div style="font-family: var(--font-blox-title); font-size: 1.5rem; color: var(--blox-yellow);" id="res-score-text">0</div>
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; color: #94a3b8;">ความแม่นยำ</div>
+          <div style="font-family: var(--font-blox-title); font-size: 1.5rem; color: var(--blox-green);" id="res-accuracy-text">100%</div>
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; color: #94a3b8;">เวลาที่ใช้</div>
+          <div style="font-family: var(--font-blox-title); font-size: 1.5rem; color: var(--blox-cyan);" id="res-time-text">0s</div>
+        </div>
+      </div>
+
+      <!-- Item-Level Visual Answer Pills Summary -->
+      <div style="margin-bottom: 0.9rem; text-align: left;">
+        <div style="font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.3rem;">ผลการตอบรายข้อ (Question Breakdown):</div>
+        <div class="answer-tracker-pill-group" id="res-item-pills" style="justify-content: center;"></div>
+      </div>
+
+      <div id="res-sync-status" style="font-size: 0.8rem; color: var(--blox-cyan); margin-bottom: 1rem; font-weight: 600;">
+        📡 บันทึกคะแนนไปยัง Supabase Database สำเร็จ!
+      </div>
+
+      <!-- EXACTLY 2 ACTION BUTTONS PER REQUIREMENT 11 -->
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.85rem 0.5rem; background: linear-gradient(135deg, #10b981, #059669); box-shadow: var(--btn-shadow-green);" onclick="Game.playAgain()">
+          🔄 เล่นอีกครั้ง (Play Again)
+        </button>
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.85rem 0.5rem; background: #25335e; border: 2px solid #435691; box-shadow: var(--btn-shadow-dark);" onclick="Game.returnHomeAndReview()">
+          🏠 กลับหน้าแรก (Return Home)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: 1-5 STAR RATING REVIEW MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-review-feedback">
+    <div class="blox-modal-card">
+      <div style="font-size: 3rem; margin-bottom: 0.3rem;">⭐</div>
+      <h2 class="modal-title">ให้คะแนนเกมนี้</h2>
+      <p class="modal-subtitle">ความคิดเห็นของน้องๆ ช่วยให้เราพัฒนาเกมการศึกษาได้ดียิ่งขึ้น</p>
+
+      <!-- 1-5 Stars Interactive Selector -->
+      <div class="star-rating-row" id="star-picker-container">
+        <span class="star-item active" onclick="App.setReviewStar(1)">★</span>
+        <span class="star-item active" onclick="App.setReviewStar(2)">★</span>
+        <span class="star-item active" onclick="App.setReviewStar(3)">★</span>
+        <span class="star-item active" onclick="App.setReviewStar(4)">★</span>
+        <span class="star-item active" onclick="App.setReviewStar(5)">★</span>
+      </div>
+
+      <textarea id="input-review-comment" class="form-input-control" rows="3" style="width: 100%; margin-bottom: 1rem;" placeholder="เขียนข้อเสนอแนะ หรือความประทับใจเกี่ยวกับเกม..."></textarea>
+
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeReviewModal()">ข้าม (Skip)</button>
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.75rem; border-radius: 12px;" onclick="App.submitRatingReview()">ส่งรีวิว ⭐</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: ADD/EDIT QUESTION (TEACHER DASHBOARD)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-add-question">
+    <div class="blox-modal-card" style="max-width: 560px; text-align: left;">
+      <h2 class="modal-title" style="font-size: 1.3rem;">✏️ เพิ่ม/แก้ไขข้อสอบ (Teacher Question)</h2>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.6rem; margin: 0.8rem 0;">
+        <div class="form-group-box">
+          <label class="form-label-title">หมวดหมู่ด่าน</label>
+          <select id="modal-q-stage" class="form-input-control">
+            <option value="1">1. HTML & Structural Tags</option>
+            <option value="2">2. CSS & Styling Attributes</option>
+            <option value="3">3. JavaScript & DOM Logic</option>
+            <option value="4">4. Server, Database & Cloud</option>
+          </select>
+        </div>
+
+        <div class="form-group-box">
+          <label class="form-label-title">โจทย์คำถามภาษาไทย</label>
+          <input type="text" id="modal-q-text" class="form-input-control" placeholder="เช่น แท็กใดใช้สร้างไฮเปอร์ลิงก์เชื่อมโยงหน้าเว็บ?">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+          <div class="form-group-box">
+            <label class="form-label-title">ตัวเลือก A</label>
+            <input type="text" id="modal-q-choice-a" class="form-input-control" placeholder="เช่น <a>">
+          </div>
+          <div class="form-group-box">
+            <label class="form-label-title">ตัวเลือก B</label>
+            <input type="text" id="modal-q-choice-b" class="form-input-control" placeholder="เช่น <p>">
+          </div>
+          <div class="form-group-box">
+            <label class="form-label-title">ตัวเลือก C</label>
+            <input type="text" id="modal-q-choice-c" class="form-input-control" placeholder="เช่น <div>">
+          </div>
+          <div class="form-group-box">
+            <label class="form-label-title">ตัวเลือก D</label>
+            <input type="text" id="modal-q-choice-d" class="form-input-control" placeholder="เช่น <span>">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.5rem;">
+          <div class="form-group-box">
+            <label class="form-label-title">ตัวเลือกที่ถูกต้อง</label>
+            <select id="modal-q-correct" class="form-input-control">
+              <option value="a">Choice A</option>
+              <option value="b">Choice B</option>
+              <option value="c">Choice C</option>
+              <option value="d">Choice D</option>
+            </select>
+          </div>
+          <div class="form-group-box">
+            <label class="form-label-title">คำอธิบายเฉลยภาษาไทย</label>
+            <input type="text" id="modal-q-explanation" class="form-input-control" placeholder="เช่น <a> คือ Anchor Tag สำหรับสร้างลิงก์">
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeAddQuestionModal()">ยกเลิก</button>
+        <button class="big-blox-action-btn" style="flex: 1; font-size: 1.05rem; padding: 0.75rem; border-radius: 12px;" onclick="App.saveTeacherQuestion()">บันทึกข้อสอบ 💾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       APPLICATION LOGIC, SUPABASE REST API, AUDIO & BATTLE GAME ENGINE
        ========================================================================== -->
   <script>
     /**
-     * Google Apps Script Web App Integration Endpoint
+     * Supabase REST Credentials
      */
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbzVE6wodqurlMz3wI9YSaBvNrXY6JZxPgUJ7558A1JzzZJUwhibIe_giluhn7Vrv54l0Q/exec";
+    const SUPABASE_CONFIG = {
+      url: "https://hdmxkdvawfpgujboxllu.supabase.co",
+      key: "sb_publishable_qT7h8ap3wsM5EaaggAXuDA__c1AAROF"
+    };
 
     /* ==========================================================================
-       1. 40 DETAILED SCENARIO-BASED WEB VOCABULARY (4 CATEGORIES)
+       1. WEB DEVELOPMENT DETAILED SCENARIO-BASED VOCABULARY DATABASE
        ========================================================================== */
-    const VOCAB_SCENARIOS = [
-      // Category 1: HTML & Structural Tags
+    const VOCAB_DATABASE = [
+      // --- STAGE 1: HTML & Structural Tags ---
       {
-        id: 1, category: 1, catName: "HTML Tags",
+        id: 1, stage: 1, stageName: "HTML Tags",
         term: "<html>",
-        ttsPronounce: "HTML tag: The root of the entire webpage",
-        scenario: "🌐 คุณกำลังเริ่มต้นเขียนโครงสร้างเว็บไซต์ใหม่ทั้งหมด ต้องใช้แท็กรากฐานตัวใดครอบโค้ดทั้งหน้าเว็บ?"
+        ttsEn: "HTML tag",
+        ttsTh: "คือแท็กรากฐานของเอกสารเว็บเพจทั้งหมด",
+        scenario: "🌐 ต้องการเริ่มต้นเขียนโครงสร้างเว็บไซต์ใหม่ทั้งหมด ต้องใช้แท็กรากฐานตัวใดครอบโค้ดทั้งหน้าเว็บ?",
+        codeExample: "<!DOCTYPE html>\n<html>\n  ...\n</html>"
       },
       {
-        id: 2, category: 1, catName: "HTML Tags",
+        id: 2, stage: 1, stageName: "HTML Tags",
         term: "<head>",
-        ttsPronounce: "Head tag: Stores metadata, title, and stylesheets",
-        scenario: "⚙️ ต้องการใส่ชื่อหน้าเว็บ (Title) และตั้งค่า Meta Data สำหรับ SEO ต้องใส่ไว้ในส่วนใดของ HTML?"
+        ttsEn: "Head tag",
+        ttsTh: "ส่วนเก็บข้อมูลเมตาดาต้า ชื่อหน้าเว็บ และลิงก์สไตล์ชีต",
+        scenario: "⚙️ ต้องการกำหนดชื่อแท็บบนเบราว์เซอร์ (Title) และเชื่อมต่อไฟล์ CSS ต้องวางคำสั่งไว้ในส่วนใด?",
+        codeExample: "<head>\n  <title>My Site</title>\n</head>"
       },
       {
-        id: 3, category: 1, catName: "HTML Tags",
+        id: 3, stage: 1, stageName: "HTML Tags",
         term: "<body>",
-        ttsPronounce: "Body tag: Contains visible contents of the website",
-        scenario: "🎨 ต้องการวางข้อความ รูปภาพ ปุ่มกด และเนื้อหาทั้งหมดที่ให้ผู้เข้าชมมองเห็น ต้องใส่ในส่วนใด?"
+        ttsEn: "Body tag",
+        ttsTh: "ส่วนแสดงผลเนื้อหาหลักที่ผู้ใช้มองเห็นบนหน้าเว็บ",
+        scenario: "🎨 ต้องการวางข้อความ รูปภาพ ปุ่มกด และคอนเทนต์ทั้งหมดให้ผู้เข้าชมมองเห็น ต้องเขียนไว้ในแท็กใด?",
+        codeExample: "<body>\n  <h1>Welcome</h1>\n</body>"
       },
       {
-        id: 4, category: 1, catName: "HTML Tags",
-        term: "<header>",
-        ttsPronounce: "Header tag: Top introductory navigation container",
-        scenario: "👑 ส่วนบนสุดของเว็บไซต์ที่มักจะวางโลโก้โรงเรียนและแถบเมนูนำทางหลัก ควรใช้แท็กใด?"
-      },
-      {
-        id: 5, category: 1, catName: "HTML Tags",
-        term: "<footer>",
-        ttsPronounce: "Footer tag: Bottom copyright and contact bar",
-        scenario: "📜 แถบด้านล่างสุดของเว็บที่ต้องการใส่ข้อความลิขสิทธิ์ © 2026 และช่องทางติดต่อ ควรใช้แท็กใด?"
-      },
-      {
-        id: 6, category: 1, catName: "HTML Tags",
+        id: 4, stage: 1, stageName: "HTML Tags",
         term: "<h1>",
-        ttsPronounce: "H1 tag: Top level major heading",
-        scenario: "📢 ต้องการสร้างหัวข้อข่าวหลักที่มีขนาดตัวอักษรใหญ่และสำคัญที่สุดในหน้าเว็บ ควรใช้แท็กใด?"
+        ttsEn: "H1 heading tag",
+        ttsTh: "แท็กหัวข้อหลักที่มีขนาดใหญ่และสำคัญที่สุดสำหรับ SEO",
+        scenario: "📢 ต้องการสร้างหัวข้อข่าวหลักที่มีขนาดตัวอักษรใหญ่ที่สุดและสำคัญที่สุดในหน้าเว็บ ควรใช้แท็กใด?",
+        codeExample: "<h1>ข่าวเด่นประจำวัน</h1>"
       },
       {
-        id: 7, category: 1, catName: "HTML Tags",
+        id: 5, stage: 1, stageName: "HTML Tags",
         term: "<p>",
-        ttsPronounce: "P tag: Paragraph block of text",
-        scenario: "📝 ต้องการเขียนเนื้อหาบทความแบ่งเป็นย่อหน้าให้อ่านง่ายและเป็นระเบียบ ควรใช้แท็กใด?"
+        ttsEn: "Paragraph tag",
+        ttsTh: "แท็กพารากราฟสำหรับแสดงย่อหน้าข้อความบทความ",
+        scenario: "📝 ต้องการเขียนเนื้อหาบทความแบ่งเป็นย่อหน้าให้อ่านง่ายเป็นระเบียบบนหน้าเว็บ ควรใช้แท็กใด?",
+        codeExample: "<p>เนื้อหาบทความย่อหน้าที่หนึ่ง...</p>"
       },
       {
-        id: 8, category: 1, catName: "HTML Tags",
+        id: 6, stage: 1, stageName: "HTML Tags",
         term: "<a>",
-        ttsPronounce: "A tag: Anchor hyperlink to navigate pages",
-        scenario: "🔗 ต้องการทำลิงก์ให้ผู้ใช้คลิกแล้วเปลี่ยนหน้าไปยังเว็บ Google ทันที ต้องใช้แท็กใด?"
+        ttsEn: "Anchor hyperlink tag",
+        ttsTh: "แท็กสร้างไฮเปอร์ลิงก์เชื่อมโยงไปยังหน้าเว็บอื่น",
+        scenario: "🔗 ต้องการสร้างปุ่มลิงก์ให้ผู้ใช้คลิกแล้วเปิดหน้าเว็บ Google ทันที ต้องใช้แท็กใด?",
+        codeExample: "<a href='https://google.com'>ค้นหา</a>"
       },
       {
-        id: 9, category: 1, catName: "HTML Tags",
+        id: 7, stage: 1, stageName: "HTML Tags",
         term: "<img>",
-        ttsPronounce: "Image tag: Embeds graphics and photos",
-        scenario: "🖼️ ต้องการนำรูปภาพสัตว์เลี้ยงสุดน่ารักมาแสดงผลบนหน้าเว็บไซต์ ต้องใช้แท็กใด?"
+        ttsEn: "Image tag",
+        ttsTh: "แท็กสำหรับฝังรูปภาพลงในหน้าเว็บไซต์",
+        scenario: "🖼️ ต้องการนำรูปภาพผลงานหรือรูปสัตว์เลี้ยงมาแสดงผลบนหน้าเว็บไซต์ ต้องใช้แท็กใด?",
+        codeExample: "<img src='photo.jpg' alt='ภาพ'>"
       },
       {
-        id: 10, category: 1, catName: "HTML Tags",
-        term: "<br>",
-        ttsPronounce: "BR tag: Line break within text",
-        scenario: "↩️ ต้องการสั่งให้ข้อความตัดขึ้นบรรทัดใหม่ทันทีโดยไม่ต้องแยกเป็นย่อหน้าใหม่ ต้องใช้แท็กใด?"
+        id: 8, stage: 1, stageName: "HTML Tags",
+        term: "<button>",
+        ttsEn: "Button tag",
+        ttsTh: "แท็กปุ่มกดสำหรับสั่งการหรือส่งข้อมูลฟอร์ม",
+        scenario: "🔘 ต้องการสร้างปุ่มกดสำหรับให้ผู้เล่นคลิกเพื่อ 'เริ่มเกม' หรือ 'สั่งซื้อสินค้า' ต้องใช้แท็กใด?",
+        codeExample: "<button type='button'>เริ่มเกม</button>"
+      },
+      {
+        id: 9, stage: 1, stageName: "HTML Tags",
+        term: "<div>",
+        ttsEn: "Division block tag",
+        ttsTh: "แท็กจัดกลุ่มเนื้อหาแบบกล่องบล็อกเลเวล",
+        scenario: "📦 ต้องการสร้างกล่องคอนเทนเนอร์สำหรับจัดกลุ่มเนื้อหาและใส่สไตล์ CSS เป็นหมวดหมู่ ควรใช้แท็กใด?",
+        codeExample: "<div class='card'>\n  <p>Hello</p>\n</div>"
+      },
+      {
+        id: 10, stage: 1, stageName: "HTML Tags",
+        term: "<footer>",
+        ttsEn: "Footer tag",
+        ttsTh: "แท็กส่วนท้ายของหน้าเว็บสำหรับใส่ลิขสิทธิ์และข้อมูลติดต่อ",
+        scenario: "📜 แถบด้านล่างสุดของเว็บไซต์สำหรับใส่ลิขสิทธิ์ © 2026 และช่องทางติดต่อ ควรใช้แท็ก Semantic ใด?",
+        codeExample: "<footer>\n  © 2026 Roblox Regent\n</footer>"
       },
 
-      // Category 2: CSS & Styling Attributes
+      // --- STAGE 2: CSS & Styling Attributes ---
       {
-        id: 11, category: 2, catName: "CSS Styling",
+        id: 11, stage: 2, stageName: "CSS Styling",
         term: "color",
-        ttsPronounce: "Color: Sets foreground text font color",
-        scenario: "🎨 ต้องการเปลี่ยนสีตัวอักษรของข้อความให้เป็นสีแดงสด (Red) ต้องใช้คำสั่ง CSS ใด?"
+        ttsEn: "Color property",
+        ttsTh: "คำสั่งกำหนดสีของตัวอักษรข้อความ",
+        scenario: "🎨 ต้องการเปลี่ยนสีตัวหนังสือของหัวข้อข่าวให้กลายเป็นสีฟ้าสดใส (Cyan) ต้องใช้คุณสมบัติ CSS ใด?",
+        codeExample: "h1 { color: #00f0ff; }"
       },
       {
-        id: 12, category: 2, catName: "CSS Styling",
+        id: 12, stage: 2, stageName: "CSS Styling",
         term: "background-color",
-        ttsPronounce: "Background color: Sets element background hue",
-        scenario: "🌈 ต้องการเปลี่ยนสีพื้นหลังของการ์ดข้อความให้เป็นสีเหลืองพาสเทล ต้องใช้คำสั่ง CSS ใด?"
+        ttsEn: "Background color property",
+        ttsTh: "คำสั่งกำหนดสีพื้นหลังขององค์ประกอบ",
+        scenario: "🌈 ต้องการเปลี่ยนสีพื้นหลังของการ์ดตัวละครให้กลายเป็นสีน้ำเงินเข้ม ต้องใช้คำสั่ง CSS ใด?",
+        codeExample: ".card { background-color: #121b3b; }"
       },
       {
-        id: 13, category: 2, catName: "CSS Styling",
+        id: 13, stage: 2, stageName: "CSS Styling",
         term: "font-size",
-        ttsPronounce: "Font size: Configures typography text dimension",
-        scenario: "🔍 ตัวหนังสือเล็กเกินไปจนอ่านไม่ออก! ต้องการเพิ่มขนาดตัวอักษรเป็น 24px ต้องใช้คำสั่งใด?"
+        ttsEn: "Font size property",
+        ttsTh: "คำสั่งกำหนดขนาดความใหญ่ของตัวหนังสือ",
+        scenario: "🔍 ตัวหนังสือเล็กเกินไปจนอ่านไม่ออก! ต้องการเพิ่มขนาดตัวอักษรให้ใหญ่เป็น 24px ต้องใช้คำสั่งใด?",
+        codeExample: "p { font-size: 24px; }"
       },
       {
-        id: 14, category: 2, catName: "CSS Styling",
+        id: 14, stage: 2, stageName: "CSS Styling",
         term: "margin",
-        ttsPronounce: "Margin: Outer spacing around elements",
-        scenario: "↔️ กล่องข้อความสองกล่องติดกันเกินไป! ต้องการเพิ่มระยะห่างภายนอกเส้นขอบ ต้องใช้คำสั่งใด?"
+        ttsEn: "Margin property",
+        ttsTh: "ระยะเว้นว่างภายนอกขอบของกล่อง",
+        scenario: "↔️ กล่องข้อความสองกล่องเบียดชิดกันเกินไป! ต้องการเพิ่มระยะห่างภายนอกเส้นขอบ ต้องใช้คำสั่งใด?",
+        codeExample: ".box { margin: 15px; }"
       },
       {
-        id: 15, category: 2, catName: "CSS Styling",
+        id: 15, stage: 2, stageName: "CSS Styling",
         term: "padding",
-        ttsPronounce: "Padding: Inner space between border and content",
-        scenario: "📦 ข้อความชิดขอบกล่องเกินไป ต้องการเพิ่มระยะเว้นว่างภายในกล่อง ต้องใช้คำสั่งใด?"
+        ttsEn: "Padding property",
+        ttsTh: "ระยะเว้นว่างภายในระหว่างเนื้อหากับขอบกล่อง",
+        scenario: "📦 ตัวหนังสือชิดขอบการ์ดมากเกินไป ต้องการเพิ่มระยะเว้นว่างภายในกล่องเพื่อความสวยงาม ต้องใช้คำสั่งใด?",
+        codeExample: ".card { padding: 1.2rem; }"
       },
       {
-        id: 16, category: 2, catName: "CSS Styling",
-        term: "border",
-        ttsPronounce: "Border: Outline stroke surrounding element",
-        scenario: "🔲 ต้องการวาดเส้นกรอบล้อมรอบรูปภาพขนาด 2px สีน้ำเงิน ต้องใช้คำสั่ง CSS ใด?"
+        id: 16, stage: 2, stageName: "CSS Styling",
+        term: "border-radius",
+        ttsEn: "Border radius property",
+        ttsTh: "คำสั่งปรับมุมกล่องให้โค้งมนนุ่มนวล",
+        scenario: "🔲 ต้องการปรับมุมของการ์ดปุ่มกดที่เหลี่ยมคมให้กลายเป็นมุมโค้งมนสวยงามสไตล์โมเดิร์น ต้องใช้คำสั่งใด?",
+        codeExample: ".btn { border-radius: 16px; }"
       },
       {
-        id: 17, category: 2, catName: "CSS Styling",
-        term: "display",
-        ttsPronounce: "Display: Controls layout render behavior",
-        scenario: "📐 ต้องการกำหนดรูปแบบการแสดงผลของบล็อก เช่น เปลี่ยนเป็น flex หรือ inline-block ต้องใช้คำสั่งใด?"
+        id: 17, stage: 2, stageName: "CSS Styling",
+        term: "display: flex",
+        ttsEn: "Display flex layout",
+        ttsTh: "จัดเลย์เอาต์ยืดหยุ่นหนึ่งมิติ ทั้งแนวนอนและแนวตั้ง",
+        scenario: "🧩 ต้องการจัดวางปุ่มกด 3 ปุ่มให้อยู่กึ่งกลางหน้าจอและเรียงแถวแนวนอนอย่างยืดหยุ่น ต้องใช้ระบบใด?",
+        codeExample: ".container { display: flex; justify-content: center; }"
       },
       {
-        id: 18, category: 2, catName: "CSS Styling",
-        term: "flex",
-        ttsPronounce: "Flex: Dynamic flexible responsive layout",
-        scenario: "🧩 ต้องการจัดวางปุ่มกด 3 ปุ่มให้อยู่กึ่งกลางหน้าจอและยืดหยุ่นได้อัตโนมัติ ต้องใช้ระบบ CSS ใด?"
+        id: 18, stage: 2, stageName: "CSS Styling",
+        term: "z-index",
+        ttsEn: "Z index property",
+        ttsTh: "กำหนดลำดับการซ้อนทับเลเยอร์หน้าหลังตามแกนแซด",
+        scenario: "🛡️ ต้องการกำหนดให้หน้าต่างป็อปอัปแจ้งเตือนแสดงผลลอยอยู่ด้านบนสุดเหนือเนื้อหาทั้งหมด ต้องใช้คำสั่งใด?",
+        codeExample: ".modal { z-index: 100; }"
       },
       {
-        id: 19, category: 2, catName: "CSS Styling",
-        term: "width",
-        ttsPronounce: "Width: Defines horizontal dimension",
-        scenario: "📏 ต้องการกำหนดความกว้างของการ์ดตัวละครให้มีขนาด 300px ต้องใช้คำสั่งใด?"
+        id: 19, stage: 2, stageName: "CSS Styling",
+        term: "box-shadow",
+        ttsEn: "Box shadow property",
+        ttsTh: "คำสั่งสร้างเงาและมิติแสงเรืองรองให้กล่อง",
+        scenario: "✨ ต้องการสร้างเอฟเฟกต์เงาเรืองแสงสีฟ้า (Neon Glow) รอบกล่องตัวละคร ต้องใช้คำสั่งใด?",
+        codeExample: ".card { box-shadow: 0 0 20px #00f0ff; }"
       },
       {
-        id: 20, category: 2, catName: "CSS Styling",
-        term: "height",
-        ttsPronounce: "Height: Defines vertical dimension",
-        scenario: "📐 ต้องการกำหนดความสูงของแถบเมนูนำทางให้มีขนาด 60px ต้องใช้คำสั่งใด?"
+        id: 20, stage: 2, stageName: "CSS Styling",
+        term: "@media",
+        ttsEn: "Media query",
+        ttsTh: "คำสั่งสำหรับทำเว็บให้รองรับหน้าจอมือถือและแท็บเล็ต",
+        scenario: "📱 ต้องการเขียนสไตล์ปรับแต่งหน้าเว็บเฉพาะเมื่อเปิดบนหน้าจอมือถือที่มีขนาดไม่เกิน 768px ต้องใช้คำสั่งใด?",
+        codeExample: "@media (max-width: 768px) { ... }"
       },
 
-      // Category 3: JavaScript & Logic
+      // --- STAGE 3: JavaScript & DOM Logic ---
       {
-        id: 21, category: 3, catName: "JS Logic",
+        id: 21, stage: 3, stageName: "JavaScript Logic",
         term: "let / const",
-        ttsPronounce: "Let and Const: Declare storage variables",
-        scenario: "💾 ต้องการสร้างกล่องเก็บข้อมูลคะแนนของผู้เล่น (Variable) ใน JavaScript ต้องใช้คำสั่งใด?"
+        ttsEn: "Let and Const keywords",
+        ttsTh: "คำสั่งสำหรับประกาศตัวแปรเก็บข้อมูลในจาวาสคริปต์",
+        scenario: "💾 ต้องการสร้างกล่องเก็บข้อมูลคะแนนของผู้เล่น (Variable) ใน JavaScript ที่แก้ไขค่าได้ ต้องใช้คำสั่งใด?",
+        codeExample: "let score = 0;\nconst maxHP = 3;"
       },
       {
-        id: 22, category: 3, catName: "JS Logic",
+        id: 22, stage: 3, stageName: "JavaScript Logic",
         term: "function",
-        ttsPronounce: "Function: Reusable block of computational code",
-        scenario: "⚙️ ต้องการเขียนชุดคำสั่งการคำนวณคะแนนรวมไว้เพื่อเรียกใช้งานซ้ำๆ ได้ ต้องสร้างอะไร?"
+        ttsEn: "Function declaration",
+        ttsTh: "ชุดคำสั่งที่รวมกันเพื่อทำงานเฉพาะและเรียกใช้ซ้ำได้",
+        scenario: "⚙️ ต้องการเขียนชุดคำสั่งการยิงเวทมนตร์เลเซอร์เก็บไว้เพื่อเรียกใช้งานซ้ำๆ ทุกครั้งที่กดปุ่ม ต้องสร้างอะไร?",
+        codeExample: "function shootLaser() { ... }"
       },
       {
-        id: 23, category: 3, catName: "JS Logic",
-        term: "if...else",
-        ttsPronounce: "If Else: Conditional decision branching logic",
-        scenario: "🤔 ถ้าคะแนนมากกว่า 80 ให้ผ่าน มิฉะนั้นให้สอบใหม่! โครงสร้างตรรกะตัดสินใจนี้เรียกว่าอะไร?"
-      },
-      {
-        id: 24, category: 3, catName: "JS Logic",
+        id: 23, stage: 3, stageName: "JavaScript Logic",
         term: "addEventListener",
-        ttsPronounce: "Add event listener: Captures user clicks and keys",
-        scenario: "🖱️ ต้องการให้โปรแกรมคอยดักฟังเหตุการณ์เมื่อผู้ใช้ 'คลิกปุ่ม' เพื่อยิงเวทมนตร์ ต้องใช้คำสั่งใด?"
+        ttsEn: "Add event listener",
+        ttsTh: "เมธอดคอยดักจับเหตุการณ์คลิกหรือกดแป้นพิมพ์ของผู้ใช้",
+        scenario: "🖱️ ต้องการให้โปรแกรมคอยดักฟังเหตุการณ์เมื่อผู้ใช้ 'คลิกปุ่มเริ่มเกม' เพื่อเล่นเสียงและเปิดหน้าต่าง ต้องใช้คำสั่งใด?",
+        codeExample: "btn.addEventListener('click', () => { ... });"
       },
       {
-        id: 25, category: 3, catName: "JS Logic",
-        term: "console.log()",
-        ttsPronounce: "Console log: Prints debugging output to console",
-        scenario: "🐞 โปรแกรมเกิดข้อผิดพลาด! ต้องการพิมพ์ข้อความตรวจสอบค่าตัวแปรลงใน Developer Console ต้องใช้คำสั่งใด?"
+        id: 24, stage: 3, stageName: "JavaScript Logic",
+        term: "document.getElementById",
+        ttsEn: "Get element by ID",
+        ttsTh: "เมธอดค้นหาและดึงองค์ประกอบในหน้าเว็บตามรหัสไอดี",
+        scenario: "🎯 ต้องการค้นหาและดึงองค์ประกอบ HTML ที่มีรหัส id='hud-score' มาอัปเดตตัวเลขใน JavaScript ต้องใช้คำสั่งใด?",
+        codeExample: "const el = document.getElementById('hud-score');"
       },
       {
-        id: 26, category: 3, catName: "JS Logic",
-        term: "alert()",
-        ttsPronounce: "Alert: Pops up a notification modal message",
-        scenario: "🔔 ต้องการสั่งให้เบราว์เซอร์แสดงหน้าต่างป็อปอัปข้อความเตือนขึ้นมาทันที ต้องใช้คำสั่งใด?"
+        id: 25, stage: 3, stageName: "JavaScript Logic",
+        term: "console.log",
+        ttsEn: "Console log method",
+        ttsTh: "เมธอดพิมพ์ข้อความตรวจสอบค่าตัวแปรลงใน Developer Console",
+        scenario: "🐞 โค้ดเกิดบั๊ก! ต้องการพิมพ์ค่าตัวแปรพลังชีวิตออกมาดูในแท็บ Console เพื่อดีบักหาข้อผิดพลาด ต้องใช้คำสั่งใด?",
+        codeExample: "console.log('Current HP:', playerHP);"
       },
       {
-        id: 27, category: 3, catName: "JS Logic",
+        id: 26, stage: 3, stageName: "JavaScript Logic",
         term: "Array",
-        ttsPronounce: "Array: Ordered collection list of elements",
-        scenario: "📋 ต้องการเก็บรายชื่อนักเรียน 10 คนไว้ในตัวแปรตัวเดียวในรูปแบบรายการ ต้องใช้โครงสร้างข้อมูลใด?"
+        ttsEn: "Array data structure",
+        ttsTh: "โครงสร้างข้อมูลเก็บรายการลำดับของสมาชิกในเครื่องหมายก้ามปู",
+        scenario: "📋 ต้องการเก็บรายชื่อเพื่อน 5 คนไว้ในตัวแปรตัวเดียวในรูปแบบรายการเรียงลำดับดัชนี ต้องใช้โครงสร้างใด?",
+        codeExample: "const friends = ['บอย', 'กาย', 'มิน'];"
       },
       {
-        id: 28, category: 3, catName: "JS Logic",
-        term: "Loop (for/while)",
-        ttsPronounce: "Loop: Iterates code repeatedly",
-        scenario: "🔄 ต้องการให้โค้ดวาดเหรียญทองซ้ำๆ จำนวน 100 เหรียญบนหน้าจอ ต้องใช้คำสั่งควบคุมใด?"
+        id: 27, stage: 3, stageName: "JavaScript Logic",
+        term: "localStorage",
+        ttsEn: "Local storage object",
+        ttsTh: "ที่เก็บข้อมูลถาวรบนเบราว์เซอร์ ไม่หายแม้ปิดเครื่อง",
+        scenario: "💾 ต้องการบันทึกคะแนนสูงสุดของผู้เล่นเก็บไว้ในเครื่องของผู้ใช้ ไม่ให้คะแนนหายแม้ปิดแท็บเบราว์เซอร์ไปแล้ว?",
+        codeExample: "localStorage.setItem('highScore', 500);"
       },
       {
-        id: 29, category: 3, catName: "JS Logic",
-        term: "document.getElementById()",
-        ttsPronounce: "Get element by ID: Selects DOM element by unique ID",
-        scenario: "🎯 ต้องการค้นหาและดึงองค์ประกอบ HTML ที่มีรหัส id='score' มาใช้งานใน JS ต้องใช้คำสั่งใด?"
+        id: 28, stage: 3, stageName: "JavaScript Logic",
+        term: "fetch()",
+        ttsEn: "Fetch API",
+        ttsTh: "ฟังก์ชันส่งคำขอรับส่งข้อมูลกับเซิร์ฟเวอร์หรือเอพีไอ",
+        scenario: "📡 ต้องการส่งคะแนนเกมจากหน้าเว็บขึ้นไปบันทึกลงฐานข้อมูล Supabase Cloud แบบ Asynchronous ต้องใช้คำสั่งใด?",
+        codeExample: "fetch('https://api.../scores', { method: 'POST' });"
       },
       {
-        id: 30, category: 3, catName: "JS Logic",
-        term: "return",
-        ttsPronounce: "Return: Sends result output back from function",
-        scenario: "📤 ฟังก์ชันคำนวณเสร็จแล้ว ต้องการส่งผลลัพธ์ของคะแนนกลับออกมายังจุดที่เรียกใช้ ต้องใช้คำสั่งใด?"
+        id: 29, stage: 3, stageName: "JavaScript Logic",
+        term: "async / await",
+        ttsEn: "Async Await syntax",
+        ttsTh: "ไวยากรณ์จัดการการทำงานแบบอะซิงโครนัสให้อ่านง่ายเป็นลำดับ",
+        scenario: "⏳ ต้องการรอให้เซิร์ฟเวอร์ตอบกลับผลการบันทึกข้อมูลคะแนนให้เสร็จสิ้นก่อนจึงค่อยแสดงหน้าต่างผลคะแนน ต้องใช้คู่คำสั่งใด?",
+        codeExample: "async function sync() {\n  await fetch(...);\n}"
+      },
+      {
+        id: 30, stage: 3, stageName: "JavaScript Logic",
+        term: "Math.random()",
+        ttsEn: "Math random function",
+        ttsTh: "ฟังก์ชันสุ่มตัวเลขทศนิยมระหว่างศูนย์ถึงหนึ่ง",
+        scenario: "🎲 ต้องการสุ่มเลือกมอนสเตอร์ที่จะเกิด หรือสุ่มคำถามจากคลังข้อสอบ ต้องใช้ฟังก์ชันคณิตศาสตร์ใด?",
+        codeExample: "const rand = Math.floor(Math.random() * 10);"
       },
 
-      // Category 4: Server, Database & Deploy
+      // --- STAGE 4: Server, Database & Cloud ---
       {
-        id: 31, category: 4, catName: "Server & Deploy",
-        term: "npm",
-        ttsPronounce: "NPM: Node package manager",
-        scenario: "📦 ต้องการติดตั้งเครื่องมือเสริมและ Library ในโปรเจกต์ Node.js อย่างรวดเร็ว ต้องใช้เครื่องมือใด?"
+        id: 31, stage: 4, stageName: "Server & Cloud",
+        term: "Supabase",
+        ttsEn: "Supabase Backend Platform",
+        ttsTh: "แพลตฟอร์มฐานข้อมูลและบริการหลังบ้านระบบคลาวด์",
+        scenario: "⚡ แพลตฟอร์ม Cloud Database PostgreSQL แบบ Open-source ยอดนิยมที่ให้บริการ REST API และจัดเก็บข้อมูลคะแนนคืออะไร?",
+        codeExample: "https://hdmxkdvawfpgujboxllu.supabase.co"
       },
       {
-        id: 32, category: 4, catName: "Server & Deploy",
-        term: "git push",
-        ttsPronounce: "Git push: Uploads code commits to remote repository",
-        scenario: "🚀 เขียนโค้ดเสร็จแล้ว ต้องการอัปโหลดโค้ดจากเครื่องขึ้นไปเก็บบน GitHub Cloud ต้องใช้คำสั่งใด?"
+        id: 32, stage: 4, stageName: "Server & Cloud",
+        term: "REST API",
+        ttsEn: "REST API Architecture",
+        ttsTh: "สถาปัตยกรรมเชื่อมต่อแลกเปลี่ยนข้อมูลผ่านเอชทีทีพี",
+        scenario: "🔌 มาตรฐานการเชื่อมต่อและแลกเปลี่ยนข้อมูลระหว่างแอปพลิเคชันกับเซิร์ฟเวอร์โดยใช้คำสั่ง GET, POST, PATCH คืออะไร?",
+        codeExample: "GET /rest/v1/scores?select=*"
       },
       {
-        id: 33, category: 4, catName: "Server & Deploy",
-        term: "API",
-        ttsPronounce: "API: Application programming interface bridge",
-        scenario: "🔌 ต้องการให้เว็บแอปพลิเคชันของเราเชื่อมต่อและแลกเปลี่ยนข้อมูลกับระบบภายนอก ต้องใช้ตัวกลางใด?"
-      },
-      {
-        id: 34, category: 4, catName: "Server & Deploy",
-        term: "JSON",
-        ttsPronounce: "JSON: JavaScript object notation data format",
-        scenario: "📄 รูปแบบข้อความมาตรฐานที่นิยมใช้ส่งข้อมูลข้ามไประหว่างหน้าเว็บ (Client) กับเซิร์ฟเวอร์คืออะไร?"
-      },
-      {
-        id: 35, category: 4, catName: "Server & Deploy",
+        id: 33, stage: 4, stageName: "Server & Cloud",
         term: "HTTP Status 200",
-        ttsPronounce: "HTTP Status 200: OK successful request response",
-        scenario: "✅ เซิร์ฟเวอร์ตอบกลับรหัสสถานะใด เพื่อบอกว่าคำขอข้อมูลสำเร็จสมบูรณ์ ไร้ข้อผิดพลาด?"
+        ttsEn: "HTTP Status 200 OK",
+        ttsTh: "รหัสสถานะแสดงว่าคำขอข้อมูลสำเร็จสมบูรณ์ ไร้ข้อผิดพลาด",
+        scenario: "✅ เซิร์ฟเวอร์ตอบกลับรหัสสถานะใด เพื่อยืนยันว่าการส่งคะแนนหรือดึงข้อมูลสำเร็จเรียบร้อย ไร้ปัญหา?",
+        codeExample: "HTTP/1.1 200 OK"
       },
       {
-        id: 36, category: 4, catName: "Server & Deploy",
+        id: 34, stage: 4, stageName: "Server & Cloud",
         term: "HTTP Status 404",
-        ttsPronounce: "HTTP Status 404: Not found missing page resource",
-        scenario: "❌ เมื่อผู้ใช้พิมพ์ URL ผิดและไม่พบหน้าเว็บที่ต้องการ เซิร์ฟเวอร์จะส่งรหัสแจ้งเตือนใด?"
+        ttsEn: "HTTP Status 404 Not Found",
+        ttsTh: "รหัสสถานะแจ้งเตือนว่าไม่พบหน้าเว็บหรือทรัพยากรที่ร้องขอ",
+        scenario: "❌ เมื่อผู้เล่นหรือเบราว์เซอร์พิมพ์ URL ผิดและไม่พบหน้าเว็บที่ต้องการ เซิร์ฟเวอร์จะส่งรหัสแจ้งเตือนใด?",
+        codeExample: "404 Not Found"
       },
       {
-        id: 37, category: 4, catName: "Server & Deploy",
-        term: "PORT",
-        ttsPronounce: "Port: Network communication endpoint channel",
-        scenario: "🚪 ช่องทางเข้าออกดิจิทัลบนเซิร์ฟเวอร์สำหรับบริการเว็บ เช่น 80 (HTTP) หรือ 443 (HTTPS) เรียกว่าอะไร?"
+        id: 35, stage: 4, stageName: "Server & Cloud",
+        term: "JSON",
+        ttsEn: "JSON data format",
+        ttsTh: "รูปแบบข้อความมาตรฐานสากลสำหรับส่งข้อมูลระหว่างหน้าเว็บกับเซิร์ฟเวอร์",
+        scenario: "📄 รูปแบบข้อความ Key-Value น้ำหนักเบาที่เป็นมาตรฐานสากลในการรับส่งข้อมูลระหว่าง Client กับ API คืออะไร?",
+        codeExample: "{ 'student_id': '660123', 'score': 1000 }"
       },
       {
-        id: 38, category: 4, catName: "Server & Deploy",
-        term: "Environment Variable",
-        ttsPronounce: "Environment variable: Secure configuration storage",
-        scenario: "🔑 ต้องการเก็บ API Key หรือรหัสผ่านฐานข้อมูลอย่างปลอดภัยโดยไม่เปิดเผยในโค้ด ต้องเก็บไว้ในที่ใด?"
+        id: 36, stage: 4, stageName: "Server & Cloud",
+        term: "POST Method",
+        ttsEn: "POST HTTP Method",
+        ttsTh: "คำขอเอชทีทีพีสำหรับส่งข้อมูลใหม่ไปบันทึกลงเซิร์ฟเวอร์",
+        scenario: "📤 ต้องการส่งข้อมูลผลคะแนนของผู้เรียนชุดใหม่ขึ้นไปสร้างและบันทึกในฐานข้อมูล ต้องใช้ HTTP Method ใด?",
+        codeExample: "fetch(url, { method: 'POST', body: ... });"
       },
       {
-        id: 39, category: 4, catName: "Server & Deploy",
+        id: 37, stage: 4, stageName: "Server & Cloud",
+        term: "git push",
+        ttsEn: "Git push command",
+        ttsTh: "คำสั่งอัปโหลดโค้ดขึ้นไปเก็บบนคลาวด์รีโพซิทอรี เช่น กิตฮับ",
+        scenario: "🚀 เขียนโค้ดเกมเสร็จสมบูรณ์แล้ว ต้องการอัปโหลดไฟล์ทั้งหมดขึ้นไปเก็บบน GitHub Cloud ต้องใช้คำสั่ง Git ใด?",
+        codeExample: "git push -u origin main"
+      },
+      {
+        id: 38, stage: 4, stageName: "Server & Cloud",
         term: "Node.js",
-        ttsPronounce: "Node JS: Server side JavaScript runtime engine",
-        scenario: "⚡ สภาพแวดล้อมรันไทม์ที่ทำให้เราสามารถเขียนภาษา JavaScript ฝั่งเซิร์ฟเวอร์ (Backend) ได้คืออะไร?"
+        ttsEn: "Node JS Runtime",
+        ttsTh: "สภาพแวดล้อมรันไทม์สำหรับรันภาษาจาวาสคริปต์ฝั่งเซิร์ฟเวอร์",
+        scenario: "⚡ รันไทม์ยอดนิยมที่ทำให้นักพัฒนาสามารถเขียนภาษา JavaScript บนฝั่งเซิร์ฟเวอร์ (Backend) ได้คืออะไร?",
+        codeExample: "node server.js"
       },
       {
-        id: 40, category: 4, catName: "Server & Deploy",
+        id: 39, stage: 4, stageName: "Server & Cloud",
+        term: "PORT",
+        ttsEn: "Network port endpoint",
+        ttsTh: "ช่องทางการเชื่อมต่อเครือข่ายสำหรับแยกแยะบริการเซิร์ฟเวอร์",
+        scenario: "🚪 ช่องทางเข้าออกเครือข่ายสำหรับบริการเว็บไซต์ เช่น พอร์ต 80 สำหรับ HTTP และพอร์ต 443 สำหรับ HTTPS เรียกว่าอะไร?",
+        codeExample: "const PORT = 3000;"
+      },
+      {
+        id: 40, stage: 4, stageName: "Server & Cloud",
         term: "Vercel",
-        ttsPronounce: "Vercel: Cloud platform for hosting static frontend websites",
-        scenario: "☁️ แพลตฟอร์มคลาวด์ยอดนิยมสำหรับ Deploy ฝากเว็บและเผยแพร่ผลงานขึ้นออนไลน์ฟรีอย่างง่ายดายคืออะไร?"
+        ttsEn: "Vercel Cloud Platform",
+        ttsTh: "แพลตฟอร์มคลาวด์สำหรับฝากและเผยแพร่หน้าเว็บออนไลน์ฟรี",
+        scenario: "☁️ บริการ Cloud Hosting ยอดนิยมสำหรับ Deploy เผยแพร่ผลงานเว็บแอปพลิเคชันขึ้นสู่โลกออนไลน์อย่างรวดเร็วคืออะไร?",
+        codeExample: "https://roblox-vocab.vercel.app"
       }
     ];
 
+    /* Initial Demo Reviews Dataset */
+    const DEFAULT_REVIEWS = [
+      { student_id: "6601001", rating_stars: 5, comment: "เกมสนุกมากครับ เข้าใจแท็ก HTML กับ Flexbox ชัดเจนขึ้นเยอะเลย!", created_at: "2026-08-20 18:30" },
+      { student_id: "6601002", rating_stars: 5, comment: "ภาพกราฟิกสวยสไตล์ Roblox เสียงประกอบเพราะมากครับ", created_at: "2026-08-20 18:45" },
+      { student_id: "6601003", rating_stars: 5, comment: "ชอบระบบเสียงอ่านสองภาษา ช่วยจำคำศัพท์ได้ดีเยี่ยมเลย", created_at: "2026-08-20 19:10" },
+      { student_id: "6601004", rating_stars: 4, comment: "ด่านที่ 5 มอนสเตอร์บอสท้าทายมาก ได้ทบทวนคำศัพท์รวม", created_at: "2026-08-20 19:25" }
+    ];
+
     /* ==========================================================================
-       2. WEB AUDIO API SYNTHESIZER (ROBLOX OOF, COIN CHIME & SYNTH BGM)
+       2. SUPABASE REST API CLIENT (No Google API / Fallback Caching)
        ========================================================================== */
-    class BloxAudioSystem {
+    class SupabaseService {
+      constructor() {
+        this.url = SUPABASE_CONFIG.url;
+        this.key = SUPABASE_CONFIG.key;
+        this.headers = {
+          "apikey": this.key,
+          "Authorization": `Bearer ${this.key}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        };
+      }
+
+      async saveScore(payload) {
+        // Save to LocalStorage first for guaranteed resilience
+        let localScores = JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
+        localScores.unshift(payload);
+        localStorage.setItem('roblox_regent_scores', JSON.stringify(localScores));
+
+        try {
+          const res = await fetch(`${this.url}/rest/v1/scores`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            console.log('Score saved to Supabase successfully!');
+          }
+        } catch (e) {
+          console.warn('Offline mode: Saved score to LocalStorage cache');
+        }
+      }
+
+      async fetchScores() {
+        try {
+          const res = await fetch(`${this.url}/rest/v1/scores?select=*&order=score.desc`, {
+            headers: this.headers
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch (e) {}
+        // Fallback to local
+        return JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
+      }
+
+      async saveReview(review) {
+        let localReviews = JSON.parse(localStorage.getItem('roblox_regent_reviews') || JSON.stringify(DEFAULT_REVIEWS));
+        localReviews.unshift(review);
+        localStorage.setItem('roblox_regent_reviews', JSON.stringify(localReviews));
+
+        try {
+          await fetch(`${this.url}/rest/v1/reviews`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(review)
+          });
+        } catch (e) {}
+      }
+
+      async fetchReviews() {
+        try {
+          const res = await fetch(`${this.url}/rest/v1/reviews?select=*&order=created_at.desc`, {
+            headers: this.headers
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch (e) {}
+        return JSON.parse(localStorage.getItem('roblox_regent_reviews') || JSON.stringify(DEFAULT_REVIEWS));
+      }
+    }
+
+    const Supabase = new SupabaseService();
+
+    /* ==========================================================================
+       3. WEB AUDIO API PROCEDURAL SYNTHESIZER & BILINGUAL TTS ENGINE
+       ========================================================================== */
+    class AudioSynthesisEngine {
       constructor() {
         this.ctx = null;
-        this.muted = false;
+        this.bgmMuted = false;
+        this.sfxMuted = false;
         this.bgmTimer = null;
         this.bgmStep = 0;
         this.bgmPlaying = false;
       }
 
-      init() {
+      initCtx() {
         if (!this.ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           this.ctx = new AudioContext();
@@ -1139,20 +2267,26 @@
         }
       }
 
-      toggleMute() {
-        this.muted = !this.muted;
-        const btn = document.getElementById('btn-sound-toggle');
-        if (btn) btn.textContent = this.muted ? '🔇 MUTED' : '🔊 SOUND';
-        if (this.muted && this.bgmPlaying) {
+      toggleBGM() {
+        this.bgmMuted = !this.bgmMuted;
+        const btn = document.getElementById('btn-bgm-toggle');
+        if (btn) btn.textContent = this.bgmMuted ? '🎵 BGM: OFF' : '🎵 BGM: ON';
+        if (this.bgmMuted && this.bgmPlaying) {
           this.stopBGM();
-        } else if (!this.muted && !this.bgmPlaying) {
+        } else if (!this.bgmMuted && !this.bgmPlaying) {
           this.startBGM();
         }
       }
 
+      toggleSFX() {
+        this.sfxMuted = !this.sfxMuted;
+        const btn = document.getElementById('btn-sfx-toggle');
+        if (btn) btn.textContent = this.sfxMuted ? '🔊 SFX: OFF' : '🔊 SFX: ON';
+      }
+
       playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.15, timeOffset = 0) {
-        if (this.muted) return;
-        this.init();
+        if (this.sfxMuted) return;
+        this.initCtx();
         if (!this.ctx) return;
         try {
           const osc = this.ctx.createOscillator();
@@ -1173,57 +2307,58 @@
         } catch(e) {}
       }
 
-      // Classic Roblox "Oof" pitch drop
+      // Classic Roblox Oof Sound on Damage
       playRobloxOof() {
-        if (this.muted) return;
-        this.init();
+        if (this.sfxMuted) return;
+        this.initCtx();
         if (!this.ctx) return;
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           const now = this.ctx.currentTime;
-
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(80, now + 0.22);
-
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.2);
           gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
-
           osc.start(now);
-          osc.stop(now + 0.22);
+          osc.stop(now + 0.2);
         } catch(e) {}
       }
 
-      playCoinChime() {
-        this.playTone(987.77, 'sine', 0.08, 0.15, 0);     // B5
-        this.playTone(1318.51, 'triangle', 0.25, 0.2, 0.07); // E6
-      }
-
-      playLaserShoot() {
-        if (this.muted) return;
-        this.init();
+      playLaserBlast() {
+        if (this.sfxMuted) return;
+        this.initCtx();
         if (!this.ctx) return;
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           const now = this.ctx.currentTime;
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(750, now);
-          osc.frequency.exponentialRampToValueAtTime(150, now + 0.14);
+          osc.frequency.setValueAtTime(850, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.16);
           gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.14);
+          osc.stop(now + 0.16);
         } catch(e) {}
       }
 
-      playPowerupSound() {
+      playShieldSpawn() {
+        this.playTone(440, 'triangle', 0.1, 0.2, 0);
+        this.playTone(660, 'sine', 0.2, 0.2, 0.08);
+      }
+
+      playCoinChime() {
+        this.playTone(987.77, 'sine', 0.08, 0.15, 0);
+        this.playTone(1318.51, 'triangle', 0.25, 0.2, 0.06);
+      }
+
+      playPowerupJingle() {
         this.playTone(523.25, 'triangle', 0.08, 0.15, 0);
         this.playTone(659.25, 'triangle', 0.08, 0.15, 0.06);
         this.playTone(783.99, 'triangle', 0.08, 0.15, 0.12);
@@ -1233,37 +2368,50 @@
       playVictoryFanfare() {
         const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
         notes.forEach((freq, idx) => {
-          this.playTone(freq, 'triangle', 0.35, 0.25, idx * 0.12);
+          this.playTone(freq, 'triangle', 0.35, 0.22, idx * 0.12);
         });
       }
 
-      speak(text) {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'en-US';
-          utterance.rate = 0.92;
-          window.speechSynthesis.speak(utterance);
-        }
+      // CRITICAL: BILINGUAL TTS (Step 1: en-US Vocabulary -> Step 2: th-TH Explanation)
+      speakBilingual(enText, thText) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+
+        // 1. Speak English Vocabulary
+        const enUtter = new SpeechSynthesisUtterance(enText);
+        enUtter.lang = 'en-US';
+        enUtter.rate = 0.95;
+
+        // 2. Immediately Follow with Thai Explanation
+        enUtter.onend = () => {
+          if (thText) {
+            const thUtter = new SpeechSynthesisUtterance(thText);
+            thUtter.lang = 'th-TH';
+            thUtter.rate = 1.0;
+            window.speechSynthesis.speak(thUtter);
+          }
+        };
+
+        window.speechSynthesis.speak(enUtter);
       }
 
       startBGM() {
-        if (this.bgmPlaying || this.muted) return;
-        this.init();
+        if (this.bgmPlaying || this.bgmMuted) return;
+        this.initCtx();
         this.bgmPlaying = true;
         const bassMelody = [130.81, 130.81, 164.81, 146.83, 130.81, 130.81, 196.00, 164.81];
         const leadMelody = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 783.99, 1046.50];
 
         this.bgmTimer = setInterval(() => {
-          if (this.muted) return;
+          if (this.bgmMuted) return;
           const bass = bassMelody[this.bgmStep % bassMelody.length];
           const lead = leadMelody[this.bgmStep % leadMelody.length];
-          this.playTone(bass, 'sawtooth', 0.12, 0.03, 0);
+          this.playTone(bass, 'sawtooth', 0.12, 0.025, 0);
           if (this.bgmStep % 2 === 0) {
-            this.playTone(lead, 'sine', 0.1, 0.04, 0.05);
+            this.playTone(lead, 'sine', 0.1, 0.035, 0.05);
           }
           this.bgmStep++;
-        }, 200);
+        }, 220);
       }
 
       stopBGM() {
@@ -1272,80 +2420,61 @@
       }
     }
 
-    const AudioEngine = new BloxAudioSystem();
+    const AudioEngine = new AudioSynthesisEngine();
 
     /* ==========================================================================
-       3. ROBLOX VOCAB LEGENDS 2D GAME ENGINE (10 QUESTIONS STRICT)
+       4. ROBLOX VOCAB REGENT GAME ENGINE (Knockback Physics, HP, 5 Stages)
        ========================================================================== */
-    class RobloxVocabLegendsGame {
+    class RobloxRegentGameEngine {
       constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
 
-        // Registration & Session State
+        // Session Parameters
         this.studentId = "";
         this.studentName = "";
-        this.categoryChoice = "all";
-        this.gameMode = "choice"; // "choice" or "type"
+        this.classLevel = "";
+        this.stageId = 1;
+        this.characterId = 1; // 1: Hero, 2: Knight, 3: Princess
+        this.wallpaperId = 1; // 1: Cyber, 2: Meadow, 3: Space, 4: Lava
 
-        // 10-Question Stage Engine
+        // Gameplay State
         this.stageQuestions = [];
-        this.currentQuestionIdx = 0; // 0 to 9 (10 questions strict)
+        this.currentQIdx = 0;
         this.activeQuestion = null;
         this.choicesList = [];
-        this.isLevelFinished = false;
+        this.answersHistory = []; // Array of boolean (true/false) for item-level tracker
+        this.isGameOver = false;
 
-        // Stats
+        // Player HP & Stats
+        this.playerHP = 3;
+        this.maxHP = 3;
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
         this.correctCount = 0;
         this.startTime = 0;
 
-        // Power-Ups Inventory (CLICK ONLY)
-        this.powerups = {
-          freeze: 1,
-          nuke: 1,
-          hint: 2,
-          shield: 1,
-          double: 1
-        };
-
-        // Active Buffs
+        // Power-ups Inventory (Unlocked via combo streaks)
+        this.powerups = { cut: 0, freeze: 0, destroy: 0, fix: 0 };
         this.freezeFrames = 0;
-        this.doubleXPFrames = 0;
-        this.activeShields = 0;
+        this.shieldActive = false;
 
         // Canvas Entities
-        this.player = { x: 75, y: 0, size: 55 };
+        this.player = { x: 80, y: 0, size: 55 };
         this.activeEnemy = null;
         this.projectiles = [];
         this.particles = [];
-        this.floatingCoins = [];
+        this.floatingTexts = [];
+        this.vfxAuraFrames = 0;
+        this.vfxShieldFrames = 0;
 
-        this.initBackgroundBlocks();
         this.initCanvasSize();
-        this.bindInputEvents();
-      }
-
-      initBackgroundBlocks() {
-        const bg = document.getElementById('bg-blocks');
-        if (!bg) return;
-        for (let i = 0; i < 15; i++) {
-          const block = document.createElement('div');
-          block.className = 'bg-block';
-          const size = Math.random() * 40 + 20;
-          block.style.width = `${size}px`;
-          block.style.height = `${size}px`;
-          block.style.left = `${Math.random() * 100}vw`;
-          block.style.animationDelay = `${Math.random() * 10}s`;
-          block.style.animationDuration = `${Math.random() * 10 + 10}s`;
-          bg.appendChild(block);
-        }
       }
 
       initCanvasSize() {
         const resize = () => {
+          if (!this.canvas.parentElement) return;
           const rect = this.canvas.parentElement.getBoundingClientRect();
           this.canvas.width = rect.width;
           this.canvas.height = rect.height;
@@ -1355,198 +2484,154 @@
         window.addEventListener('resize', resize);
       }
 
-      bindInputEvents() {
-        // Typing input Enter handler
-        const typeInput = document.getElementById('blox-type-input');
-        if (typeInput) {
-          typeInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-              this.handleTypeAnswerSubmit();
-            }
-          });
-        }
-      }
+      startSession(studentId, studentName, classLevel, stageId, characterId, wallpaperId) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.classLevel = classLevel;
+        this.stageId = stageId;
+        this.characterId = characterId;
+        this.wallpaperId = wallpaperId;
 
-      submitRegistrationAndStart() {
-        const idInput = document.getElementById('input-student-id');
-        const nameInput = document.getElementById('input-student-name');
-        const catSelect = document.getElementById('select-category');
-        const modeSelect = document.getElementById('select-mode');
-
-        if (!idInput.value.trim() || !nameInput.value.trim()) {
-          alert('กรุณากรอกรหัสผู้เรียน และชื่อ-นามสกุล ก่อนเริ่มเกม');
-          return;
-        }
-
-        AudioEngine.playCoinChime();
-        this.studentId = idInput.value.trim();
-        this.studentName = nameInput.value.trim();
-        this.categoryChoice = catSelect.value;
-        this.gameMode = modeSelect.value;
-
-        document.getElementById('hud-student-name').textContent = this.studentName;
-        document.getElementById('modal-login').style.display = 'none';
-
-        // Toggle UI Mode
-        const choicesGrid = document.getElementById('choices-container');
-        const typingWrap = document.getElementById('typing-container');
-        if (this.gameMode === "choice") {
-          choicesGrid.style.display = 'grid';
-          typingWrap.style.display = 'none';
-        } else {
-          choicesGrid.style.display = 'none';
-          typingWrap.style.display = 'flex';
-          setTimeout(() => document.getElementById('blox-type-input').focus(), 300);
-        }
-
-        AudioEngine.startBGM();
-        this.startLevel();
-      }
-
-      startLevel() {
-        this.isLevelFinished = false;
+        // Reset Game Values
+        this.playerHP = 3;
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
         this.correctCount = 0;
+        this.answersHistory = [];
+        this.isGameOver = false;
         this.startTime = Date.now();
+        this.powerups = { cut: 0, freeze: 0, destroy: 0, fix: 0 };
+        this.freezeFrames = 0;
+        this.shieldActive = false;
 
-        this.projectiles = [];
-        this.particles = [];
-        this.floatingCoins = [];
-        this.activeEnemy = null;
-
-        this.powerups = { freeze: 1, nuke: 1, hint: 2, shield: 1, double: 1 };
-        this.updatePowerupDock();
-        this.updateHUD();
-
-        // Build EXACTLY 10 Questions pool
-        let pool = [...VOCAB_SCENARIOS];
-        if (this.categoryChoice !== 'all') {
-          const catNum = parseInt(this.categoryChoice, 10);
-          pool = pool.filter(v => v.category === catNum);
+        // Prepare Questions Pool
+        let pool = [];
+        if (stageId === 5) {
+          // Stage 5: 20 Questions randomly picked from ALL categories
+          pool = App.shuffleArray([...VOCAB_DATABASE]).slice(0, 20);
+        } else {
+          // Stages 1-4: 10 Questions from selected stage
+          pool = App.shuffleArray(VOCAB_DATABASE.filter(q => q.stage === stageId)).slice(0, 10);
         }
 
-        // Shuffle & pick exactly 10 questions
-        this.stageQuestions = this.shuffleArray(pool).slice(0, 10);
-        this.currentQuestionIdx = 0;
+        this.stageQuestions = pool;
+        this.currentQIdx = 0;
 
-        this.loadQuestion(this.currentQuestionIdx);
+        // Update HUD display
+        document.getElementById('hud-player-name').textContent = this.studentName;
+        document.getElementById('hud-char-icon').textContent = this.characterId === 1 ? '👦' : (this.characterId === 2 ? '🥷' : '👸');
+        document.getElementById('hud-total-questions').textContent = this.stageQuestions.length;
+        this.updateHUD();
+        this.updatePowerupDock();
+
+        // Switch Screen to Gameplay View
+        App.showView('gameplay');
+        AudioEngine.startBGM();
+
+        this.loadQuestion(this.currentQIdx);
         this.loop();
       }
 
       loadQuestion(idx) {
-        if (idx >= 10 || idx >= this.stageQuestions.length) {
-          this.finishStage();
+        if (idx >= this.stageQuestions.length) {
+          this.finishLevel(true); // Victory!
           return;
         }
 
         this.activeQuestion = this.stageQuestions[idx];
-        const isBoss = (idx === 4 || idx === 9); // Question 5 and 10 are Bosses!
-        const isRushHour = (idx >= 7); // Question 8, 9, 10 are Rush Hour!
+        const isBoss = (idx === 4 || idx === 9 || idx === 19); // Boss monster on Q5, Q10, Q20
 
-        // Update Rush Hour tag
-        const rushTag = document.getElementById('rush-hour-banner');
-        if (rushTag) rushTag.style.display = isRushHour ? 'block' : 'none';
-
-        // Update Question Banner (>= 20px font size)
+        // Update Question Banner
         const qIdxEl = document.getElementById('hud-question-idx');
-        const scenarioTextEl = document.getElementById('scenario-text');
-        const catBadgeEl = document.getElementById('scenario-category-badge');
-        const iconEl = document.getElementById('scenario-icon');
+        const qTextEl = document.getElementById('question-prompt-text');
+        const qTagEl = document.getElementById('question-category-tag');
+        const qIconEl = document.getElementById('q-icon-badge');
 
         if (qIdxEl) qIdxEl.textContent = idx + 1;
-        if (scenarioTextEl) scenarioTextEl.textContent = this.activeQuestion.scenario;
-        if (catBadgeEl) catBadgeEl.textContent = this.activeQuestion.catName;
-        if (iconEl) iconEl.textContent = isBoss ? '👑' : (isRushHour ? '⚡' : '🎮');
+        if (qTextEl) qTextEl.textContent = this.activeQuestion.scenario;
+        if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName;
+        if (qIconEl) qIconEl.textContent = isBoss ? '👑' : '🎮';
 
-        if (isBoss) {
-          this.showBossBanner();
-        }
-
-        // Spawn Roblox Monster / Boss
-        const speed = isRushHour ? 0.75 : (isBoss ? 0.45 : 0.55);
+        // Spawn Themed Enemy
+        const speed = isBoss ? 0.55 : 0.68;
         this.activeEnemy = {
           x: this.canvas.width + 40,
           y: this.canvas.height / 2,
-          size: isBoss ? 75 : 50,
+          size: isBoss ? 70 : 48,
           isBoss: isBoss,
           speed: speed,
-          color: isBoss ? '#ffd700' : (idx % 2 === 0 ? '#00f0ff' : '#ff2a85'),
-          name: isBoss ? "TITAN BUG BOSS" : "VIRUS CUBE"
+          baseSpeed: speed,
+          color: this.getMonsterColor(this.activeQuestion.stage, isBoss),
+          name: this.getMonsterName(this.activeQuestion.stage, isBoss)
         };
 
-        // Prepare Choices (1 Correct + 3 Distinct Wrong STRICTLY from the Same Category Pool)
-        if (this.gameMode === "choice") {
-          // 1. Gather all other distinct terms STRICTLY from the SAME category
-          const sameCategoryWrong = this.shuffleArray(
-            VOCAB_SCENARIOS.filter(v => v.category === this.activeQuestion.category && v.term !== this.activeQuestion.term)
-          ).slice(0, 3).map(v => v.term);
+        // Prepare Choices (1 Correct + 3 Distinct Wrong STRICTLY from Same Stage)
+        const sameStageOthers = App.shuffleArray(
+          VOCAB_DATABASE.filter(v => v.stage === this.activeQuestion.stage && v.term !== this.activeQuestion.term)
+        ).slice(0, 3).map(v => v.term);
 
-          // 2. Combine with correct answer -> exactly 4 choices
-          this.choicesList = this.shuffleArray([
-            { term: this.activeQuestion.term, correct: true },
-            ...sameCategoryWrong.map(t => ({ term: t, correct: false }))
-          ]);
+        // Fill up to 3 wrong choices if category has fewer
+        const otherCategories = App.shuffleArray(
+          VOCAB_DATABASE.filter(v => v.term !== this.activeQuestion.term)
+        ).slice(0, 3 - sameStageOthers.length).map(v => v.term);
 
-          const container = document.getElementById('choices-container');
-          if (container) {
-            // Clear and render using DOM elements with textContent to avoid HTML escape bugs with <a>, <html>, <p>, etc.
-            container.innerHTML = '';
-            this.choicesList.forEach((c, i) => {
-              const btn = document.createElement('button');
-              btn.className = 'blox-choice-btn';
-              btn.setAttribute('data-idx', i);
-              btn.textContent = c.term; // CRITICAL: textContent safely renders literal <a>, <html>, <p>, <footer>
-              btn.onclick = () => Game.handleChoiceButtonClick(i);
-              container.appendChild(btn);
-            });
-          }
-        } else {
-          // Reset Type Mode input
-          const typeInput = document.getElementById('blox-type-input');
-          if (typeInput) {
-            typeInput.value = "";
-            typeInput.focus();
-          }
+        const wrongOptions = [...sameStageOthers, ...otherCategories];
+
+        this.choicesList = App.shuffleArray([
+          { term: this.activeQuestion.term, correct: true },
+          ...wrongOptions.map(t => ({ term: t, correct: false }))
+        ]);
+
+        // CRITICAL REQUIREMENT: Render choice buttons using element.textContent to prevent <a>, <html>, <p> vanishing
+        const container = document.getElementById('choices-container');
+        if (container) {
+          container.innerHTML = '';
+          this.choicesList.forEach((choice, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'blox-choice-btn';
+            btn.setAttribute('data-idx', i);
+            btn.textContent = choice.term; // CRITICAL: 100% visible text rendering
+            btn.onclick = () => Game.handleChoiceClick(i);
+            container.appendChild(btn);
+          });
         }
       }
 
-      showBossBanner() {
-        const banner = document.getElementById('boss-alert-banner');
-        if (banner) {
-          banner.classList.add('show');
-          setTimeout(() => banner.classList.remove('show'), 1200);
-        }
+      getMonsterName(stage, isBoss) {
+        if (isBoss) return "TITAN BUG BOSS 👑";
+        if (stage === 1) return "GLITCH WEBPAGE ⬛";
+        if (stage === 2) return "UNSTYLED GOLEM 🗿";
+        if (stage === 3) return "BUG SPIDER BOT 🕷️";
+        return "404 ERROR BANNER ❌";
       }
 
-      handleChoiceButtonClick(choiceIdx) {
-        if (!this.activeQuestion || this.isLevelFinished) return;
+      getMonsterColor(stage, isBoss) {
+        if (isBoss) return "#ffd700";
+        if (stage === 1) return "#00f0ff";
+        if (stage === 2) return "#a855f7";
+        if (stage === 3) return "#ff2a85";
+        return "#ef4444";
+      }
+
+      handleChoiceClick(choiceIdx) {
+        if (!this.activeQuestion || this.isGameOver) return;
         const choice = this.choicesList[choiceIdx];
         const buttons = document.querySelectorAll('.blox-choice-btn');
 
         if (choice.correct) {
+          // Correct Answer!
           if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('correct');
+          this.answersHistory.push(true);
           this.processCorrectAnswer();
         } else {
-          if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('wrong');
+          // Wrong Answer!
+          if (buttons[choiceIdx]) {
+            buttons[choiceIdx].classList.add('wrong');
+            buttons[choiceIdx].classList.add('locked'); // Lock clicked wrong choice
+          }
+          this.answersHistory.push(false);
           this.processWrongAnswer();
-        }
-      }
-
-      handleTypeAnswerSubmit() {
-        const input = document.getElementById('blox-type-input');
-        if (!input || !this.activeQuestion || this.isLevelFinished) return;
-
-        const val = input.value.trim().toLowerCase();
-        const target = this.activeQuestion.term.toLowerCase();
-
-        if (val === target) {
-          this.processCorrectAnswer();
-          input.value = "";
-        } else {
-          this.processWrongAnswer();
-          input.value = "";
         }
       }
 
@@ -1556,87 +2641,106 @@
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
         AudioEngine.playCoinChime();
-        AudioEngine.playLaserShoot();
 
-        // Pronounce correct answer using Text-to-Speech
-        AudioEngine.speak(this.activeQuestion.ttsPronounce);
+        // Trigger Bilingual TTS (Step 1: English -> Step 2: Thai)
+        AudioEngine.speakBilingual(this.activeQuestion.ttsEn, this.activeQuestion.ttsTh);
 
-        // Fire Laser Projectile from Player to Enemy
-        if (this.activeEnemy) {
-          this.projectiles.push({
-            x: this.player.x + 30,
-            y: this.player.y,
-            target: this.activeEnemy,
-            speed: 18,
-            color: '#00f0ff'
-          });
+        // Visual FX based on Stage Category
+        if (this.activeQuestion.stage === 1) {
+          // HTML: Concrete Shield Spawn
+          this.vfxShieldFrames = 40;
+          AudioEngine.playShieldSpawn();
+          this.createFloatingText("SHIELD DEFENSE! 🛡️", this.player.x + 30, this.player.y - 30, '#00f0ff');
+        } else if (this.activeQuestion.stage === 2) {
+          // CSS: Glowing Aura Pulse
+          this.vfxAuraFrames = 40;
+          this.createFloatingText("AURA PULSE! ✨", this.player.x + 30, this.player.y - 30, '#ffd700');
+        } else {
+          // JS & Server: Cyber Laser Beam
+          AudioEngine.playLaserBlast();
+          if (this.activeEnemy) {
+            this.projectiles.push({
+              x: this.player.x + 30,
+              y: this.player.y,
+              target: this.activeEnemy,
+              speed: 20,
+              color: '#00f0ff'
+            });
+          }
         }
 
-        // Points
-        let points = this.activeEnemy && this.activeEnemy.isBoss ? 300 : 150;
-        points += this.combo * 20;
-        if (this.doubleXPFrames > 0) points *= 2;
-        this.score += points;
+        // Calculate Points
+        let pts = (this.activeEnemy && this.activeEnemy.isBoss) ? 350 : 180;
+        pts += this.combo * 25;
+        this.score += pts;
 
-        this.createCoinText(`+${points} 🪙`, this.player.x + 40, this.player.y - 20);
+        this.createFloatingText(`+${pts} 🪙`, this.player.x + 40, this.player.y - 20, '#ffd700');
 
-        // Powerup Unlock via Combo Streaks (3, 5, 8)
-        if (this.combo === 3) this.grantPowerup('hint');
-        if (this.combo === 5) this.grantPowerup('freeze');
-        if (this.combo === 8) this.grantPowerup('nuke');
+        // Unlock Power-ups on Streak 2, 3, 4
+        if (this.combo === 2) this.grantPowerup('cut');
+        if (this.combo === 3) this.grantPowerup('freeze');
+        if (this.combo === 4) this.grantPowerup('destroy');
+        if (this.combo === 5) this.grantPowerup('fix');
 
         this.updateHUD();
+
+        // Advance to Next Question
+        setTimeout(() => {
+          this.currentQIdx++;
+          this.loadQuestion(this.currentQIdx);
+        }, 1100);
       }
 
       processWrongAnswer() {
         this.combo = 0;
         AudioEngine.playRobloxOof();
-        this.createCoinText("OOPS! ✗", this.player.x + 30, this.player.y - 20, '#ff3838');
+        this.createFloatingText("WRONG! ✗", this.player.x + 20, this.player.y - 20, '#ef4444');
         this.updateHUD();
       }
 
       grantPowerup(type) {
         this.powerups[type]++;
         this.updatePowerupDock();
-        AudioEngine.playPowerupSound();
-        this.createCoinText(`+1 ${type.toUpperCase()}! 🎁`, this.player.x + 50, this.player.y - 40, '#ffd700');
+        AudioEngine.playPowerupJingle();
+        const names = { cut: "ตัดช้อยส์ ✂️", freeze: "แช่แข็ง ❄️", destroy: "กำจัดมอน 💥", fix: "แก้ไขข้อผิด 🩹" };
+        this.createFloatingText(`+1 ${names[type]}!`, this.player.x + 40, this.player.y - 45, '#ffd700');
       }
 
-      // CRITICAL: CLICK ONLY POWER-UP HANDLER (NO KEYBOARD BINDINGS)
       usePowerup(type) {
-        if (this.powerups[type] <= 0 || this.isLevelFinished) return;
-
+        if (this.powerups[type] <= 0 || this.isGameOver) return;
         this.powerups[type]--;
-        AudioEngine.playPowerupSound();
+        AudioEngine.playPowerupJingle();
 
-        if (type === 'freeze') {
-          this.freezeFrames = 300; // 5s at 60fps
-          this.createCoinText("TIME FROZEN! ⏱️", this.canvas.width / 2, 80, '#00f0ff');
-        } else if (type === 'nuke') {
+        if (type === 'cut') {
+          // Cut 2 Wrong Choices
+          const wrongButtons = Array.from(document.querySelectorAll('.blox-choice-btn'))
+            .filter((btn, i) => !this.choicesList[i].correct);
+          wrongButtons.slice(0, 2).forEach(b => b.classList.add('faded'));
+          this.createFloatingText("50:50 CUT CHOICES! ✂️", this.canvas.width / 2, 60, '#00f0ff');
+        } else if (type === 'freeze') {
+          // Freeze Monster for 6 seconds (360 frames)
+          this.freezeFrames = 360;
+          this.createFloatingText("MONSTER FROZEN! ❄️", this.canvas.width / 2, 60, '#38bdf8');
+        } else if (type === 'destroy') {
+          // Instantly blast monster away
           if (this.activeEnemy) {
-            this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ff3838', 35);
-            this.score += 200;
+            this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ef4444', 30);
             this.activeEnemy = null;
-            this.createCoinText("BLOX NUKE! 💣", this.canvas.width / 2, 80, '#ff3838');
-            this.nextQuestionTransition();
+            this.score += 200;
+            this.createFloatingText("BLAST DESTROYED! 💥", this.canvas.width / 2, 60, '#ef4444');
+            this.currentQIdx++;
+            this.loadQuestion(this.currentQIdx);
           }
-        } else if (type === 'hint') {
-          if (this.gameMode === "choice") {
-            const wrongButtons = Array.from(document.querySelectorAll('.blox-choice-btn'))
-              .filter((btn, i) => !this.choicesList[i].correct);
-            wrongButtons.slice(0, 2).forEach(b => b.classList.add('faded'));
-          } else {
-            const input = document.getElementById('blox-type-input');
-            if (input && this.activeQuestion) {
-              input.value = this.activeQuestion.term.substring(0, 3);
-            }
+        } else if (type === 'fix') {
+          // Fix previous wrong answer & recover 1 HP
+          if (this.playerHP < this.maxHP) this.playerHP++;
+          // Change most recent false to true
+          const lastWrongIdx = this.answersHistory.lastIndexOf(false);
+          if (lastWrongIdx !== -1) {
+            this.answersHistory[lastWrongIdx] = true;
+            this.correctCount++;
           }
-        } else if (type === 'shield') {
-          this.activeShields += 2;
-          this.createCoinText("+2 SHIELD! 🛡️", this.player.x + 30, this.player.y - 30, '#b339eb');
-        } else if (type === 'double') {
-          this.doubleXPFrames = 600; // 10s at 60fps
-          this.createCoinText("2X XP BOOST! ⚡", this.canvas.width / 2, 80, '#2ecc71');
+          this.createFloatingText("FIXED ANSWER & +1 HP! 🩹", this.player.x + 30, this.player.y - 40, '#10b981');
         }
 
         this.updatePowerupDock();
@@ -1655,15 +2759,23 @@
       }
 
       updateHUD() {
-        const scoreEl = document.getElementById('hud-score');
+        const hpEl = document.getElementById('hud-hp-hearts');
+        const scoreEl = document.getElementById('hud-score-val');
+        if (hpEl) {
+          let hearts = '';
+          for (let i = 0; i < this.maxHP; i++) {
+            hearts += (i < this.playerHP) ? '❤️' : '🖤';
+          }
+          hpEl.textContent = hearts;
+        }
         if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
       }
 
-      createCoinText(text, x, y, color = '#ffd700') {
-        this.floatingCoins.push({ text, x, y, color, alpha: 1, vy: -1.4 });
+      createFloatingText(text, x, y, color = '#ffd700') {
+        this.floatingTexts.push({ text, x, y, color, alpha: 1, vy: -1.3 });
       }
 
-      createExplosion(x, y, color, count = 25) {
+      createExplosion(x, y, color, count = 20) {
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
           const speed = Math.random() * 5 + 2;
@@ -1671,27 +2783,26 @@
             x, y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
-            size: Math.random() * 5 + 3,
+            size: Math.random() * 6 + 3,
             color,
             alpha: 1,
-            decay: 0.025
+            decay: 0.028
           });
         }
       }
 
-      // --- MAIN GAME LOOP ---
+      // --- MAIN 60 FPS GAME LOOP ---
       loop() {
-        if (this.isLevelFinished) return;
-
+        if (this.isGameOver) return;
         this.update();
         this.render();
-
         requestAnimationFrame(() => this.loop());
       }
 
       update() {
         if (this.freezeFrames > 0) this.freezeFrames--;
-        if (this.doubleXPFrames > 0) this.doubleXPFrames--;
+        if (this.vfxAuraFrames > 0) this.vfxAuraFrames--;
+        if (this.vfxShieldFrames > 0) this.vfxShieldFrames--;
 
         // Projectiles
         for (let i = this.projectiles.length - 1; i >= 0; i--) {
@@ -1700,41 +2811,42 @@
             this.projectiles.splice(i, 1);
             continue;
           }
-
           const dx = p.target.x - p.x;
           const dy = p.target.y - p.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < p.speed) {
-            // Hit!
-            this.createExplosion(p.target.x, p.target.y, p.target.color, 30);
+            this.createExplosion(p.target.x, p.target.y, p.target.color, 25);
             this.projectiles.splice(i, 1);
             this.activeEnemy = null;
-            this.nextQuestionTransition();
           } else {
             p.x += (dx / dist) * p.speed;
             p.y += (dy / dist) * p.speed;
           }
         }
 
-        // Active Enemy Move
+        // Active Monster Marching & Knockback Collision Physics
         if (this.activeEnemy && this.freezeFrames <= 0) {
           this.activeEnemy.x -= this.activeEnemy.speed;
 
-          // Enemy reaches player
-          if (this.activeEnemy.x <= this.player.x + 25) {
-            if (this.activeShields > 0) {
-              this.activeShields--;
-              this.createCoinText("SHIELD SAVED! 🛡️", this.player.x + 20, this.player.y - 20, '#b339eb');
-            } else {
-              AudioEngine.playRobloxOof();
-              this.combo = 0;
-              this.createCoinText("HIT! OOF 💥", this.player.x + 20, this.player.y - 20, '#ff3838');
-            }
+          // KNOCKBACK COLLISION: When monster reaches the player
+          if (this.activeEnemy.x <= this.player.x + 30) {
+            AudioEngine.playRobloxOof();
+            this.playerHP--;
+            this.combo = 0;
+            this.updateHUD();
 
-            this.createExplosion(this.activeEnemy.x, this.activeEnemy.y, '#ff3838', 20);
-            this.activeEnemy = null;
-            this.nextQuestionTransition();
+            this.createFloatingText("-1 HP! 💥", this.player.x + 20, this.player.y - 20, '#ef4444');
+            this.createExplosion(this.player.x + 20, this.player.y, '#ef4444', 15);
+
+            // MONSTER BOUNCES BACK (KNOCKBACK 38% of canvas)
+            this.activeEnemy.x = this.canvas.width * 0.55;
+
+            // Check Game Over
+            if (this.playerHP <= 0) {
+              this.finishLevel(false); // Defeat!
+              return;
+            }
           }
         }
 
@@ -1748,46 +2860,42 @@
         }
 
         // Floating texts
-        for (let i = this.floatingCoins.length - 1; i >= 0; i--) {
-          const ft = this.floatingCoins[i];
+        for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = this.floatingTexts[i];
           ft.y += ft.vy;
           ft.alpha -= 0.02;
-          if (ft.alpha <= 0) this.floatingCoins.splice(i, 1);
+          if (ft.alpha <= 0) this.floatingTexts.splice(i, 1);
         }
-      }
-
-      nextQuestionTransition() {
-        this.currentQuestionIdx++;
-        setTimeout(() => {
-          this.loadQuestion(this.currentQuestionIdx);
-        }, 500);
       }
 
       render() {
         const { ctx, canvas } = this;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw Robloxian Player Character
-        this.renderRobloxAvatar(this.player.x, this.player.y);
+        // 1. Draw Wallpaper Scene Theme
+        this.renderWallpaperBackground();
 
-        // Draw Active Enemy
+        // 2. Draw Robloxian Character Model
+        this.renderPlayerModel(this.player.x, this.player.y);
+
+        // 3. Draw Active Enemy
         if (this.activeEnemy) {
-          this.renderRobloxEnemy(this.activeEnemy);
+          this.renderEnemyModel(this.activeEnemy);
         }
 
-        // Draw Projectiles
+        // 4. Draw Projectiles
         this.projectiles.forEach(p => {
           ctx.save();
           ctx.fillStyle = p.color;
           ctx.shadowColor = p.color;
-          ctx.shadowBlur = 12;
+          ctx.shadowBlur = 15;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         });
 
-        // Draw Particles
+        // 5. Draw Particles
         this.particles.forEach(pt => {
           ctx.save();
           ctx.globalAlpha = pt.alpha;
@@ -1796,60 +2904,98 @@
           ctx.restore();
         });
 
-        // Draw Floating Coins/Texts
-        this.floatingCoins.forEach(ft => {
+        // 6. Draw Floating Texts
+        this.floatingTexts.forEach(ft => {
           ctx.save();
           ctx.globalAlpha = ft.alpha;
-          ctx.font = "bold 18px 'Fredoka', 'Prompt', sans-serif";
+          ctx.font = "bold 16px 'Prompt', sans-serif";
           ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, ft.x, ft.y);
           ctx.restore();
         });
       }
 
-      renderRobloxAvatar(x, y) {
-        const { ctx } = this;
+      renderWallpaperBackground() {
+        const { ctx, canvas } = this;
         ctx.save();
 
-        // 3D Blocky Robloxian Character
-        // Yellow Head
-        ctx.fillStyle = '#ffcc00';
-        ctx.fillRect(x - 14, y - 36, 28, 22);
-
-        // Cute Smile Face
-        ctx.fillStyle = '#000';
-        ctx.fillRect(x - 8, y - 28, 4, 4);
-        ctx.fillRect(x + 4, y - 28, 4, 4);
-        ctx.fillRect(x - 4, y - 20, 8, 2);
-
-        // Blue Torso
-        ctx.fillStyle = '#0077ff';
-        ctx.fillRect(x - 16, y - 14, 32, 28);
-
-        // Block Tie / Emblem
-        ctx.fillStyle = '#ffd700';
-        ctx.fillRect(x - 4, y - 10, 8, 14);
-
-        // Yellow Arms
-        ctx.fillStyle = '#ffcc00';
-        ctx.fillRect(x - 26, y - 12, 10, 24);
-        ctx.fillRect(x + 16, y - 12, 10, 24);
-
-        // Green Legs
-        ctx.fillStyle = '#2ecc71';
-        ctx.fillRect(x - 14, y + 14, 12, 22);
-        ctx.fillRect(x + 2, y + 14, 12, 22);
-
-        // Magic Blox Wand
-        ctx.fillStyle = '#ffd700';
-        ctx.fillRect(x + 24, y - 20, 4, 28);
-        ctx.fillStyle = '#00f0ff';
-        ctx.fillRect(x + 22, y - 26, 8, 8);
+        if (this.wallpaperId === 1) {
+          // Cyber City: Neon Grid
+          ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+          ctx.lineWidth = 1;
+          for (let x = 0; x < canvas.width; x += 40) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+          }
+        } else if (this.wallpaperId === 2) {
+          // Green Meadow: Pixel Grass Horizon
+          ctx.fillStyle = '#10b981';
+          ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+        } else if (this.wallpaperId === 3) {
+          // Space Void: Distant Stars
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.fillRect(100, 40, 2, 2);
+          ctx.fillRect(300, 90, 3, 3);
+          ctx.fillRect(500, 30, 2, 2);
+        } else if (this.wallpaperId === 4) {
+          // Lava Core: Glowing Red Floor
+          ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+          ctx.fillRect(0, canvas.height - 25, canvas.width, 25);
+        }
 
         ctx.restore();
       }
 
-      renderRobloxEnemy(enemy) {
+      renderPlayerModel(x, y) {
+        const { ctx } = this;
+        ctx.save();
+
+        // Visual Aura / Shield Glow
+        if (this.vfxAuraFrames > 0) {
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(x, y, 42, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        if (this.vfxShieldFrames > 0) {
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.35)';
+          ctx.fillRect(x + 22, y - 30, 12, 60);
+        }
+
+        // Model 1: Classic Hero | Model 2: Cyber Knight | Model 3: Neon Princess
+        const headColor = this.characterId === 2 ? '#b339eb' : (this.characterId === 3 ? '#ffb6c1' : '#ffd700');
+        const torsoColor = this.characterId === 2 ? '#1e1b4b' : (this.characterId === 3 ? '#ff2a85' : '#0077ff');
+        const pantsColor = this.characterId === 2 ? '#00f0ff' : (this.characterId === 3 ? '#ffd700' : '#10b981');
+
+        // Head
+        ctx.fillStyle = headColor;
+        ctx.fillRect(x - 14, y - 36, 28, 22);
+
+        // Face Eyes
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x - 8, y - 28, 4, 4);
+        ctx.fillRect(x + 4, y - 28, 4, 4);
+
+        // Torso
+        ctx.fillStyle = torsoColor;
+        ctx.fillRect(x - 16, y - 14, 32, 28);
+
+        // Arms
+        ctx.fillStyle = headColor;
+        ctx.fillRect(x - 26, y - 12, 10, 24);
+        ctx.fillRect(x + 16, y - 12, 10, 24);
+
+        // Legs
+        ctx.fillStyle = pantsColor;
+        ctx.fillRect(x - 14, y + 14, 12, 22);
+        ctx.fillRect(x + 2, y + 14, 12, 22);
+
+        ctx.restore();
+      }
+
+      renderEnemyModel(enemy) {
         const { ctx } = this;
         ctx.save();
 
@@ -1860,20 +3006,20 @@
         const size = enemy.size;
         ctx.fillRect(enemy.x - size / 2, enemy.y - size / 2, size, size);
 
-        // Enemy Eyes
+        // Monster Eyes
         ctx.fillStyle = '#000';
         ctx.fillRect(enemy.x - size / 4, enemy.y - size / 4, 6, 6);
         ctx.fillRect(enemy.x + size / 4 - 6, enemy.y - size / 4, 6, 6);
 
         // Boss Crown 👑
         if (enemy.isBoss) {
-          ctx.font = "28px sans-serif";
+          ctx.font = "26px sans-serif";
           ctx.textAlign = "center";
           ctx.fillText("👑", enemy.x, enemy.y - size / 2 - 8);
         }
 
-        // Enemy Label
-        ctx.font = "bold 13px 'Orbitron', sans-serif";
+        // Enemy Name
+        ctx.font = "bold 12px 'Orbitron', sans-serif";
         ctx.fillStyle = '#fff';
         ctx.textAlign = "center";
         ctx.fillText(enemy.name, enemy.x, enemy.y + size / 2 + 16);
@@ -1881,117 +3027,575 @@
         ctx.restore();
       }
 
-      // --- STAGE FINISH & RESULTS MODAL ---
-      finishStage() {
-        this.isLevelFinished = true;
+      finishLevel(isVictory) {
+        this.isGameOver = true;
         AudioEngine.stopBGM();
-        AudioEngine.playVictoryFanfare();
 
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+        if (isVictory) {
+          AudioEngine.playVictoryFanfare();
+          if (typeof confetti === 'function') {
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+          }
+        } else {
+          AudioEngine.playRobloxOof();
         }
 
         const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
-        const accuracy = Math.round((this.correctCount / 10) * 100);
+        const totalQ = this.stageQuestions.length;
+        const accuracy = Math.round((this.correctCount / totalQ) * 100);
 
-        document.getElementById('modal-stage-clear').style.display = 'flex';
-        document.getElementById('res-score').textContent = this.score.toLocaleString();
-        document.getElementById('res-accuracy').textContent = `${accuracy}%`;
-        document.getElementById('res-time').textContent = `${timeUsedSec}s`;
-
-        // Save locally to Leaderboard
-        this.saveToLeaderboard({
-          studentId: this.studentId,
-          studentName: this.studentName,
-          score: this.score,
-          accuracy: accuracy,
-          timeUsed: `${timeUsedSec}s`,
-          date: new Date().toLocaleDateString('th-TH')
-        });
-
-        // Trigger Google Sheets Sync
-        this.syncScoreToSheet({
-          studentId: this.studentId,
-          studentName: this.studentName,
-          category: `Category ${this.categoryChoice}`,
-          score: this.score,
-          timeUsed: `${timeUsedSec}s`,
-          accuracy: accuracy
-        });
-      }
-
-      saveToLeaderboard(entry) {
-        let list = JSON.parse(localStorage.getItem('roblox_vocab_leaderboard') || '[]');
-        list.push(entry);
-        list.sort((a, b) => b.score - a.score);
-        list = list.slice(0, 10);
-        localStorage.setItem('roblox_vocab_leaderboard', JSON.stringify(list));
-      }
-
-      async syncScoreToSheet(payload) {
-        const msgEl = document.getElementById('sync-status-msg');
-        if (!webAppUrl || webAppUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-          if (msgEl) msgEl.textContent = "ℹ️ บันทึกคะแนนลงเครื่องแล้ว (เชื่อมต่อ Google Sheet ได้โดยใส่ Web App URL)";
-          return;
-        }
-
-        try {
-          if (msgEl) msgEl.textContent = "📡 กำลังส่งข้อมูลไปยัง Google Sheet...";
-          await fetch(webAppUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-          });
-          if (msgEl) msgEl.textContent = "✅ บันทึกคะแนนลง Google Sheet สำเร็จเรียบร้อย!";
-        } catch (e) {
-          if (msgEl) msgEl.textContent = "⚠️ ไม่สามารถเชื่อมต่อ Google Sheet ได้ บันทึกคะแนนในเครื่องแล้ว";
-        }
-      }
-
-      manualSyncSheet() {
-        const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
-        const accuracy = Math.round((this.correctCount / 10) * 100);
-        this.syncScoreToSheet({
-          studentId: this.studentId,
-          studentName: this.studentName,
-          category: `Category ${this.categoryChoice}`,
-          score: this.score,
-          timeUsed: `${timeUsedSec}s`,
-          accuracy: accuracy
-        });
-      }
-
-      openLeaderboard() {
-        const modal = document.getElementById('modal-leaderboard');
-        const container = document.getElementById('leaderboard-list');
-        const list = JSON.parse(localStorage.getItem('roblox_vocab_leaderboard') || '[]');
-
-        if (container) {
-          if (list.length === 0) {
-            container.innerHTML = `<div style="padding: 1.5rem; text-align: center; color: #889ac2;">ยังไม่มีข้อมูลคะแนน</div>`;
-          } else {
-            container.innerHTML = list.map((item, i) => `
-              <div class="leaderboard-item">
-                <span>#${i + 1} ${item.studentName} (${item.studentId})</span>
-                <span style="color: var(--blox-yellow);">${item.score.toLocaleString()} 🪙 (${item.accuracy}%)</span>
-              </div>
-            `).join('');
+        // Prepare Item Pills Breakdown (Green / Red)
+        const pillsContainer = document.getElementById('res-item-pills');
+        if (pillsContainer) {
+          pillsContainer.innerHTML = '';
+          for (let i = 0; i < totalQ; i++) {
+            const pill = document.createElement('div');
+            const isCorrect = this.answersHistory[i] === true;
+            pill.className = `tracker-box ${isCorrect ? 'correct' : 'wrong'}`;
+            pill.textContent = i + 1;
+            pillsContainer.appendChild(pill);
           }
         }
 
-        if (modal) modal.style.display = 'flex';
+        // Update Modal Texts
+        document.getElementById('res-icon').textContent = isVictory ? '🎉🏆' : '💀';
+        document.getElementById('res-title').textContent = isVictory ? 'STAGE CLEARED!' : 'GAME OVER!';
+        document.getElementById('res-subtitle').textContent = isVictory ? 'ยินดีด้วย! คุณพิชิตคำศัพท์ครบทุกข้อแล้ว' : 'พลังชีวิตหมด! พยายามใหม่อีกครั้งนะ';
+        document.getElementById('res-score-text').textContent = this.score.toLocaleString();
+        document.getElementById('res-accuracy-text').textContent = `${accuracy}%`;
+        document.getElementById('res-time-text').textContent = `${timeUsedSec}s`;
+
+        // Save Score Payload to Supabase & LocalStorage
+        const scorePayload = {
+          student_id: this.studentId,
+          student_name: this.studentName,
+          class_level: this.classLevel,
+          score: this.score,
+          percentage: accuracy,
+          correct_answers: this.correctCount,
+          total_questions: totalQ,
+          answers_history: this.answersHistory,
+          stage_name: `Stage ${this.stageId}`,
+          entry_number: App.getEntrySequence(this.studentId),
+          created_at: new Date().toISOString()
+        };
+
+        Supabase.saveScore(scorePayload);
+
+        // Show Modal
+        document.getElementById('modal-stage-result').classList.add('show');
       }
 
-      closeLeaderboard() {
-        const modal = document.getElementById('modal-leaderboard');
-        if (modal) modal.style.display = 'none';
+      playAgain() {
+        document.getElementById('modal-stage-result').classList.remove('show');
+        this.startSession(this.studentId, this.studentName, this.classLevel, this.stageId, this.characterId, this.wallpaperId);
       }
 
-      restartLevel() {
-        document.getElementById('modal-stage-clear').style.display = 'none';
-        this.startLevel();
-        AudioEngine.startBGM();
+      returnHomeAndReview() {
+        document.getElementById('modal-stage-result').classList.remove('show');
+        App.showView('home');
+        // Open review feedback popup after returning home
+        setTimeout(() => {
+          App.openReviewModal();
+        }, 400);
+      }
+
+      exitGameToHome() {
+        if (confirm('คุณต้องการออกจากเกมและกลับสู่หน้าหลักใช่หรือไม่?')) {
+          this.isGameOver = true;
+          AudioEngine.stopBGM();
+          App.showView('home');
+        }
+      }
+    }
+
+    const Game = new RobloxRegentGameEngine();
+
+    /* ==========================================================================
+       5. MAIN APPLICATION CONTROLLER (Tabs, Customization, Teacher Dashboard)
+       ========================================================================== */
+    class MainAppController {
+      constructor() {
+        this.selectedCharacter = 1;
+        this.selectedWallpaper = 1;
+        this.selectedStage = 1;
+        this.reviewRating = 5;
+        this.teacherAuthenticated = false;
+
+        this.init();
+      }
+
+      init() {
+        this.initBackgroundBlocks();
+        this.renderLessons();
+        this.loadLeaderboard();
+        this.loadRatingSummary();
+      }
+
+      initBackgroundBlocks() {
+        const bg = document.getElementById('bg-blocks');
+        if (!bg) return;
+        for (let i = 0; i < 15; i++) {
+          const block = document.createElement('div');
+          block.className = 'bg-block';
+          const size = Math.random() * 40 + 20;
+          block.style.width = `${size}px`;
+          block.style.height = `${size}px`;
+          block.style.left = `${Math.random() * 100}vw`;
+          block.style.animationDelay = `${Math.random() * 10}s`;
+          block.style.animationDuration = `${Math.random() * 10 + 12}s`;
+          bg.appendChild(block);
+        }
+      }
+
+      showView(viewName) {
+        document.querySelectorAll('.view-screen').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+
+        const targetScreen = document.getElementById(`view-${viewName}`);
+        const targetBtn = document.getElementById(`tab-btn-${viewName}`);
+
+        if (targetScreen) targetScreen.classList.add('active');
+        if (targetBtn) targetBtn.classList.add('active');
+
+        if (viewName === 'leaderboard') this.loadLeaderboard();
+        if (viewName === 'teacher' && this.teacherAuthenticated) this.renderTeacherDashboard();
+      }
+
+      // Character & Wallpaper Selectors
+      selectCharacter(id) {
+        this.selectedCharacter = id;
+        document.querySelectorAll('.character-card').forEach((c, idx) => {
+          c.classList.toggle('selected', idx + 1 === id);
+        });
+        const names = ["Classic Blox Hero", "Cyber Hacker Knight", "Neon Builder Princess"];
+        document.getElementById('char-selected-label').textContent = names[id - 1];
+        AudioEngine.playCoinChime();
+      }
+
+      selectWallpaper(id) {
+        this.selectedWallpaper = id;
+        document.querySelectorAll('.wallpaper-card').forEach((w, idx) => {
+          w.classList.toggle('selected', idx + 1 === id);
+        });
+        const names = ["Cyber City", "Meadow", "Space Void", "Lava Core"];
+        document.getElementById('wallpaper-selected-label').textContent = names[id - 1];
+        AudioEngine.playCoinChime();
+      }
+
+      selectStage(id) {
+        this.selectedStage = id;
+        document.querySelectorAll('.stage-select-btn').forEach((s, idx) => {
+          s.classList.toggle('selected', idx + 1 === id);
+        });
+        AudioEngine.playCoinChime();
+      }
+
+      handleStudentIdInput(val) {
+        const id = val.trim();
+        const seq = this.getEntrySequence(id);
+        const previewEl = document.getElementById('entry-sequence-preview');
+        if (previewEl) {
+          previewEl.textContent = seq > 1 ? `เข้าเล่นครั้งที่ ${seq} (${id}(${seq - 1}))` : `เข้าเล่นครั้งที่ 1 (${id})`;
+        }
+      }
+
+      getEntrySequence(studentId) {
+        if (!studentId) return 1;
+        const scores = JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
+        const todayStr = new Date().toDateString();
+        const count = scores.filter(s => s.student_id === studentId && new Date(s.created_at).toDateString() === todayStr).length;
+        return count + 1;
+      }
+
+      startGameSession() {
+        const idInput = document.getElementById('input-student-id');
+        const nameInput = document.getElementById('input-student-name');
+        const classInput = document.getElementById('input-class-level');
+
+        if (!idInput.value.trim() || !nameInput.value.trim()) {
+          alert('กรุณากรอกรหัสนักเรียน และชื่อ-นามสกุล ก่อนเริ่มเกม');
+          return;
+        }
+
+        const studentId = idInput.value.trim();
+        const studentName = nameInput.value.trim();
+        const classLevel = classInput.value.trim() || 'ปวช. 2/1';
+
+        Game.startSession(studentId, studentName, classLevel, this.selectedStage, this.selectedCharacter, this.selectedWallpaper);
+      }
+
+      // Lessons View
+      renderLessons() {
+        const container = document.getElementById('lessons-cards-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        VOCAB_DATABASE.forEach(v => {
+          const card = document.createElement('div');
+          card.className = 'lesson-item-card';
+          card.setAttribute('data-stage', v.stage);
+          card.setAttribute('data-search', `${v.term} ${v.ttsTh} ${v.scenario}`.toLowerCase());
+
+          const top = document.createElement('div');
+          top.className = 'lesson-card-top';
+
+          const badge = document.createElement('div');
+          badge.className = 'lesson-term-badge';
+          badge.textContent = v.term; // Safe text rendering
+
+          const audioBtn = document.createElement('button');
+          audioBtn.className = 'lesson-audio-btn';
+          audioBtn.innerHTML = '<span>🔊</span> ฟัง';
+          audioBtn.onclick = () => AudioEngine.speakBilingual(v.ttsEn, v.ttsTh);
+
+          top.appendChild(badge);
+          top.appendChild(audioBtn);
+
+          const desc = document.createElement('div');
+          desc.className = 'lesson-desc-th';
+          desc.textContent = v.ttsTh;
+
+          const example = document.createElement('div');
+          example.className = 'lesson-example-code';
+          example.textContent = v.codeExample;
+
+          card.appendChild(top);
+          card.appendChild(desc);
+          card.appendChild(example);
+          container.appendChild(card);
+        });
+      }
+
+      filterLessons() {
+        const q = document.getElementById('lessons-search').value.toLowerCase().trim();
+        document.querySelectorAll('.lesson-item-card').forEach(card => {
+          const text = card.getAttribute('data-search') || '';
+          card.style.display = text.includes(q) ? 'flex' : 'none';
+        });
+      }
+
+      filterLessonsCategory(stage, btn) {
+        document.querySelectorAll('.lesson-cat-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.lesson-item-card').forEach(card => {
+          if (stage === 'all') {
+            card.style.display = 'flex';
+          } else {
+            const cardStage = parseInt(card.getAttribute('data-stage'), 10);
+            card.style.display = (cardStage === stage) ? 'flex' : 'none';
+          }
+        });
+      }
+
+      // Leaderboard
+      async loadLeaderboard(timeFilter = 'today') {
+        const tbody = document.getElementById('leaderboard-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">กำลังโหลดข้อมูลอันดับ...</td></tr>';
+
+        const scores = await Supabase.fetchScores();
+        if (!scores || scores.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ยังไม่มีข้อมูลผลคะแนนในระบบ</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '';
+        scores.slice(0, 15).forEach((s, idx) => {
+          const tr = document.createElement('tr');
+          const trophy = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
+          const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('th-TH') : '-';
+
+          tr.innerHTML = `
+            <td style="font-weight: 800; color: ${idx < 3 ? 'var(--blox-yellow)' : '#fff'};">${trophy}</td>
+            <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id}</td>
+            <td style="font-weight: 600;">${s.student_name}</td>
+            <td>${s.class_level || 'ปวช. 2/1'}</td>
+            <td><span class="nav-brand-badge">${s.stage_name || 'Stage 1'}</span></td>
+            <td style="font-family: var(--font-blox-title); color: var(--blox-yellow);">${(s.score || 0).toLocaleString()} 🪙</td>
+            <td style="font-weight: 700; color: var(--blox-green);">${s.percentage || 100}%</td>
+            <td style="color: #94a3b8; font-size: 0.8rem;">${dateStr}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      filterLeaderboard(filter) {
+        document.querySelectorAll('.filter-time-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById(`lb-filter-${filter}`);
+        if (btn) btn.classList.add('active');
+        this.loadLeaderboard(filter);
+      }
+
+      // Teacher Dashboard Protected Auth
+      openTeacherAuth() {
+        if (this.teacherAuthenticated) {
+          this.showView('teacher');
+          return;
+        }
+        document.getElementById('modal-teacher-auth').classList.add('show');
+        document.getElementById('input-teacher-password').value = '';
+        setTimeout(() => document.getElementById('input-teacher-password').focus(), 200);
+      }
+
+      closeTeacherAuth() {
+        document.getElementById('modal-teacher-auth').classList.remove('show');
+      }
+
+      verifyTeacherPassword() {
+        const pwd = document.getElementById('input-teacher-password').value.trim();
+        if (pwd === "Teacher") {
+          this.teacherAuthenticated = true;
+          this.closeTeacherAuth();
+          this.showView('teacher');
+          AudioEngine.playCoinChime();
+        } else {
+          alert('รหัสผ่านไม่ถูกต้อง! กรุณากรอก "Teacher"');
+        }
+      }
+
+      lockTeacherDashboard() {
+        this.teacherAuthenticated = false;
+        this.showView('home');
+      }
+
+      showTeacherSubscreen(screenName) {
+        document.querySelectorAll('.teacher-subscreen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.teacher-subnav-btn').forEach(b => b.classList.remove('active'));
+
+        const targetScreen = document.getElementById(`tscreen-${screenName}`);
+        const targetBtn = document.getElementById(`tsub-btn-${screenName}`);
+
+        if (targetScreen) targetScreen.classList.add('active');
+        if (targetBtn) targetBtn.classList.add('active');
+
+        if (screenName === 'analytics') this.renderTeacherAnalytics();
+        if (screenName === 'tracker') this.renderItemTrackerTable();
+        if (screenName === 'questions') this.renderTeacherQuestionsTable();
+        if (screenName === 'reviews') this.renderTeacherReviewsTable();
+      }
+
+      async renderTeacherDashboard() {
+        this.renderTeacherAnalytics();
+        this.renderItemTrackerTable();
+        this.renderTeacherQuestionsTable();
+        this.renderTeacherReviewsTable();
+      }
+
+      async renderTeacherAnalytics() {
+        const scores = await Supabase.fetchScores();
+        const entriesCount = scores.length;
+        const avgScore = entriesCount > 0 ? Math.round(scores.reduce((acc, s) => acc + (s.percentage || 0), 0) / entriesCount) : 0;
+        const clears = scores.filter(s => (s.percentage || 0) >= 60).length;
+        const clearRate = entriesCount > 0 ? Math.round((clears / entriesCount) * 100) : 0;
+
+        document.getElementById('t-stat-entries').textContent = entriesCount;
+        document.getElementById('t-stat-avg-score').textContent = `${avgScore}%`;
+        document.getElementById('t-stat-clear-rate').textContent = `${clearRate}%`;
+
+        // Class breakdown
+        const classMap = {};
+        scores.forEach(s => {
+          const cl = s.class_level || 'ปวช. 2/1';
+          if (!classMap[cl]) classMap[cl] = { count: 0, sumPercent: 0 };
+          classMap[cl].count++;
+          classMap[cl].sumPercent += (s.percentage || 0);
+        });
+
+        const breakdownList = document.getElementById('teacher-class-breakdown-list');
+        if (breakdownList) {
+          breakdownList.innerHTML = Object.keys(classMap).map(cl => `
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+              <span><strong>ห้อง:</strong> ${cl} (${classMap[cl].count} คน)</span>
+              <span style="color: var(--blox-cyan);">คะแนนเฉลี่ย: ${Math.round(classMap[cl].sumPercent / classMap[cl].count)}%</span>
+            </div>
+          `).join('') || '<div style="color: #94a3b8; font-size: 0.82rem;">ยังไม่มีข้อมูลผลคะแนน</div>';
+        }
+      }
+
+      async renderItemTrackerTable() {
+        const tbody = document.getElementById('tracker-tbody');
+        if (!tbody) return;
+        const scores = await Supabase.fetchScores();
+        const search = (document.getElementById('tracker-search-input')?.value || '').toLowerCase().trim();
+
+        tbody.innerHTML = '';
+        scores.filter(s => !search || s.student_name.toLowerCase().includes(search) || s.student_id.includes(search)).forEach(s => {
+          const tr = document.createElement('tr');
+          const history = Array.isArray(s.answers_history) ? s.answers_history : [true, true, true, false, true];
+
+          const pillsHtml = history.map((isOk, idx) => `
+            <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${idx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${idx + 1}</div>
+          `).join('');
+
+          tr.innerHTML = `
+            <td><strong>${s.student_name}</strong> <span style="font-size: 0.75rem; color: #94a3b8;">(${s.student_id})</span></td>
+            <td>${s.class_level || 'ปวช. 2/1'}</td>
+            <td><span class="nav-brand-badge">${s.stage_name}</span></td>
+            <td style="color: var(--blox-yellow); font-weight: 700;">${(s.score || 0).toLocaleString()} (${s.percentage}%)</td>
+            <td><div class="answer-tracker-pill-group">${pillsHtml}</div></td>
+            <td style="color: #94a3b8; font-size: 0.78rem;">${new Date(s.created_at).toLocaleTimeString('th-TH')}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      renderTeacherQuestionsTable() {
+        const tbody = document.getElementById('questions-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        VOCAB_DATABASE.forEach(q => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${q.id}</td>
+            <td><span class="nav-brand-badge">Stage ${q.stage}</span></td>
+            <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${q.scenario}</td>
+            <td style="font-family: var(--font-code); color: var(--blox-yellow);">${q.term}</td>
+            <td>
+              <button class="icon-toggle-btn" style="font-size: 0.75rem; padding: 0.2rem 0.4rem;" onclick="App.deleteQuestion(${q.id})">🗑️ ลบ</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      async renderTeacherReviewsTable() {
+        const tbody = document.getElementById('reviews-tbody');
+        if (!tbody) return;
+        const reviews = await Supabase.fetchReviews();
+        tbody.innerHTML = '';
+
+        reviews.forEach(r => {
+          const tr = document.createElement('tr');
+          const stars = '⭐'.repeat(r.rating_stars || 5);
+          tr.innerHTML = `
+            <td style="color: var(--blox-cyan);">${r.student_id}</td>
+            <td style="color: var(--blox-yellow);">${stars}</td>
+            <td>${r.comment || '-'}</td>
+            <td style="color: #94a3b8; font-size: 0.78rem;">${r.created_at || '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('t-reviews-count').textContent = reviews.length;
+      }
+
+      exportTeacherDataCSV() {
+        const scores = JSON.parse(localStorage.getItem('roblox_regent_scores') || '[]');
+        if (scores.length === 0) {
+          alert('ไม่มีข้อมูลสำหรับส่งออก CSV');
+          return;
+        }
+
+        let csv = "Timestamp,Student ID,Student Name,Class Level,Stage,Score,Accuracy,Correct Answers,Total Questions\n";
+        scores.forEach(s => {
+          csv += `"${s.created_at}","${s.student_id}","${s.student_name}","${s.class_level || ''}","${s.stage_name}","${s.score}","${s.percentage}%","${s.correct_answers}","${s.total_questions}"\n`;
+        });
+
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `roblox_regent_scores_${Date.now()}.csv`;
+        link.click();
+      }
+
+      // Review Modal & Rating Handling
+      openReviewModal() {
+        document.getElementById('modal-review-feedback').classList.add('show');
+      }
+
+      closeReviewModal() {
+        document.getElementById('modal-review-feedback').classList.remove('show');
+      }
+
+      setReviewStar(num) {
+        this.reviewRating = num;
+        const stars = document.querySelectorAll('#star-picker-container .star-item');
+        stars.forEach((s, idx) => {
+          s.classList.toggle('active', idx < num);
+        });
+        AudioEngine.playCoinChime();
+      }
+
+      async submitRatingReview() {
+        const comment = document.getElementById('input-review-comment').value.trim();
+        const idInput = document.getElementById('input-student-id').value.trim() || 'Robloxian';
+
+        await Supabase.saveReview({
+          student_id: idInput,
+          rating_stars: this.reviewRating,
+          comment: comment || 'เยี่ยมยอดมากครับ!',
+          created_at: new Date().toISOString()
+        });
+
+        this.closeReviewModal();
+        alert('ขอบคุณสำหรับคะแนนประเมินและข้อเสนอแนะ ⭐');
+        this.loadRatingSummary();
+      }
+
+      async loadRatingSummary() {
+        const reviews = await Supabase.fetchReviews();
+        if (reviews.length > 0) {
+          const avg = (reviews.reduce((acc, r) => acc + (r.rating_stars || 5), 0) / reviews.length).toFixed(1);
+          document.getElementById('home-avg-rating-val').textContent = `${avg} / 5.0`;
+          document.getElementById('home-total-reviews-count').textContent = `(จาก ${reviews.length} รีวิว)`;
+        }
+      }
+
+      openAddQuestionModal() {
+        document.getElementById('modal-add-question').classList.add('show');
+      }
+
+      closeAddQuestionModal() {
+        document.getElementById('modal-add-question').classList.remove('show');
+      }
+
+      saveTeacherQuestion() {
+        const stage = parseInt(document.getElementById('modal-q-stage').value, 10);
+        const scenario = document.getElementById('modal-q-text').value.trim();
+        const choiceA = document.getElementById('modal-q-choice-a').value.trim();
+        const choiceB = document.getElementById('modal-q-choice-b').value.trim();
+        const choiceC = document.getElementById('modal-q-choice-c').value.trim();
+        const choiceD = document.getElementById('modal-q-choice-d').value.trim();
+        const correct = document.getElementById('modal-q-correct').value;
+        const explanation = document.getElementById('modal-q-explanation').value.trim();
+
+        if (!scenario || !choiceA || !choiceB) {
+          alert('กรุณากรอกโจทย์และตัวเลือกให้ครบถ้วน');
+          return;
+        }
+
+        const termMap = { a: choiceA, b: choiceB, c: choiceC, d: choiceD };
+        const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
+
+        VOCAB_DATABASE.push({
+          id: VOCAB_DATABASE.length + 1,
+          stage: stage,
+          stageName: stageNames[stage],
+          term: termMap[correct],
+          ttsEn: termMap[correct],
+          ttsTh: explanation || 'คำตอบที่ถูกต้อง',
+          scenario: scenario,
+          codeExample: `// ${termMap[correct]}`
+        });
+
+        this.closeAddQuestionModal();
+        this.renderTeacherQuestionsTable();
+        this.renderLessons();
+        alert('เพิ่มข้อสอบลงในระบบเรียบร้อยแล้ว!');
+      }
+
+      deleteQuestion(id) {
+        if (confirm('คุณต้องการลบข้อสอบนี้ใช่หรือไม่?')) {
+          const idx = VOCAB_DATABASE.findIndex(q => q.id === id);
+          if (idx !== -1) {
+            VOCAB_DATABASE.splice(idx, 1);
+            this.renderTeacherQuestionsTable();
+            this.renderLessons();
+          }
+        }
       }
 
       shuffleArray(arr) {
@@ -2004,39 +3608,8 @@
       }
     }
 
-    // Initialize Game Instance
-    const Game = new RobloxVocabLegendsGame();
-
-    /* ==========================================================================
-       GOOGLE APPS SCRIPT DEPLOYMENT SCRIPT (FOR GOOGLE SHEETS)
-       ==========================================================================
-       function doPost(e) {
-         try {
-           var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-           var data = JSON.parse(e.postData.contents);
-           
-           if (sheet.getLastRow() === 0) {
-             sheet.appendRow(["Timestamp", "Student ID", "Student Name", "Category", "Score", "Time Used", "Accuracy"]);
-           }
-           
-           sheet.appendRow([
-             new Date(),
-             data.studentId,
-             data.studentName,
-             data.category,
-             data.score,
-             data.timeUsed,
-             data.accuracy + "%"
-           ]);
-           
-           return ContentService.createTextOutput(JSON.stringify({"result": "success"}))
-             .setMimeType(ContentService.MimeType.JSON);
-         } catch(err) {
-           return ContentService.createTextOutput(JSON.stringify({"result": "error", "error": err.toString()}))
-             .setMimeType(ContentService.MimeType.JSON);
-         }
-       }
-       ========================================================================== */
+    // Initialize Main Application Instance
+    const App = new MainAppController();
   </script>
 </body>
 </html>

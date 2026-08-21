@@ -401,6 +401,81 @@
       margin-top: 0.2rem;
     }
 
+    /* How to Play / Student Instructions Card */
+    .how-to-play-card {
+      margin-top: 0.85rem;
+      background: rgba(14, 22, 50, 0.88);
+      border: 1.5px solid rgba(0, 240, 255, 0.25);
+      border-radius: 12px;
+      padding: 0.85rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .how-to-play-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    }
+
+    .how-to-play-title {
+      font-family: var(--font-blox-title);
+      font-size: 0.95rem;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+
+    .how-to-play-badge {
+      font-family: var(--font-blox-title);
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      color: #000;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .how-to-play-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .how-to-play-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #e2e8f0;
+    }
+
+    .step-num-badge {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1.5px solid var(--blox-cyan);
+      border-radius: 6px;
+      color: var(--blox-cyan);
+      font-family: var(--font-blox-title);
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 6px rgba(0, 240, 255, 0.25);
+      margin-top: 1px;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
     /* Registration Input Fields */
     .form-group-box {
       display: flex;
@@ -1470,6 +1545,54 @@
                     <rect x="26" y="6" width="10" height="16" fill="#292524" stroke="#78716C" stroke-width="0.8"/>
                   </svg>
                   <div class="wallpaper-title">Lava Core</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. How to Play / Student Instructions (วิธีการเล่นและเรียนรู้) -->
+            <div class="how-to-play-card">
+              <div class="how-to-play-header">
+                <div style="display: flex; align-items: center; gap: 0.45rem;">
+                  <span style="font-size: 1.15rem;">🎮</span>
+                  <span class="how-to-play-title">วิธีการเล่นและเรียนรู้ (How to Play)</span>
+                </div>
+                <span class="how-to-play-badge">GUIDE</span>
+              </div>
+              <div class="how-to-play-list">
+                <div class="how-to-play-item">
+                  <div class="step-num-badge">1</div>
+                  <div class="step-content">
+                    <strong style="color: var(--blox-cyan);">เลือกบทเรียน & ด่าน:</strong>
+                    <span>เลือกระดับชั้นและหมวดหมู่คำศัพท์ที่ต้องการเรียนรู้</span>
+                  </div>
+                </div>
+                <div class="how-to-play-item">
+                  <div class="step-num-badge">2</div>
+                  <div class="step-content">
+                    <strong style="color: var(--blox-yellow);">ตอบคำถามท้าทาย:</strong>
+                    <span>เลือกคำตอบที่ถูกต้องจาก 4 ตัวเลือก หากตอบถูกจะได้คะแนนและคอมโบพิเศษ!</span>
+                  </div>
+                </div>
+                <div class="how-to-play-item">
+                  <div class="step-num-badge">3</div>
+                  <div class="step-content">
+                    <strong style="color: #c084fc;">อ่านคำอธิบายเพิ่มเติม:</strong>
+                    <span>หลังตอบคำถาม ให้กดอ่านคำอธิบายเพื่อทบทวนความรู้</span>
+                  </div>
+                </div>
+                <div class="how-to-play-item">
+                  <div class="step-num-badge">4</div>
+                  <div class="step-content">
+                    <strong style="color: var(--blox-green);">บันทึกอันดับยอดฝีมือ:</strong>
+                    <span>เมื่อเล่นจบด่าน ให้พิมพ์ชื่อเพื่อบันทึกคะแนนลง Leaderboard</span>
+                  </div>
+                </div>
+                <div class="how-to-play-item">
+                  <div class="step-num-badge">5</div>
+                  <div class="step-content">
+                    <strong style="color: var(--blox-pink);">ปรับแต่งตามใจชอบ:</strong>
+                    <span>เลือกฉากพื้นหลังและเปลี่ยนธีมเกมได้ตลอดเวลาที่เมนูด้านบน</span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -2137,6 +2137,30 @@
         return 'Code';
       },
 
+      mapCategoryToStage(category) {
+        if (!category) return 1;
+        const str = String(category).trim().toLowerCase();
+        const matchNum = str.match(/^(\d+)/);
+        if (matchNum && parseInt(matchNum[1], 10) >= 1 && parseInt(matchNum[1], 10) <= 4) {
+          return parseInt(matchNum[1], 10);
+        }
+        if (/html|โครงสร้าง|tag/i.test(str)) return 1;
+        if (/css|style|ตกแต่ง/i.test(str)) return 2;
+        if (/js|javascript|dom|script|logic/i.test(str)) return 3;
+        if (/server|backend|cloud|database|sql|node|api/i.test(str)) return 4;
+        return 1;
+      },
+
+      groupQuestionsByCategory(questions = []) {
+        const groups = {};
+        questions.forEach(q => {
+          const cat = q.category || 'General';
+          if (!groups[cat]) groups[cat] = [];
+          groups[cat].push(q);
+        });
+        return groups;
+      },
+
       shuffleArray(arr) {
         if (!Array.isArray(arr)) return [];
         const copy = [...arr];
@@ -2608,16 +2632,21 @@
         try {
           await this.fetchWithTimeout(`${this.url}/rest/v1/reviews`, {
             method: 'POST',
-            headers: this.headers,
+            headers: {
+              ...this.headers,
+              "Prefer": "return=representation"
+            },
             body: JSON.stringify(reviewPayload),
             timeout: 4000
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Supabase saveReview fallback:', e);
+        }
       }
 
       async fetchReviews() {
         try {
-          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/reviews?select=id,rating,comment,student_id,created_at&order=created_at.desc`, {
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/reviews?select=*&order=created_at.desc`, {
             headers: this.headers,
             timeout: 3500
           });
@@ -2629,10 +2658,10 @@
         return JSON.parse(localStorage.getItem('roblox_regent_reviews') || JSON.stringify(DEFAULT_REVIEWS));
       }
 
-      // Questions Management (category, question, option_a, option_b, option_c, option_d, correct_option, explanation)
+      // Questions Management (stage_id, category, question, option_a, option_b, option_c, option_d, correct_option, explanation)
       async fetchQuestions() {
         try {
-          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/questions?select=id,category,question,option_a,option_b,option_c,option_d,correct_option,explanation,created_at&order=id.asc`, {
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/questions?select=*&order=id.asc`, {
             headers: this.headers,
             timeout: 3500
           });
@@ -2657,6 +2686,27 @@
         } catch (e) {}
 
         return DEFAULT_VOCAB_DATABASE;
+      }
+
+      async fetchQuestionsByCategory(category) {
+        if (!category) return this.fetchQuestions();
+        try {
+          const encodedCat = encodeURIComponent(category);
+          const res = await this.fetchWithTimeout(`${this.url}/rest/v1/questions?category=eq.${encodedCat}&select=id,category,question,option_a,option_b,option_c,option_d,correct_option,explanation,created_at&order=id.asc`, {
+            headers: this.headers,
+            timeout: 3500
+          });
+          if (res && res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              return data;
+            }
+          }
+        } catch (e) {
+          console.warn('Supabase fetchQuestionsByCategory fallback:', e);
+        }
+        const all = await this.fetchQuestions();
+        return all.filter(q => q.category === category);
       }
 
       // Auto-Seed Initial Questions to Supabase
@@ -3133,12 +3183,14 @@
         if (this.stageId === 5) {
           pool = QuestionHelper.shuffleArray([...sourceData]).slice(0, 20);
         } else {
-          pool = QuestionHelper.shuffleArray(sourceData.filter(q => q && (q.stage === this.stageId || Number(q.stage) === this.stageId))).slice(0, 10);
+          pool = QuestionHelper.shuffleArray(
+            sourceData.filter(q => q && (q.stage === this.stageId || Number(q.stage) === this.stageId || QuestionHelper.mapCategoryToStage(q.category) === this.stageId))
+          ).slice(0, 10);
         }
 
         // Failsafe: if filtered pool is empty, fallback to default stage questions
         if (!pool || pool.length === 0) {
-          pool = QuestionHelper.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
+          pool = QuestionHelper.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId || QuestionHelper.mapCategoryToStage(q.stageName) === this.stageId)).slice(0, 10);
         }
         // Double failsafe: if still empty, grab any questions
         if (!pool || pool.length === 0) {
@@ -3419,7 +3471,7 @@
             titleEl.style.color = 'var(--blox-green)';
           }
           document.getElementById('modal-exp-term').textContent = this.activeQuestion.term;
-          document.getElementById('modal-exp-text').textContent = this.activeQuestion.ttsTh;
+          document.getElementById('modal-exp-text').textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
           expModal.classList.add('show');
         }
 
@@ -3482,7 +3534,7 @@
             titleEl.style.color = '#f87171';
           }
           document.getElementById('modal-exp-term').textContent = `เฉลยที่ถูกต้อง: ${this.activeQuestion.term}`;
-          document.getElementById('modal-exp-text').textContent = this.activeQuestion.ttsTh;
+          document.getElementById('modal-exp-text').textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
           expModal.classList.add('show');
         }
 
@@ -4258,35 +4310,28 @@
         try {
           const customQ = await Supabase.fetchQuestions();
           if (customQ && Array.isArray(customQ) && customQ.length > 0) {
-            const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
+            const stageNames = ["", "1. HTML & Structural Tags", "2. CSS & Styling", "3. JavaScript Logic", "4. Server & Backend"];
             const normalized = customQ.map((q, idx) => {
               if (!q || typeof q !== 'object') return null;
 
-              const catStr = String(q.category || q.stage || q.stageName || '').trim();
+              // 1. Map stage_id (number) -> Match game stage
               let stageNum = 1;
-              const matchNum = catStr.match(/^(\d+)/);
-              if (matchNum && parseInt(matchNum[1], 10) >= 1 && parseInt(matchNum[1], 10) <= 4) {
-                stageNum = parseInt(matchNum[1], 10);
-              } else if (/html|โครงสร้าง|tag/i.test(catStr) || catStr === '1') {
-                stageNum = 1;
-              } else if (/css|style|ตกแต่ง/i.test(catStr) || catStr === '2') {
-                stageNum = 2;
-              } else if (/js|javascript|dom|script|logic/i.test(catStr) || catStr === '3') {
-                stageNum = 3;
-              } else if (/server|backend|cloud|database|sql|node|api/i.test(catStr) || catStr === '4') {
-                stageNum = 4;
-              } else if (!isNaN(parseInt(catStr, 10)) && parseInt(catStr, 10) >= 1 && parseInt(catStr, 10) <= 4) {
-                stageNum = parseInt(catStr, 10);
+              if (q.stage_id !== undefined && q.stage_id !== null && !isNaN(parseInt(q.stage_id, 10))) {
+                stageNum = parseInt(q.stage_id, 10);
               } else {
-                stageNum = (idx % 4) + 1;
+                stageNum = QuestionHelper.mapCategoryToStage(q.category);
               }
 
-              const stageName = stageNames[stageNum] || catStr || `Stage ${stageNum}`;
+              // 2. Map category (text) -> Match category
+              const categoryStr = String(q.category || stageNames[stageNum] || `Stage ${stageNum}`).trim();
+              const stageName = stageNames[stageNum] || categoryStr || `Stage ${stageNum}`;
 
+              // 3. Map correct_option (handles 'Choice A', 'option_a', 'A', etc.)
               const rawCorrect = (q.correct_option !== undefined && q.correct_option !== null) ? q.correct_option : 'Choice A';
               const correctKey = QuestionHelper.normalizeCorrectOption(rawCorrect, q); // 'option_a', 'option_b', etc.
               const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A', 'B', 'C', 'D'
 
+              // 4. Map option_a, option_b, option_c, option_d (text) -> Choice options A, B, C, D
               const optionA = (q.option_a !== undefined && q.option_a !== null) ? String(q.option_a) : (q.term || 'Option A');
               const optionB = (q.option_b !== undefined && q.option_b !== null) ? String(q.option_b) : 'Option B';
               const optionC = (q.option_c !== undefined && q.option_c !== null) ? String(q.option_c) : 'Option C';
@@ -4296,17 +4341,23 @@
               let term = QuestionHelper.getCorrectOptionTerm(dummyItem, correctKey);
               if (!term) term = (DEFAULT_VOCAB_DATABASE[idx % DEFAULT_VOCAB_DATABASE.length] || {}).term || 'Code';
 
-              const scenario = q.question || q.scenario || 'โจทย์คำถามการพัฒนาเว็บไซต์';
-              const explanation = q.explanation || q.ttsTh || `เฉลย: ${term}`;
+              // 5. Map question (text) -> Question title
+              const questionTitle = q.question || q.scenario || 'โจทย์คำถามการพัฒนาเว็บไซต์';
+
+              // 6. Map explanation (text) -> Explanation modal text
+              const explanationText = q.explanation || q.ttsTh || `เฉลย: ${term}`;
 
               return {
                 id: q.id || (idx + 1),
+                stage_id: stageNum,
                 stage: stageNum,
                 stageName: stageName,
+                category: categoryStr,
+                question: questionTitle,
+                scenario: questionTitle,
                 term: term,
                 ttsEn: q.ttsEn || term,
-                ttsTh: explanation,
-                scenario: scenario,
+                ttsTh: explanationText,
                 codeExample: q.codeExample || `// ${term}`,
                 option_a: optionA,
                 option_b: optionB,
@@ -4315,22 +4366,23 @@
                 correct_option: correctKey,
                 correct_choice: `Choice ${choiceLetter}`,
                 correct_letter: choiceLetter,
-                explanation: explanation,
-                category: q.category || stageName,
-                question: scenario
+                explanation: explanationText,
+                created_at: q.created_at || new Date().toISOString()
               };
             }).filter(Boolean);
 
             if (normalized.length > 0) {
               VOCAB_DATABASE = normalized;
             } else {
+              // Async fallback: If Supabase returns empty, fallback smoothly to internal default questions
               VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
             }
           } else {
+            // Async fallback: If Supabase returns empty or non-array, fallback smoothly
             VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
           }
         } catch (e) {
-          console.warn('Error loading questions from Supabase, using default dataset:', e);
+          console.warn('Error loading questions from Supabase, using default dataset fallback:', e);
           VOCAB_DATABASE = [...DEFAULT_VOCAB_DATABASE];
         }
       }
@@ -4764,12 +4816,14 @@
 
         VOCAB_DATABASE.forEach(q => {
           const tr = document.createElement('tr');
+          const catDisplay = q.category || q.stageName || `Stage ${q.stage}`;
+          const expDisplay = q.explanation || q.ttsTh || '-';
           tr.innerHTML = `
             <td>${q.id}</td>
-            <td><span class="nav-brand-badge">Stage ${q.stage}</span></td>
+            <td><span class="nav-brand-badge">${catDisplay}</span></td>
             <td style="max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${q.scenario}</td>
             <td style="font-family: var(--font-code); color: var(--blox-yellow);">${q.term}</td>
-            <td style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #cbd5e1;">${q.ttsTh || '-'}</td>
+            <td style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #cbd5e1;">${expDisplay}</td>
             <td style="text-align: center; white-space: nowrap;">
               <button class="icon-toggle-btn" style="display: inline-flex; font-size: 0.75rem; padding: 0.25rem 0.5rem; margin-right: 4px;" onclick="App.openEditQuestionModal(${q.id})">✏️ แก้ไข</button>
               <button class="icon-toggle-btn" style="display: inline-flex; font-size: 0.75rem; padding: 0.25rem 0.5rem; background: #ef4444; border-color: #f87171;" onclick="App.deleteQuestion(${q.id})">🗑️ ลบ</button>
@@ -4904,10 +4958,8 @@
 
         const reviewData = {
           student_id: idInput,
-          rating: this.reviewRating,
-          rating_stars: this.reviewRating,
-          comment: comment || 'ยอดเยี่ยมมากครับ!',
-          created_at: new Date().toISOString()
+          rating: Number(this.reviewRating || 5),
+          comment: comment || 'ยอดเยี่ยมมากครับ!'
         };
 
         await Supabase.saveReview(reviewData);
@@ -4915,6 +4967,7 @@
         this.closeReviewModal();
         alert('ขอบคุณสำหรับคะแนนประเมินและข้อเสนอแนะ ⭐');
         this.loadRatingSummary();
+        this.renderTeacherReviewsTable();
       }
 
       async loadRatingSummary() {

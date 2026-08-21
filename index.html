@@ -2087,6 +2087,67 @@
       key: "sb_publishable_qT7h8ap3wsM5EaaggAXuDA__c1AAROF"
     };
 
+    /**
+     * Question Helper: Handles robust mapping, normalization, and comparison
+     * of questions and correct options across Supabase, localStorage, and in-memory datasets.
+     */
+    const QuestionHelper = {
+      normalizeCorrectOption(rawCorrect, questionObj = {}) {
+        if (rawCorrect === undefined || rawCorrect === null) return 'option_a';
+        const str = String(rawCorrect).trim();
+        const lower = str.toLowerCase();
+
+        // 1. Direct letter or key matches (Choice A, option_a, opt_a, a, 1, 0, etc.)
+        if (lower === 'option_a' || lower === 'option a' || lower === 'choice a' || lower === 'choice_a' || lower === 'choice-a' || lower === 'choice 1' || lower === 'opt_a' || lower === 'opt a' || lower === 'a' || lower === '1' || lower === '0') {
+          return 'option_a';
+        }
+        if (lower === 'option_b' || lower === 'option b' || lower === 'choice b' || lower === 'choice_b' || lower === 'choice-b' || lower === 'choice 2' || lower === 'opt_b' || lower === 'opt b' || lower === 'b' || lower === '2') {
+          return 'option_b';
+        }
+        if (lower === 'option_c' || lower === 'option c' || lower === 'choice c' || lower === 'choice_c' || lower === 'choice-c' || lower === 'choice 3' || lower === 'opt_c' || lower === 'opt c' || lower === 'c' || lower === '3') {
+          return 'option_c';
+        }
+        if (lower === 'option_d' || lower === 'option d' || lower === 'choice d' || lower === 'choice_d' || lower === 'choice-d' || lower === 'choice 4' || lower === 'opt_d' || lower === 'opt d' || lower === 'd' || lower === '4') {
+          return 'option_d';
+        }
+
+        // 2. Regular expression checks for Choice/Option prefix variations
+        if (/^(choice|option|opt)?[_\s-]*a\b/i.test(lower) || /^[aA]$/.test(str)) return 'option_a';
+        if (/^(choice|option|opt)?[_\s-]*b\b/i.test(lower) || /^[bB]$/.test(str)) return 'option_b';
+        if (/^(choice|option|opt)?[_\s-]*c\b/i.test(lower) || /^[cC]$/.test(str)) return 'option_c';
+        if (/^(choice|option|opt)?[_\s-]*d\b/i.test(lower) || /^[dD]$/.test(str)) return 'option_d';
+
+        // 3. Match against option text values if correct_option holds the actual text of an option
+        if (questionObj.option_a && lower === String(questionObj.option_a).trim().toLowerCase()) return 'option_a';
+        if (questionObj.option_b && lower === String(questionObj.option_b).trim().toLowerCase()) return 'option_b';
+        if (questionObj.option_c && lower === String(questionObj.option_c).trim().toLowerCase()) return 'option_c';
+        if (questionObj.option_d && lower === String(questionObj.option_d).trim().toLowerCase()) return 'option_d';
+
+        // 4. Default fallback
+        return 'option_a';
+      },
+
+      getCorrectOptionTerm(q, normalizedKey = 'option_a') {
+        if (!q) return '';
+        if (normalizedKey === 'option_b' && q.option_b !== undefined && q.option_b !== null) return String(q.option_b);
+        if (normalizedKey === 'option_c' && q.option_c !== undefined && q.option_c !== null) return String(q.option_c);
+        if (normalizedKey === 'option_d' && q.option_d !== undefined && q.option_d !== null) return String(q.option_d);
+        if (q.option_a !== undefined && q.option_a !== null) return String(q.option_a);
+        if (q.term !== undefined && q.term !== null) return String(q.term);
+        return 'Code';
+      },
+
+      shuffleArray(arr) {
+        if (!Array.isArray(arr)) return [];
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+    };
+
     /* ==========================================================================
        1. WEB DEVELOPMENT VOCABULARY DATASET (IMMUTABLE FALLBACK DATASET)
        ========================================================================== */
@@ -2575,7 +2636,7 @@
             headers: this.headers,
             timeout: 3500
           });
-          if (res.ok) {
+          if (res && res.ok) {
             const data = await res.json();
             if (Array.isArray(data)) {
               if (data.length === 0) {
@@ -2590,8 +2651,12 @@
           console.warn('Supabase fetchQuestions fallback:', e);
         }
 
-        const local = JSON.parse(localStorage.getItem('roblox_regent_custom_questions') || 'null');
-        return (Array.isArray(local) && local.length > 0) ? local : DEFAULT_VOCAB_DATABASE;
+        try {
+          const local = JSON.parse(localStorage.getItem('roblox_regent_custom_questions') || 'null');
+          if (Array.isArray(local) && local.length > 0) return local;
+        } catch (e) {}
+
+        return DEFAULT_VOCAB_DATABASE;
       }
 
       // Auto-Seed Initial Questions to Supabase
@@ -2616,7 +2681,7 @@
               option_b: pool[0] || '<div>',
               option_c: pool[1] || '<span>',
               option_d: pool[2] || '<p>',
-              correct_option: 'a',
+              correct_option: 'Choice A',
               explanation: q.ttsTh
             };
           });
@@ -2636,6 +2701,9 @@
       }
 
       async saveQuestion(q) {
+        const correctKey = QuestionHelper.normalizeCorrectOption(q.correct_option, q);
+        const choiceLetter = correctKey.replace('option_', '').toUpperCase();
+
         const questionPayload = {
           category: String(q.category || q.stageName || `Stage ${q.stage || 1}`),
           question: String(q.question || q.scenario || ''),
@@ -2643,7 +2711,7 @@
           option_b: String(q.option_b || ''),
           option_c: String(q.option_c || ''),
           option_d: String(q.option_d || ''),
-          correct_option: String(q.correct_option || 'a').toLowerCase(),
+          correct_option: `Choice ${choiceLetter}`,
           explanation: String(q.explanation || q.ttsTh || '')
         };
 
@@ -2654,10 +2722,15 @@
             body: JSON.stringify(questionPayload),
             timeout: 4000
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Supabase saveQuestion error:', e);
+        }
       }
 
       async updateQuestion(id, q) {
+        const correctKey = QuestionHelper.normalizeCorrectOption(q.correct_option, q);
+        const choiceLetter = correctKey.replace('option_', '').toUpperCase();
+
         const questionPayload = {
           category: String(q.category || q.stageName || `Stage ${q.stage || 1}`),
           question: String(q.question || q.scenario || ''),
@@ -2665,7 +2738,7 @@
           option_b: String(q.option_b || ''),
           option_c: String(q.option_c || ''),
           option_d: String(q.option_d || ''),
-          correct_option: String(q.correct_option || 'a').toLowerCase(),
+          correct_option: `Choice ${choiceLetter}`,
           explanation: String(q.explanation || q.ttsTh || '')
         };
 
@@ -2676,7 +2749,9 @@
             body: JSON.stringify(questionPayload),
             timeout: 4000
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Supabase updateQuestion error:', e);
+        }
       }
 
       async deleteQuestion(id) {
@@ -2686,7 +2761,9 @@
             headers: this.headers,
             timeout: 4000
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Supabase deleteQuestion error:', e);
+        }
       }
     }
 
@@ -3054,18 +3131,18 @@
         const sourceData = (Array.isArray(VOCAB_DATABASE) && VOCAB_DATABASE.length > 0) ? VOCAB_DATABASE : DEFAULT_VOCAB_DATABASE;
         
         if (this.stageId === 5) {
-          pool = App.shuffleArray([...sourceData]).slice(0, 20);
+          pool = QuestionHelper.shuffleArray([...sourceData]).slice(0, 20);
         } else {
-          pool = App.shuffleArray(sourceData.filter(q => q.stage === this.stageId)).slice(0, 10);
+          pool = QuestionHelper.shuffleArray(sourceData.filter(q => q && (q.stage === this.stageId || Number(q.stage) === this.stageId))).slice(0, 10);
         }
 
         // Failsafe: if filtered pool is empty, fallback to default stage questions
         if (!pool || pool.length === 0) {
-          pool = App.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
+          pool = QuestionHelper.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId)).slice(0, 10);
         }
         // Double failsafe: if still empty, grab any questions
         if (!pool || pool.length === 0) {
-          pool = App.shuffleArray([...DEFAULT_VOCAB_DATABASE]).slice(0, 10);
+          pool = QuestionHelper.shuffleArray([...DEFAULT_VOCAB_DATABASE]).slice(0, 10);
         }
 
         this.stageQuestions = pool;
@@ -3202,22 +3279,24 @@
         // Prepare Choices: Support both pre-configured options and dynamic distractors
         let choices = [];
         const q = this.activeQuestion;
+        const correctKey = QuestionHelper.normalizeCorrectOption(q.correct_option, q); // 'option_a' | 'option_b' | 'option_c' | 'option_d'
+
         if (q.option_a && q.option_b && (q.option_b !== q.option_a)) {
           const opts = [
-            { term: q.option_a, correct: (q.correct_option === 'a' || q.correct_option === 'option_a') },
-            { term: q.option_b, correct: (q.correct_option === 'b' || q.correct_option === 'option_b') },
-            { term: q.option_c || '<div>', correct: (q.correct_option === 'c' || q.correct_option === 'option_c') },
-            { term: q.option_d || '<p>', correct: (q.correct_option === 'd' || q.correct_option === 'option_d') }
+            { key: 'option_a', choiceLabel: 'Choice A', term: String(q.option_a), correct: (correctKey === 'option_a') },
+            { key: 'option_b', choiceLabel: 'Choice B', term: String(q.option_b), correct: (correctKey === 'option_b') },
+            { key: 'option_c', choiceLabel: 'Choice C', term: String(q.option_c || '<div>'), correct: (correctKey === 'option_c') },
+            { key: 'option_d', choiceLabel: 'Choice D', term: String(q.option_d || '<p>'), correct: (correctKey === 'option_d') }
           ];
           if (!opts.some(o => o.correct)) opts[0].correct = true;
-          choices = App.shuffleArray(opts);
+          choices = QuestionHelper.shuffleArray(opts);
         } else {
           const allPool = (Array.isArray(VOCAB_DATABASE) && VOCAB_DATABASE.length >= 4) ? VOCAB_DATABASE : DEFAULT_VOCAB_DATABASE;
-          const sameStageOthers = App.shuffleArray(
+          const sameStageOthers = QuestionHelper.shuffleArray(
             allPool.filter(v => v.stage === q.stage && v.term !== q.term)
           ).slice(0, 3).map(v => v.term);
 
-          const otherCategories = App.shuffleArray(
+          const otherCategories = QuestionHelper.shuffleArray(
             allPool.filter(v => v.term !== q.term && !sameStageOthers.includes(v.term))
           ).slice(0, 3 - sameStageOthers.length).map(v => v.term);
 
@@ -3226,9 +3305,11 @@
             wrongOptions.push(`Option ${wrongOptions.length + 2}`);
           }
 
-          choices = App.shuffleArray([
-            { term: q.term, correct: true },
-            ...wrongOptions.map(t => ({ term: t, correct: false }))
+          choices = QuestionHelper.shuffleArray([
+            { key: 'option_a', choiceLabel: 'Choice A', term: q.term, correct: true },
+            { key: 'option_b', choiceLabel: 'Choice B', term: wrongOptions[0], correct: false },
+            { key: 'option_c', choiceLabel: 'Choice C', term: wrongOptions[1], correct: false },
+            { key: 'option_d', choiceLabel: 'Choice D', term: wrongOptions[2], correct: false }
           ]);
         }
 
@@ -3265,14 +3346,40 @@
         return "#ef4444";
       }
 
+      isChoiceCorrect(choice, question) {
+        if (!choice || !question) return false;
+        if (choice.correct === true) return true;
+
+        const correctKey = QuestionHelper.normalizeCorrectOption(question.correct_option, question); // 'option_a'
+        if (choice.key && choice.key === correctKey) return true;
+
+        const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A'
+        const choiceLabel = `Choice ${choiceLetter}`; // 'Choice A'
+
+        const rawCorrectStr = String(question.correct_option || '').trim().toLowerCase();
+        if (choice.choiceLabel && (choice.choiceLabel.toLowerCase() === rawCorrectStr || choice.choiceLabel.toLowerCase() === choiceLabel.toLowerCase())) {
+          return true;
+        }
+
+        // Compare term text directly
+        const correctTerm = QuestionHelper.getCorrectOptionTerm(question, correctKey);
+        if (choice.term && correctTerm && choice.term.trim().toLowerCase() === correctTerm.trim().toLowerCase()) {
+          return true;
+        }
+
+        return false;
+      }
+
       handleChoiceClick(choiceIdx) {
         if (!this.activeQuestion || this.isGameOver || !this.isPlaying || this.isAnswered) return;
         const choice = this.choicesList[choiceIdx];
+        if (!choice) return;
         const buttons = document.querySelectorAll('.blox-choice-btn');
 
         this.isAnswered = true;
+        const isCorrect = this.isChoiceCorrect(choice, this.activeQuestion);
 
-        if (choice.correct) {
+        if (isCorrect) {
           if (buttons[choiceIdx]) buttons[choiceIdx].classList.add('correct');
           this.answersHistory.push(true);
           this.processCorrectAnswer();
@@ -3282,7 +3389,9 @@
           }
           // Highlight correct choice for clear visual feedback
           this.choicesList.forEach((c, idx) => {
-            if (c.correct && buttons[idx]) buttons[idx].classList.add('correct');
+            if (this.isChoiceCorrect(c, this.activeQuestion) && buttons[idx]) {
+              buttons[idx].classList.add('correct');
+            }
           });
           this.answersHistory.push(false);
           this.processWrongAnswer();
@@ -3414,7 +3523,7 @@
 
         if (type === 'cut') {
           const wrongButtons = Array.from(document.querySelectorAll('.blox-choice-btn'))
-            .filter((btn, i) => !this.choicesList[i].correct);
+            .filter((btn, i) => !this.isChoiceCorrect(this.choicesList[i], this.activeQuestion));
           wrongButtons.slice(0, 2).forEach(b => b.classList.add('faded'));
           this.createFloatingText("50:50 CUT CHOICES! ✂️", this.canvas.width / 2, 60, '#00f0ff');
         } else if (type === 'freeze') {
@@ -4151,13 +4260,22 @@
           if (customQ && Array.isArray(customQ) && customQ.length > 0) {
             const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
             const normalized = customQ.map((q, idx) => {
+              if (!q || typeof q !== 'object') return null;
+
               const catStr = String(q.category || q.stage || q.stageName || '').trim();
               let stageNum = 1;
-              if (/html|โครงสร้าง|tag/i.test(catStr) || catStr === '1') stageNum = 1;
-              else if (/css|style|ตกแต่ง/i.test(catStr) || catStr === '2') stageNum = 2;
-              else if (/js|javascript|dom|script|logic/i.test(catStr) || catStr === '3') stageNum = 3;
-              else if (/server|backend|cloud|database|sql|node|api/i.test(catStr) || catStr === '4') stageNum = 4;
-              else if (!isNaN(parseInt(catStr, 10)) && parseInt(catStr, 10) >= 1 && parseInt(catStr, 10) <= 4) {
+              const matchNum = catStr.match(/^(\d+)/);
+              if (matchNum && parseInt(matchNum[1], 10) >= 1 && parseInt(matchNum[1], 10) <= 4) {
+                stageNum = parseInt(matchNum[1], 10);
+              } else if (/html|โครงสร้าง|tag/i.test(catStr) || catStr === '1') {
+                stageNum = 1;
+              } else if (/css|style|ตกแต่ง/i.test(catStr) || catStr === '2') {
+                stageNum = 2;
+              } else if (/js|javascript|dom|script|logic/i.test(catStr) || catStr === '3') {
+                stageNum = 3;
+              } else if (/server|backend|cloud|database|sql|node|api/i.test(catStr) || catStr === '4') {
+                stageNum = 4;
+              } else if (!isNaN(parseInt(catStr, 10)) && parseInt(catStr, 10) >= 1 && parseInt(catStr, 10) <= 4) {
                 stageNum = parseInt(catStr, 10);
               } else {
                 stageNum = (idx % 4) + 1;
@@ -4165,13 +4283,17 @@
 
               const stageName = stageNames[stageNum] || catStr || `Stage ${stageNum}`;
 
-              let term = q.term || '';
-              const correctOpt = String(q.correct_option || '').toLowerCase();
-              if (correctOpt === 'a' || correctOpt === 'option_a') term = q.option_a || term;
-              else if (correctOpt === 'b' || correctOpt === 'option_b') term = q.option_b || term;
-              else if (correctOpt === 'c' || correctOpt === 'option_c') term = q.option_c || term;
-              else if (correctOpt === 'd' || correctOpt === 'option_d') term = q.option_d || term;
-              else if (!term && q.option_a) term = q.option_a;
+              const rawCorrect = (q.correct_option !== undefined && q.correct_option !== null) ? q.correct_option : 'Choice A';
+              const correctKey = QuestionHelper.normalizeCorrectOption(rawCorrect, q); // 'option_a', 'option_b', etc.
+              const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A', 'B', 'C', 'D'
+
+              const optionA = (q.option_a !== undefined && q.option_a !== null) ? String(q.option_a) : (q.term || 'Option A');
+              const optionB = (q.option_b !== undefined && q.option_b !== null) ? String(q.option_b) : 'Option B';
+              const optionC = (q.option_c !== undefined && q.option_c !== null) ? String(q.option_c) : 'Option C';
+              const optionD = (q.option_d !== undefined && q.option_d !== null) ? String(q.option_d) : 'Option D';
+
+              const dummyItem = { option_a: optionA, option_b: optionB, option_c: optionC, option_d: optionD, term: q.term };
+              let term = QuestionHelper.getCorrectOptionTerm(dummyItem, correctKey);
               if (!term) term = (DEFAULT_VOCAB_DATABASE[idx % DEFAULT_VOCAB_DATABASE.length] || {}).term || 'Code';
 
               const scenario = q.question || q.scenario || 'โจทย์คำถามการพัฒนาเว็บไซต์';
@@ -4186,16 +4308,18 @@
                 ttsTh: explanation,
                 scenario: scenario,
                 codeExample: q.codeExample || `// ${term}`,
-                option_a: q.option_a || term,
-                option_b: q.option_b || '',
-                option_c: q.option_c || '',
-                option_d: q.option_d || '',
-                correct_option: correctOpt || 'a',
+                option_a: optionA,
+                option_b: optionB,
+                option_c: optionC,
+                option_d: optionD,
+                correct_option: correctKey,
+                correct_choice: `Choice ${choiceLetter}`,
+                correct_letter: choiceLetter,
                 explanation: explanation,
                 category: q.category || stageName,
                 question: scenario
               };
-            });
+            }).filter(Boolean);
 
             if (normalized.length > 0) {
               VOCAB_DATABASE = normalized;
@@ -4742,6 +4866,7 @@
               </div>
             `;
           }).join('') || '<div style="text-align: center; color: #94a3b8; padding: 1rem;">ยังไม่มีรีวิว</div>';
+        }
         modal.classList.add('show');
         AudioEngine.playCoinChime();
       }
@@ -4832,6 +4957,9 @@
         const q = VOCAB_DATABASE.find(item => item.id === id);
         if (!q) return;
 
+        const correctKey = QuestionHelper.normalizeCorrectOption(q.correct_option, q);
+        const correctLetter = correctKey.replace('option_', ''); // 'a', 'b', 'c', 'd'
+
         document.getElementById('modal-q-id').value = q.id;
         document.getElementById('modal-q-title').textContent = `✏️ แก้ไขข้อสอบ ID #${q.id}`;
         document.getElementById('modal-q-stage').value = q.stage || 1;
@@ -4840,7 +4968,7 @@
         document.getElementById('modal-q-choice-b').value = q.option_b || '';
         document.getElementById('modal-q-choice-c').value = q.option_c || '';
         document.getElementById('modal-q-choice-d').value = q.option_d || '';
-        document.getElementById('modal-q-correct').value = (q.correct_option || 'a').toLowerCase();
+        document.getElementById('modal-q-correct').value = correctLetter;
         document.getElementById('modal-q-explanation').value = q.explanation || q.ttsTh || '';
         document.getElementById('modal-add-question').classList.add('show');
       }
@@ -4851,7 +4979,7 @@
 
       async saveTeacherQuestion() {
         const editIdStr = document.getElementById('modal-q-id').value.trim();
-        const stage = parseInt(document.getElementById('modal-q-stage').value, 10);
+        const stage = parseInt(document.getElementById('modal-q-stage').value, 10) || 1;
         const stageNames = ["", "HTML Tags", "CSS Styling", "JS Logic", "Server & Cloud"];
         const categoryName = stageNames[stage] || `Stage ${stage}`;
 
@@ -4860,7 +4988,7 @@
         const choiceB = document.getElementById('modal-q-choice-b').value.trim();
         const choiceC = document.getElementById('modal-q-choice-c').value.trim();
         const choiceD = document.getElementById('modal-q-choice-d').value.trim();
-        const correct = document.getElementById('modal-q-correct').value.toLowerCase();
+        const rawCorrect = document.getElementById('modal-q-correct').value;
         const explanation = document.getElementById('modal-q-explanation').value.trim();
 
         if (!questionText || !choiceA) {
@@ -4868,8 +4996,10 @@
           return;
         }
 
-        const termMap = { a: choiceA, b: choiceB, c: choiceC, d: choiceD };
-        const chosenTerm = termMap[correct] || choiceA;
+        const dummyQ = { option_a: choiceA, option_b: choiceB, option_c: choiceC, option_d: choiceD };
+        const correctKey = QuestionHelper.normalizeCorrectOption(rawCorrect, dummyQ);
+        const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A', 'B', 'C', 'D'
+        const chosenTerm = (correctKey === 'option_a' ? choiceA : (correctKey === 'option_b' ? choiceB : (correctKey === 'option_c' ? choiceC : choiceD))) || choiceA;
 
         // Payload for Supabase questions table:
         // category, question, option_a, option_b, option_c, option_d, correct_option, explanation
@@ -4880,47 +5010,56 @@
           option_b: choiceB || choiceA,
           option_c: choiceC || choiceA,
           option_d: choiceD || choiceA,
-          correct_option: correct,
+          correct_option: `Choice ${choiceLetter}`,
           explanation: explanation || `เฉลย: ${chosenTerm}`
         };
 
-        if (editIdStr) {
-          // Edit Existing Question
-          const editId = parseInt(editIdStr, 10);
-          const idx = VOCAB_DATABASE.findIndex(q => q.id === editId);
-          if (idx !== -1) {
-            VOCAB_DATABASE[idx] = {
-              ...VOCAB_DATABASE[idx],
+        try {
+          if (editIdStr) {
+            // Edit Existing Question
+            const editId = parseInt(editIdStr, 10);
+            const idx = VOCAB_DATABASE.findIndex(q => q.id === editId);
+            if (idx !== -1) {
+              VOCAB_DATABASE[idx] = {
+                ...VOCAB_DATABASE[idx],
+                stage: stage,
+                stageName: categoryName,
+                scenario: questionText,
+                term: chosenTerm,
+                ttsEn: chosenTerm,
+                ttsTh: explanation || `เฉลย: ${chosenTerm}`,
+                codeExample: `// ${chosenTerm}`,
+                correct_choice: `Choice ${choiceLetter}`,
+                correct_letter: choiceLetter,
+                ...questionPayload
+              };
+              await Supabase.updateQuestion(editId, questionPayload);
+            }
+          } else {
+            // Add New Question
+            const newId = VOCAB_DATABASE.length > 0 ? Math.max(...VOCAB_DATABASE.map(q => q.id)) + 1 : 1;
+            const newQ = {
+              id: newId,
               stage: stage,
               stageName: categoryName,
-              scenario: questionText,
               term: chosenTerm,
               ttsEn: chosenTerm,
               ttsTh: explanation || `เฉลย: ${chosenTerm}`,
+              scenario: questionText,
               codeExample: `// ${chosenTerm}`,
+              correct_choice: `Choice ${choiceLetter}`,
+              correct_letter: choiceLetter,
               ...questionPayload
             };
-            await Supabase.updateQuestion(editId, questionPayload);
+            VOCAB_DATABASE.push(newQ);
+            await Supabase.saveQuestion(questionPayload);
           }
-        } else {
-          // Add New Question
-          const newId = VOCAB_DATABASE.length > 0 ? Math.max(...VOCAB_DATABASE.map(q => q.id)) + 1 : 1;
-          const newQ = {
-            id: newId,
-            stage: stage,
-            stageName: categoryName,
-            term: chosenTerm,
-            ttsEn: chosenTerm,
-            ttsTh: explanation || `เฉลย: ${chosenTerm}`,
-            scenario: questionText,
-            codeExample: `// ${chosenTerm}`,
-            ...questionPayload
-          };
-          VOCAB_DATABASE.push(newQ);
-          await Supabase.saveQuestion(questionPayload);
+
+          localStorage.setItem('roblox_regent_custom_questions', JSON.stringify(VOCAB_DATABASE));
+        } catch (err) {
+          console.warn('saveTeacherQuestion error:', err);
         }
 
-        localStorage.setItem('roblox_regent_custom_questions', JSON.stringify(VOCAB_DATABASE));
         this.closeAddQuestionModal();
         this.renderTeacherQuestionsTable();
         this.renderLessons();

@@ -1666,12 +1666,21 @@
                 </div>
 
                 <!-- Stage 5: Mixed All-Star Quest (20 Qs) -->
-                <div class="stage-select-btn" id="stage-card-5" onclick="App.selectStage(5)" style="grid-column: span 2; border-color: var(--blox-gold);">
+                <div class="stage-select-btn" id="stage-card-5" onclick="App.selectStage(5)" style="border-color: var(--blox-gold);">
                   <div class="stage-btn-header">
-                    <span class="stage-btn-title" style="color: var(--blox-yellow);">🌟 5. Random Mixed All-Star Quest</span>
-                    <span class="stage-btn-count" style="background: var(--blox-gold);">20 ข้อจัดเต็ม</span>
+                    <span class="stage-btn-title" style="color: var(--blox-yellow);">🌟 5. Mixed All-Star</span>
+                    <span class="stage-btn-count" style="background: var(--blox-gold);">20 ข้อ</span>
                   </div>
-                  <span class="stage-btn-desc">สุ่มโจทย์รวมทุกหมวดหมู่ บอสไททันยักษ์ Titan Bug Overlord เกิดในข้อ 5, 10, และ 20!</span>
+                  <span class="stage-btn-desc">สุ่มโจทย์รวมทุกหมวดหมู่ บอสไททันยักษ์!</span>
+                </div>
+
+                <!-- Stage 6: Speed & Accuracy Code Typing Challenge (10 Qs) -->
+                <div class="stage-select-btn" id="stage-card-6" onclick="App.selectStage(6)" style="border-color: var(--blox-cyan); background: rgba(0, 240, 255, 0.08);">
+                  <div class="stage-btn-header">
+                    <span class="stage-btn-title" style="color: var(--blox-cyan);">⌨️ 6. Code Typing Quest</span>
+                    <span class="stage-btn-count" style="background: var(--blox-cyan); color: #000;">10 ข้อท้าทาย</span>
+                  </div>
+                  <span class="stage-btn-desc">พิมพ์คำสั่งโค้ดรวดเร็ว วัดความเร็ว WPM และความแม่นยำ!</span>
                 </div>
               </div>
             </div>
@@ -1697,6 +1706,7 @@
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(2, this)">🎨 2. CSS</button>
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(3, this)">⚡ 3. JavaScript</button>
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(4, this)">☁️ 4. Server & Cloud</button>
+            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(6, this)">⌨️ 6. Code Typing</button>
           </div>
         </div>
 
@@ -1729,6 +1739,7 @@
           <button class="stage-tab-btn" id="lb-stage-3" onclick="App.filterLeaderboardStage(3)">3. JS Logic</button>
           <button class="stage-tab-btn" id="lb-stage-4" onclick="App.filterLeaderboardStage(4)">4. Server & Cloud</button>
           <button class="stage-tab-btn" id="lb-stage-5" onclick="App.filterLeaderboardStage(5)">🌟 5. Boss Quest</button>
+          <button class="stage-tab-btn" id="lb-stage-6" onclick="App.filterLeaderboardStage(6)">⌨️ 6. Code Typing</button>
         </div>
 
         <div class="leaderboard-table-wrap">
@@ -1806,10 +1817,19 @@
 
         <!-- Subscreen 2: Item-Level Tracker (Green/Red boxes) -->
         <div class="teacher-subscreen" id="tscreen-tracker">
-          <div style="display: flex; gap: 0.6rem; margin-bottom: 0.4rem;">
-            <input type="text" id="tracker-search-input" class="form-input-control" style="flex: 1;" placeholder="🔍 ค้นหารหัสนักเรียน หรือ ชื่อ-นามสกุล..." oninput="App.renderItemTrackerTable()">
-            <select id="tracker-class-filter" class="form-input-control" style="width: 180px;" onchange="App.renderItemTrackerTable()">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.4rem;">
+            <input type="text" id="tracker-search-input" class="form-input-control" style="flex: 1; min-width: 200px;" placeholder="🔍 ค้นหารหัสนักเรียน หรือ ชื่อ-นามสกุล..." oninput="App.renderItemTrackerTable()">
+            <select id="tracker-class-filter" class="form-input-control" style="width: 170px;" onchange="App.renderItemTrackerTable()">
               <option value="all">ทุกระดับชั้น</option>
+            </select>
+            <select id="tracker-stage-filter" class="form-input-control" style="width: 170px;" onchange="App.renderItemTrackerTable()">
+              <option value="all">ทุกด่าน (All Stages)</option>
+              <option value="1">1. HTML Structure</option>
+              <option value="2">2. CSS Styling</option>
+              <option value="3">3. JS Logic</option>
+              <option value="4">4. Server & Cloud</option>
+              <option value="5">5. Boss Quest</option>
+              <option value="6">6. Code Typing Quest</option>
             </select>
           </div>
 
@@ -1817,12 +1837,14 @@
             <table class="lb-table">
               <thead>
                 <tr>
-                  <th>รหัส / ชื่อนักเรียน</th>
+                  <th style="width: 55px; text-align: center;">ลำดับ</th>
+                  <th style="width: 130px;">รหัสนักเรียน</th>
+                  <th>ชื่อ-นามสกุล</th>
                   <th>ระดับชั้น</th>
-                  <th>ด่าน</th>
+                  <th class="lb-stage-col">ด่าน</th>
                   <th>คะแนน</th>
-                  <th>ผลตรวจรายข้อ (🟢 ถูก / 🔴 ผิด)</th>
-                  <th>วันที่</th>
+                  <th>ความถูกต้อง / ผลตรวจรายข้อ</th>
+                  <th style="min-width: 135px;">วันที่และเวลา</th>
                 </tr>
               </thead>
               <tbody id="tracker-tbody">
@@ -1943,6 +1965,20 @@
                 <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 10px; justify-content: center;" onclick="App.resetMonsterSpeedConfig()">🔄 รีเซ็ตค่าเริ่มต้น</button>
                 <button class="big-blox-action-btn" style="flex: 1.4; font-size: 1.05rem; padding: 0.75rem; border-radius: 10px;" onclick="App.saveMonsterSpeedConfig()">💾 บันทึกการตั้งค่าความเร็ว</button>
               </div>
+
+              <!-- Teacher Password Reset Card -->
+              <div style="margin-top: 0.8rem; background: rgba(10, 16, 36, 0.9); border: 1.5px solid rgba(168, 85, 247, 0.35); border-radius: 12px; padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.2rem;">🔐</span>
+                    <span style="font-weight: 700; color: #fff;">ตั้งรหัสผ่านครูใหม่ (Reset Teacher Password)</span>
+                  </div>
+                  <button class="icon-toggle-btn" style="background: linear-gradient(135deg, #a855f7, #ec4899); border-color: #c084fc;" onclick="App.openResetTeacherPasswordModal()">🔑 เปลี่ยนรหัสผ่าน</button>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+                  รหัสผ่านเริ่มต้นคือ <code style="color: var(--blox-yellow);">Teacher</code> หากเปลี่ยนแล้ว ระบบจะบันทึกรหัสผ่านใหม่ลงเครื่องนี้
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -2020,7 +2056,7 @@
           </button>
         </section>
 
-        <!-- Question Prompt & Clean 4-Choice Buttons -->
+        <!-- Question Prompt & Clean 4-Choice Buttons or Code Typing Terminal -->
         <footer class="question-deck-panel">
           <div class="question-prompt-banner">
             <div style="font-size: 1.6rem;" id="q-icon-badge">🎮</div>
@@ -2030,8 +2066,28 @@
             <div class="question-cat-tag" id="question-category-tag">HTML TAGS</div>
           </div>
 
+          <!-- Stages 1-5: 4-Choice Buttons -->
           <div class="choices-grid-layout" id="choices-container">
             <!-- 4 Choice buttons safely rendered with textContent -->
+          </div>
+
+          <!-- Stage 6: Code Typing Terminal UI -->
+          <div id="typing-challenge-container" style="display: none; width: 100%; flex-direction: column; gap: 0.6rem;">
+            <div class="typing-target-box" style="background: rgba(9, 14, 32, 0.95); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.85rem 1.1rem; font-family: var(--font-code); font-size: 1.15rem; color: #fff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); display: flex; align-items: center; justify-content: space-between; overflow-x: auto;">
+              <div id="typing-target-display" style="letter-spacing: 0.5px; white-space: nowrap;"></div>
+              <button class="icon-toggle-btn" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-left: 0.8rem; flex-shrink: 0; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="Game.speakCurrentTypingTarget()">🔊 ฟัง</button>
+            </div>
+
+            <div style="display: flex; gap: 0.6rem; align-items: center;">
+              <input type="text" id="typing-input-field" class="form-input-control" style="flex: 1; font-family: var(--font-code); font-size: 1.05rem; padding: 0.75rem 1rem; border-color: var(--blox-cyan); background: rgba(14, 22, 50, 0.95); color: #00f0ff;" placeholder="⌨️ พิมพ์โค้ดตามข้อความด้านบนให้ถูกต้องและรวดเร็ว..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="Game.handleTypingInput(this.value)" onkeydown="if(event.key === 'Enter') Game.submitTypingAnswer();">
+              <button class="big-blox-action-btn" id="typing-submit-btn" style="min-width: 130px; font-size: 0.95rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, #00f0ff, #3b82f6); color: #000;" onclick="Game.submitTypingAnswer()">⚡ ส่งคำตอบ</button>
+            </div>
+
+            <div class="typing-metrics-bar" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: #94a3b8; padding: 0 0.4rem;">
+              <span>ความแม่นยำ: <strong id="typing-live-accuracy" style="color: var(--blox-green);">100%</strong></span>
+              <span>ความเร็วพิมพ์: <strong id="typing-live-wpm" style="color: var(--blox-yellow);">0 WPM</strong></span>
+              <span>เวลาที่ใช้: <strong id="typing-live-time" style="color: var(--blox-cyan);">0.0s</strong></span>
+            </div>
           </div>
         </footer>
       </div>
@@ -2054,11 +2110,38 @@
       <h2 class="modal-title">TEACHER ACCESS</h2>
       <p class="modal-subtitle">กรุณากรอกรหัสผ่านสำหรับคุณครูผู้ดูแลระบบ</p>
       
-      <input type="password" id="input-teacher-password" class="form-input-control" style="width: 100%; text-align: center; font-size: 1.1rem; margin-bottom: 1rem;" placeholder="กรอกรหัสผ่าน...">
+      <input type="password" id="input-teacher-password" class="form-input-control" style="width: 100%; text-align: center; font-size: 1.1rem; margin-bottom: 1rem;" placeholder="กรอกรหัสผ่าน..." onkeydown="if(event.key === 'Enter') App.verifyTeacherPassword();">
 
       <div style="display: flex; gap: 0.6rem;">
         <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeTeacherAuth()">ยกเลิก (Cancel)</button>
         <button class="big-blox-action-btn" style="flex: 1; font-size: 1.1rem; padding: 0.75rem; border-radius: 12px;" onclick="App.verifyTeacherPassword()">เข้าสู่ระบบ 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1.5: RESET TEACHER PASSWORD
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-reset-teacher-password">
+    <div class="blox-modal-card" style="max-width: 440px;">
+      <div style="font-size: 2.8rem; margin-bottom: 0.3rem;">🔑</div>
+      <h2 class="modal-title">RESET TEACHER KEY</h2>
+      <p class="modal-subtitle">กำหนดรหัสผ่านใหม่สำหรับเข้าสู่ Teacher Dashboard</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; text-align: left;">
+        <label class="form-label-title">รหัสผ่านปัจจุบัน (Current Key)</label>
+        <input type="password" id="input-curr-teacher-password" class="form-input-control" placeholder="กรอกรหัสผ่านเดิม (เช่น Teacher)...">
+
+        <label class="form-label-title">รหัสผ่านใหม่ (New Key)</label>
+        <input type="password" id="input-new-teacher-password" class="form-input-control" placeholder="กรอกรหัสผ่านใหม่...">
+
+        <label class="form-label-title">ยืนยันรหัสผ่านใหม่ (Confirm New Key)</label>
+        <input type="password" id="input-confirm-teacher-password" class="form-input-control" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง...">
+      </div>
+
+      <div style="display: flex; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeResetTeacherPasswordModal()">ยกเลิก (Cancel)</button>
+        <button class="big-blox-action-btn" style="flex: 1.2; font-size: 1rem; padding: 0.75rem; border-radius: 12px; background: linear-gradient(135deg, #a855f7, #ec4899);" onclick="App.saveNewTeacherPassword()">💾 บันทึกรหัสผ่านใหม่</button>
       </div>
     </div>
   </div>
@@ -2283,6 +2366,24 @@
     };
 
     /**
+     * Stage 6: Code Typing Challenge Dataset (12 Real-World Code Snippets)
+     */
+    const CODE_TYPING_SNIPPETS = [
+      { id: 101, stage: 6, stageName: "6. Code Typing", term: '<meta charset="UTF-8">', scenario: 'กำหนดการเข้ารหัสอักขระภาษาไทยและสากลของเอกสาร HTML', explanation: '<meta charset="UTF-8"> ใช้สำหรับระบุ Character Encoding ให้รองรับภาษาไทยและอักขระสากลได้อย่างถูกต้อง', code: '<meta charset="UTF-8">', ttsEn: 'meta charset UTF-8', ttsTh: 'กำหนดการเข้ารหัสอักขระภาษาไทยและสากล', codeExample: '<meta charset="UTF-8">' },
+      { id: 102, stage: 6, stageName: "6. Code Typing", term: 'display: flex; justify-content: center;', scenario: 'จัดตำแหน่งองค์ประกอบ UI ให้อยู่กึ่งกลางหน้าจอแนวนอน', explanation: 'display: flex ทำงานร่วมกับ justify-content: center เพื่อจัด Alignment ให้อยู่ตรงกลางแกนหลัก', code: 'display: flex; justify-content: center;', ttsEn: 'display flex justify content center', ttsTh: 'จัดตำแหน่งองค์ประกอบ UI ให้อยู่กึ่งกลาง', codeExample: '.container { display: flex; justify-content: center; }' },
+      { id: 103, stage: 6, stageName: "6. Code Typing", term: 'document.getElementById("app")', scenario: 'คำสั่ง JavaScript สำหรับเข้าถึง DOM Element ด้วย id', explanation: 'document.getElementById() เป็นคำสั่งพื้นฐานในการค้นหา Node ในเอกสาร HTML อย่างรวดเร็ว', code: 'document.getElementById("app")', ttsEn: 'document getElementById app', ttsTh: 'เข้าถึงองค์ประกอบ DOM ด้วย id', codeExample: 'const app = document.getElementById("app");' },
+      { id: 104, stage: 6, stageName: "6. Code Typing", term: '<link rel="stylesheet" href="style.css">', scenario: 'แท็ก HTML เชื่อมต่อไฟล์สไตล์ชีต CSS ภายนอก', explanation: '<link rel="stylesheet"> นำเข้าไฟล์ CSS เพื่อตกแต่งหน้าเว็บแยกจากโครงสร้าง HTML', code: '<link rel="stylesheet" href="style.css">', ttsEn: 'link rel stylesheet href style.css', ttsTh: 'เชื่อมต่อไฟล์ CSS ภายนอกเข้าสู่เอกสาร HTML', codeExample: '<link rel="stylesheet" href="style.css">' },
+      { id: 105, stage: 6, stageName: "6. Code Typing", term: 'addEventListener("click", () => {})', scenario: 'ฟังก์ชันดักจับเหตุการณ์ Event Listener เมื่อผู้ใช้คลิก', explanation: 'addEventListener("click", callback) ทำให้องค์ประกอบตอบสนองต่อการคลิกของผู้เล่น', code: 'addEventListener("click", () => {})', ttsEn: 'addEventListener click', ttsTh: 'ดักฟังเหตุการณ์การคลิกเมาส์ของผู้ใช้', codeExample: 'btn.addEventListener("click", () => { console.log("clicked"); });' },
+      { id: 106, stage: 6, stageName: "6. Code Typing", term: 'box-shadow: 0 4px 15px rgba(0,0,0,0.3);', scenario: 'คำสั่ง CSS สร้างมิติแสงเงาให้บล็อกองค์ประกอบแบบ 3D', explanation: 'box-shadow กำหนดเงาแนวนอน แนวตั้ง รัศมีการเบลอ และสี RGBA', code: 'box-shadow: 0 4px 15px rgba(0,0,0,0.3);', ttsEn: 'box shadow 0 4px 15px rgba 0 0 0 0.3', ttsTh: 'สร้างมิติแสงเงาให้บล็อกองค์ประกอบแบบ 3D', codeExample: '.card { box-shadow: 0 4px 15px rgba(0,0,0,0.3); }' },
+      { id: 107, stage: 6, stageName: "6. Code Typing", term: 'fetch("https://api.example.com/data")', scenario: 'ฟังก์ชัน Asynchronous ดึงข้อมูล REST API จากเซิร์ฟเวอร์', explanation: 'fetch() ส่ง HTTP Request แบบ Promise ช่วยโหลดข้อมูลแบบเบื้องหลังโดยไม่ต้องรีเฟรชหน้าเว็บ', code: 'fetch("https://api.example.com/data")', ttsEn: 'fetch api data', ttsTh: 'ดึงข้อมูล REST API จากเซิร์ฟเวอร์', codeExample: 'fetch("https://api.example.com/data").then(res => res.json());' },
+      { id: 108, stage: 6, stageName: "6. Code Typing", term: 'localStorage.setItem("user", "Roblox");', scenario: 'บันทึกข้อมูลถาวรลงใน Web Storage ของเบราว์เซอร์', explanation: 'localStorage.setItem(key, value) บันทึกข้อมูลค้างไว้ในเครื่องไคลเอนต์แม้ปิดแท็บ', code: 'localStorage.setItem("user", "Roblox");', ttsEn: 'localStorage setItem user Roblox', ttsTh: 'บันทึกข้อมูลถาวรบนเบราว์เซอร์ไคลเอนต์', codeExample: 'localStorage.setItem("user", "Roblox");' },
+      { id: 109, stage: 6, stageName: "6. Code Typing", term: '<button class="btn-primary">Click</button>', scenario: 'แท็กปุ่มกด Action Button พร้อมคลาสสไตล์ลิ่ง', explanation: '<button> ใช้สร้างปุ่มแบบ Interactive พร้อมคลาสเพื่อตกแต่งสไตล์สวยงาม', code: '<button class="btn-primary">Click</button>', ttsEn: 'button class btn-primary Click', ttsTh: 'ปุ่มกดสำหรับให้ผู้ใช้โต้ตอบในระบบเว็บ', codeExample: '<button class="btn-primary">Click</button>' },
+      { id: 110, stage: 6, stageName: "6. Code Typing", term: 'JSON.stringify(responsePayload);', scenario: 'ฟังก์ชันแปลง JavaScript Object ให้เป็นข้อความ JSON', explanation: 'JSON.stringify() เข้ารหัสโครงสร้างข้อมูลให้อยู่ในรูปสตริงเพื่อส่งผ่านเน็ตเวิร์ก', code: 'JSON.stringify(responsePayload);', ttsEn: 'JSON stringify responsePayload', ttsTh: 'แปลง JavaScript Object เป็นข้อความ JSON string', codeExample: 'const jsonStr = JSON.stringify(responsePayload);' },
+      { id: 111, stage: 6, stageName: "6. Code Typing", term: '<input type="password" required>', scenario: 'ฟิลด์กรอกรหัสผ่านที่บังคับกรอกข้อมูลก่อนกดส่งฟอร์ม', explanation: '<input type="password"> ซ่อนตัวอักษรที่พิมพ์เป็นจุดกลม และ required บังคับกรอก', code: '<input type="password" required>', ttsEn: 'input type password required', ttsTh: 'ช่องกรอกรหัสผ่านที่จำเป็นต้องกรอกก่อนส่งฟอร์ม', codeExample: '<input type="password" required>' },
+      { id: 112, stage: 6, stageName: "6. Code Typing", term: 'background: linear-gradient(135deg, #00f0ff, #a855f7);', scenario: 'คำสั่ง CSS สร้างพื้นหลังไล่เฉดสีฟ้าไซเบอร์และม่วงเมจิก', explanation: 'linear-gradient(มุม, สีเริ่มต้น, สีสิ้นสุด) สร้างกราเดียนต์สีที่ทันสมัย', code: 'background: linear-gradient(135deg, #00f0ff, #a855f7);', ttsEn: 'background linear gradient 135deg', ttsTh: 'สร้างพื้นหลังไล่เฉดสีฟ้าไซเบอร์และม่วงเมจิก', codeExample: 'background: linear-gradient(135deg, #00f0ff, #a855f7);' }
+    ];
+
+    /**
      * Question Helper: Handles robust mapping, normalization, and comparison
      * of questions and correct options across Supabase, localStorage, and in-memory datasets.
      */
@@ -2336,9 +2437,11 @@
         if (!category) return 1;
         const str = String(category).trim().toLowerCase();
         const matchNum = str.match(/^(\d+)/);
-        if (matchNum && parseInt(matchNum[1], 10) >= 1 && parseInt(matchNum[1], 10) <= 4) {
+        if (matchNum && parseInt(matchNum[1], 10) >= 1 && parseInt(matchNum[1], 10) <= 6) {
           return parseInt(matchNum[1], 10);
         }
+        if (/typing|speed|code quest|พิมพ์/i.test(str)) return 6;
+        if (/mixed|all-star|boss|titan/i.test(str)) return 5;
         if (/html|โครงสร้าง|tag/i.test(str)) return 1;
         if (/css|style|ตกแต่ง/i.test(str)) return 2;
         if (/js|javascript|dom|script|logic/i.test(str)) return 3;
@@ -3382,6 +3485,8 @@
         
         if (this.stageId === 5) {
           pool = QuestionHelper.shuffleArray([...sourceData]).slice(0, 20);
+        } else if (this.stageId === 6) {
+          pool = QuestionHelper.shuffleArray([...CODE_TYPING_SNIPPETS]).slice(0, 10);
         } else {
           pool = QuestionHelper.shuffleArray(
             sourceData.filter(q => q && (q.stage === this.stageId || Number(q.stage) === this.stageId || QuestionHelper.mapCategoryToStage(q.category) === this.stageId))
@@ -3470,9 +3575,9 @@
         const qIconEl = document.getElementById('q-icon-badge');
 
         if (qIdxEl) qIdxEl.textContent = idx + 1;
-        if (qTextEl) qTextEl.textContent = this.activeQuestion.scenario;
-        if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName;
-        if (qIconEl) qIconEl.textContent = isBoss ? '👑' : '🎮';
+        if (qTextEl) qTextEl.textContent = this.activeQuestion.scenario || "พิมพ์คำสั่งโค้ดต่อไปนี้ให้ถูกต้อง";
+        if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName || (this.stageId === 6 ? "6. CODE TYPING" : "WEB VOCAB");
+        if (qIconEl) qIconEl.textContent = this.stageId === 6 ? '⌨️' : (isBoss ? '👑' : '🎮');
 
         // 1. Immediate Monster Spawn with Teacher Configured Speed
         const baseMultiplier = (this.customBaseSpeed !== undefined) ? this.customBaseSpeed : ((typeof App !== 'undefined' && App.monsterBaseSpeed) ? App.monsterBaseSpeed : 0.35);
@@ -3528,6 +3633,20 @@
         const expBanner = document.getElementById('question-explanation-banner');
         if (expBanner) expBanner.style.display = 'none';
 
+        // Setup Stage 6 (Code Typing Challenge) vs Stages 1-5 (4-Choice selection)
+        const choicesContainer = document.getElementById('choices-container');
+        const typingContainer = document.getElementById('typing-challenge-container');
+
+        if (this.stageId === 6) {
+          if (choicesContainer) choicesContainer.style.display = 'none';
+          if (typingContainer) typingContainer.style.display = 'flex';
+          this.setupTypingChallenge();
+          return;
+        }
+
+        if (typingContainer) typingContainer.style.display = 'none';
+        if (choicesContainer) choicesContainer.style.display = 'grid';
+
         // Prepare Choices: Support both pre-configured options and dynamic distractors
         let choices = [];
         const q = this.activeQuestion;
@@ -3568,18 +3687,131 @@
         this.choicesList = choices;
 
         // CRITICAL REQUIREMENT: Render choice buttons using element.textContent (NEVER innerHTML)
-        const container = document.getElementById('choices-container');
-        if (container) {
-          container.innerHTML = '';
+        if (choicesContainer) {
+          choicesContainer.innerHTML = '';
           this.choicesList.forEach((choice, i) => {
             const btn = document.createElement('button');
             btn.className = 'blox-choice-btn';
             btn.setAttribute('data-idx', i);
             btn.textContent = choice.term;
             btn.onclick = () => Game.handleChoiceClick(i);
-            container.appendChild(btn);
+            choicesContainer.appendChild(btn);
           });
         }
+      }
+
+      setupTypingChallenge() {
+        this.itemTypingStartTime = Date.now();
+        const inputField = document.getElementById('typing-input-field');
+        if (inputField) {
+          inputField.value = '';
+          inputField.disabled = false;
+          setTimeout(() => inputField.focus(), 100);
+        }
+
+        const targetCode = this.activeQuestion.code || this.activeQuestion.term || '';
+        const targetDisplay = document.getElementById('typing-target-display');
+        if (targetDisplay) {
+          targetDisplay.innerHTML = targetCode.split('').map((char, i) => {
+            if (i === 0) {
+              return `<span style="background: rgba(0, 240, 255, 0.35); color: #fff; border-bottom: 2px solid var(--blox-cyan); padding: 0 1px;">${this.escapeHtml(char)}</span>`;
+            }
+            return `<span style="color: #64748b;">${this.escapeHtml(char)}</span>`;
+          }).join('');
+        }
+
+        const accEl = document.getElementById('typing-live-accuracy');
+        const wpmEl = document.getElementById('typing-live-wpm');
+        const timeEl = document.getElementById('typing-live-time');
+        if (accEl) accEl.textContent = '100%';
+        if (wpmEl) wpmEl.textContent = '0 WPM';
+        if (timeEl) timeEl.textContent = '0.0s';
+      }
+
+      handleTypingInput(typed) {
+        if (!this.activeQuestion || this.stageId !== 6 || this.isAnswered || this.isGameOver) return;
+        const target = this.activeQuestion.code || this.activeQuestion.term || '';
+        const displayEl = document.getElementById('typing-target-display');
+        if (!displayEl) return;
+
+        let html = '';
+        let correctCount = 0;
+
+        for (let i = 0; i < target.length; i++) {
+          const expected = target[i];
+          const actual = typed[i];
+          if (actual === undefined) {
+            if (i === typed.length) {
+              html += `<span style="background: rgba(0, 240, 255, 0.35); color: #fff; border-bottom: 2px solid var(--blox-cyan); padding: 0 1px;">${this.escapeHtml(expected)}</span>`;
+            } else {
+              html += `<span style="color: #64748b;">${this.escapeHtml(expected)}</span>`;
+            }
+          } else if (actual === expected) {
+            correctCount++;
+            html += `<span style="color: var(--blox-green); font-weight: 700; text-shadow: 0 0 8px rgba(16,185,129,0.6);">${this.escapeHtml(expected)}</span>`;
+          } else {
+            html += `<span style="color: #f87171; background: rgba(239,68,68,0.3); text-decoration: line-through;">${this.escapeHtml(expected)}</span>`;
+          }
+        }
+
+        displayEl.innerHTML = html;
+
+        // Real-time Metrics
+        const elapsedSec = Math.max((Date.now() - this.itemTypingStartTime) / 1000, 0.1);
+        const wpm = Math.round(((typed.length / 5) / (elapsedSec / 60)));
+        const accuracy = Math.min(Math.max(Math.round((correctCount / Math.max(typed.length, 1)) * 100), 0), 100);
+
+        const accEl = document.getElementById('typing-live-accuracy');
+        const wpmEl = document.getElementById('typing-live-wpm');
+        const timeEl = document.getElementById('typing-live-time');
+
+        if (accEl) accEl.textContent = `${accuracy}%`;
+        if (wpmEl) wpmEl.textContent = `${wpm} WPM`;
+        if (timeEl) timeEl.textContent = `${elapsedSec.toFixed(1)}s`;
+
+        // Auto-submit on exact full match
+        if (typed === target || (typed.length >= target.length && typed.trim() === target.trim())) {
+          this.submitTypingAnswer(true);
+        }
+      }
+
+      submitTypingAnswer(isAuto = false) {
+        if (!this.activeQuestion || this.stageId !== 6 || this.isAnswered || this.isGameOver) return;
+        const inputField = document.getElementById('typing-input-field');
+        const typed = inputField ? inputField.value : '';
+        const target = this.activeQuestion.code || this.activeQuestion.term || '';
+
+        this.isAnswered = true;
+        if (inputField) inputField.disabled = true;
+
+        const isExact = (typed.trim() === target.trim());
+        const elapsedSec = Math.max((Date.now() - this.itemTypingStartTime) / 1000, 0.5);
+        const wpm = Math.round(((typed.length / 5) / (elapsedSec / 60)));
+
+        if (isExact) {
+          this.answersHistory.push(true);
+          // Bonus speed calculation
+          this.score += Math.max(wpm * 5, 50);
+          this.processCorrectAnswer();
+        } else {
+          this.answersHistory.push(false);
+          this.processWrongAnswer();
+        }
+      }
+
+      speakCurrentTypingTarget() {
+        if (!this.activeQuestion) return;
+        AudioEngine.speakEnglish(this.activeQuestion.ttsEn || this.activeQuestion.term || this.activeQuestion.code || '');
+      }
+
+      escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
       }
 
       getMonsterName(stage, isBoss) {
@@ -3587,6 +3819,8 @@
         if (stage === 1) return "GLITCH SHADOW BEAST ⬛";
         if (stage === 2) return "UNSTYLED STONE BEHEMOTH 🗿";
         if (stage === 3) return "CYBER SPIDER FIEND 🕷️";
+        if (stage === 4) return "404 VOID DEMON ❌";
+        if (stage === 6) return "SYNTAX DRAGON BEAST 🐉";
         return "404 VOID DEMON ❌";
       }
 
@@ -3595,6 +3829,8 @@
         if (stage === 1) return "#00f0ff";
         if (stage === 2) return "#a855f7";
         if (stage === 3) return "#ff2a85";
+        if (stage === 4) return "#ef4444";
+        if (stage === 6) return "#10b981";
         return "#ef4444";
       }
 
@@ -4433,11 +4669,16 @@
         document.getElementById('res-accuracy-text').textContent = `${accuracy}%`;
         document.getElementById('res-time-text').textContent = `${timeUsedSec}s`;
 
+        let stageDisplayName = `Stage ${this.stageId}`;
+        if (this.stageId === 5) stageDisplayName = "Stage 5 - Boss Quest";
+        else if (this.stageId === 6) stageDisplayName = "Stage 6 - Code Typing";
+        else if (this.stageQuestions[0] && this.stageQuestions[0].stageName) stageDisplayName = this.stageQuestions[0].stageName;
+
         const scorePayload = {
           student_id: this.studentId,
           student_name: this.studentName,
           grade: this.classLevel || 'ปวช. 2/1',
-          stage: `Stage ${this.stageId}`,
+          stage: stageDisplayName,
           score: this.score,
           accuracy: accuracy,
           class_level: this.classLevel || 'ปวช. 2/1',
@@ -4445,7 +4686,7 @@
           correct_answers: this.correctCount,
           total_questions: totalQ,
           answers_history: this.answersHistory,
-          stage_name: `Stage ${this.stageId}`,
+          stage_name: stageDisplayName,
           entry_number: App.getEntrySequence(this.studentId),
           created_at: new Date().toISOString()
         };
@@ -4719,11 +4960,13 @@
         if (!container) return;
         container.innerHTML = '';
 
-        VOCAB_DATABASE.forEach(v => {
+        const allLessons = [...VOCAB_DATABASE, ...CODE_TYPING_SNIPPETS];
+
+        allLessons.forEach(v => {
           const card = document.createElement('div');
           card.className = 'lesson-item-card';
           card.setAttribute('data-stage', v.stage);
-          card.setAttribute('data-search', `${v.term} ${v.ttsTh} ${v.scenario}`.toLowerCase());
+          card.setAttribute('data-search', `${v.term} ${v.ttsTh || ''} ${v.scenario || ''}`.toLowerCase());
 
           const top = document.createElement('div');
           top.className = 'lesson-card-top';
@@ -4742,11 +4985,11 @@
 
           const desc = document.createElement('div');
           desc.className = 'lesson-desc-th';
-          desc.textContent = v.ttsTh;
+          desc.textContent = v.ttsTh || v.explanation || v.scenario;
 
           const example = document.createElement('div');
           example.className = 'lesson-example-code';
-          example.textContent = v.codeExample;
+          example.textContent = v.codeExample || v.code || `// ${v.term}`;
 
           card.appendChild(top);
           card.appendChild(desc);
@@ -4923,14 +5166,57 @@
 
       verifyTeacherPassword() {
         const pwd = document.getElementById('input-teacher-password').value.trim();
-        if (pwd === "Teacher") {
+        const stored = localStorage.getItem('roblox_teacher_custom_password') || 'Teacher';
+
+        if (pwd === stored || pwd === 'Teacher') {
           this.teacherAuthenticated = true;
           this.closeTeacherAuth();
           this.showView('teacher');
           AudioEngine.playCoinChime();
         } else {
-          alert('รหัสผ่านไม่ถูกต้อง! กรุณากรอก "Teacher"');
+          alert('รหัสผ่านไม่ถูกต้อง! กรุณากรอกรหัสผ่านที่ตั้งไว้ หรือ "Teacher"');
+          AudioEngine.playRobloxOof();
         }
+      }
+
+      openResetTeacherPasswordModal() {
+        document.getElementById('input-curr-teacher-password').value = '';
+        document.getElementById('input-new-teacher-password').value = '';
+        document.getElementById('input-confirm-teacher-password').value = '';
+        document.getElementById('modal-reset-teacher-password').classList.add('show');
+        setTimeout(() => document.getElementById('input-curr-teacher-password').focus(), 150);
+      }
+
+      closeResetTeacherPasswordModal() {
+        document.getElementById('modal-reset-teacher-password').classList.remove('show');
+      }
+
+      saveNewTeacherPassword() {
+        const curr = document.getElementById('input-curr-teacher-password').value.trim();
+        const newPass = document.getElementById('input-new-teacher-password').value.trim();
+        const confirmPass = document.getElementById('input-confirm-teacher-password').value.trim();
+
+        const stored = localStorage.getItem('roblox_teacher_custom_password') || 'Teacher';
+
+        if (curr !== stored && curr !== 'Teacher') {
+          alert('รหัสผ่านปัจจุบันไม่ถูกต้อง!');
+          return;
+        }
+
+        if (!newPass || newPass.length < 3) {
+          alert('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 3 ตัวอักษร');
+          return;
+        }
+
+        if (newPass !== confirmPass) {
+          alert('รหัสผ่านใหม่และช่องยืนยันรหัสผ่านไม่ตรงกัน!');
+          return;
+        }
+
+        localStorage.setItem('roblox_teacher_custom_password', newPass);
+        alert('ตั้งรหัสผ่านครูใหม่เรียบร้อยแล้ว! 🔐');
+        this.closeResetTeacherPasswordModal();
+        AudioEngine.playCoinChime();
       }
 
       lockTeacherDashboard() {
@@ -5078,21 +5364,28 @@
           const scores = await Supabase.fetchScores();
           const search = (document.getElementById('tracker-search-input')?.value || '').toLowerCase().trim();
           const classFilterSelect = document.getElementById('tracker-class-filter');
+          const stageFilterSelect = document.getElementById('tracker-stage-filter');
 
           // Dynamic Grade Dropdown: populate unique grades from scores
           if (classFilterSelect) {
             const currentSelected = classFilterSelect.value || 'all';
             const uniqueGrades = [...new Set(scores.map(s => (s.grade || s.class_level || '').trim()).filter(Boolean))].sort();
             
-            let optionsHtml = `<option value="all">ทุกระดับชั้น (All Grades)</option>`;
-            uniqueGrades.forEach(g => {
-              optionsHtml += `<option value="${g}">${g}</option>`;
-            });
-            classFilterSelect.innerHTML = optionsHtml;
-            classFilterSelect.value = uniqueGrades.includes(currentSelected) ? currentSelected : 'all';
+            const currentOptionVals = Array.from(classFilterSelect.options).map(o => o.value).filter(v => v !== 'all');
+            const isDifferent = uniqueGrades.length !== currentOptionVals.length || uniqueGrades.some((g, i) => g !== currentOptionVals[i]);
+            
+            if (isDifferent || classFilterSelect.options.length <= 1) {
+              let optionsHtml = `<option value="all">ทุกระดับชั้น (All Grades)</option>`;
+              uniqueGrades.forEach(g => {
+                optionsHtml += `<option value="${g}">${g}</option>`;
+              });
+              classFilterSelect.innerHTML = optionsHtml;
+              classFilterSelect.value = uniqueGrades.includes(currentSelected) ? currentSelected : 'all';
+            }
           }
 
           const selectedClass = classFilterSelect ? classFilterSelect.value : 'all';
+          const selectedStage = stageFilterSelect ? stageFilterSelect.value : 'all';
 
           tbody.innerHTML = '';
           const filtered = scores.filter(s => {
@@ -5101,20 +5394,31 @@
             const sId = String(s.student_id || '').toLowerCase();
             const matchSearch = !search || sName.includes(search) || sId.includes(search);
             const matchClass = (selectedClass === 'all') || (gradeVal === selectedClass);
-            return matchSearch && matchClass;
+            
+            let matchStage = true;
+            if (selectedStage !== 'all') {
+              const targetStage = Number(selectedStage);
+              const stStr = String(s.stage || s.stage_name || '');
+              const stageNum = QuestionHelper.mapCategoryToStage(stStr);
+              const rawMatch = stStr.match(/(\d+)/);
+              const foundNum = rawMatch ? parseInt(rawMatch[1], 10) : stageNum;
+              matchStage = (foundNum === targetStage);
+            }
+
+            return matchSearch && matchClass && matchStage;
           });
 
           if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ไม่พบข้อมูลผลคะแนนที่ตรงกับเงื่อนไขการค้นหา</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ไม่พบข้อมูลผลคะแนนที่ตรงกับเงื่อนไขการค้นหา</td></tr>';
             return;
           }
 
-          filtered.forEach(s => {
+          filtered.forEach((s, idx) => {
             const tr = document.createElement('tr');
             const history = Array.isArray(s.answers_history) ? s.answers_history : [true, true, true, false, true];
 
-            const pillsHtml = history.map((isOk, idx) => `
-              <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${idx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${idx + 1}</div>
+            const pillsHtml = history.map((isOk, pIdx) => `
+              <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${pIdx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${pIdx + 1}</div>
             `).join('');
 
             const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
@@ -5124,11 +5428,18 @@
             const dateStr = this.formatDateTime(s.created_at);
 
             tr.innerHTML = `
-              <td><strong>${s.student_name || 'Robloxian'}</strong> <span style="font-size: 0.75rem; color: #94a3b8;">(${s.student_id || '-'})</span></td>
+              <td style="font-weight: 700; color: #94a3b8; text-align: center; width: 55px;">#${idx + 1}</td>
+              <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id || '-'}</td>
+              <td><strong>${s.student_name || 'Robloxian'}</strong></td>
               <td>${gradeVal}</td>
-              <td><span class="nav-brand-badge">${stageVal}</span></td>
-              <td style="color: var(--blox-yellow); font-weight: 700;">${scoreVal} (${accVal}%)</td>
-              <td><div class="answer-tracker-pill-group">${pillsHtml}</div></td>
+              <td class="lb-stage-col"><span class="nav-brand-badge">${stageVal}</span></td>
+              <td style="color: var(--blox-yellow); font-weight: 700;">${scoreVal}</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-weight: 700; color: ${accVal >= 80 ? 'var(--blox-green)' : (accVal >= 50 ? 'var(--blox-yellow)' : '#f87171')}; min-width: 45px;">${accVal}%</span>
+                  <div class="answer-tracker-pill-group">${pillsHtml}</div>
+                </div>
+              </td>
               <td style="color: #94a3b8; font-size: 0.78rem; font-family: var(--font-code); white-space: nowrap;">${dateStr}</td>
             `;
             tbody.appendChild(tr);

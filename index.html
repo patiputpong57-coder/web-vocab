@@ -508,6 +508,82 @@
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
     }
 
+    /* Game Mode Picker Grid */
+    .gamemode-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .gamemode-card {
+      background: rgba(22, 33, 66, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .gamemode-card:hover {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .gamemode-card.selected {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.15);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+    }
+
+    .gamemode-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .gamemode-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #fff;
+    }
+
+    .gamemode-badge {
+      font-size: 0.7rem;
+      color: #fff;
+      padding: 0.15rem 0.45rem;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .gamemode-desc {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .typing-mode-card {
+      background: linear-gradient(135deg, rgba(14, 22, 50, 0.95), rgba(0, 240, 255, 0.08));
+      border: 2px solid var(--blox-cyan);
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+    }
+
+    .typing-feat-pill {
+      font-size: 0.73rem;
+      color: #00f0ff;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
     /* Stage Levels Grid */
     .stages-selection-grid {
       display: grid;
@@ -1620,12 +1696,36 @@
               </div>
             </div>
 
-            <!-- Stage Categories (5 Stages) -->
-            <div class="form-group-box" style="flex: 1;">
+            <!-- Game Mode Selection (RPG Quest vs Code Typing Mini-Game) -->
+            <div class="form-group-box">
+              <label class="form-label-title">
+                <span>🎮 เลือกโหมดเกม (Game Mode Selection)</span>
+                <span id="mode-selected-label" style="color: var(--blox-cyan); font-size: 0.8rem;">RPG Vocab Quest</span>
+              </label>
+              <div class="gamemode-picker-grid">
+                <div class="gamemode-card selected" id="mode-card-quest" onclick="App.selectGameMode('quest')">
+                  <div class="gamemode-card-header">
+                    <span class="gamemode-title">⚔️ RPG Vocab Quest</span>
+                    <span class="gamemode-badge" style="background: var(--blox-pink);">5 ด่าน</span>
+                  </div>
+                  <span class="gamemode-desc">ตอบคำถามศัพท์เว็บ 4 ตัวเลือก โจมตีมอนสเตอร์</span>
+                </div>
+                <div class="gamemode-card" id="mode-card-typing" onclick="App.selectGameMode('typing')">
+                  <div class="gamemode-card-header">
+                    <span class="gamemode-title" style="color: var(--blox-cyan);">⌨️ Code Typing Quest</span>
+                    <span class="gamemode-badge" style="background: var(--blox-cyan); color: #000;">มินิเกม</span>
+                  </div>
+                  <span class="gamemode-desc">มินิเกมพิมพ์โค้ดรวดเร็ว วัด WPM และความแม่นยำ</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage Categories (5 Stages for RPG Quest Mode) -->
+            <div class="form-group-box" id="stage-selection-container" style="flex: 1;">
               <label class="form-label-title">เลือกด่านภารกิจ (Stage Selection)</label>
               <div class="stages-selection-grid">
                 <!-- Stage 1: HTML -->
-                <div class="stage-select-btn selected" id="stage-card-1" onclick="App.selectStage(1)">
+                <div class="stage-select-btn selected" id="stage-card-1" data-stage-id="1" onclick="App.selectStage(1)">
                   <div class="stage-btn-header">
                     <span class="stage-btn-title">1. HTML Structure</span>
                     <span class="stage-btn-count">10 ข้อ</span>
@@ -1634,7 +1734,7 @@
                 </div>
 
                 <!-- Stage 2: CSS -->
-                <div class="stage-select-btn" id="stage-card-2" onclick="App.selectStage(2)">
+                <div class="stage-select-btn" id="stage-card-2" data-stage-id="2" onclick="App.selectStage(2)">
                   <div class="stage-btn-header">
                     <span class="stage-btn-title">2. CSS Styling</span>
                     <span class="stage-btn-count">10 ข้อ</span>
@@ -1643,7 +1743,7 @@
                 </div>
 
                 <!-- Stage 3: JS -->
-                <div class="stage-select-btn" id="stage-card-3" onclick="App.selectStage(3)">
+                <div class="stage-select-btn" id="stage-card-3" data-stage-id="3" onclick="App.selectStage(3)">
                   <div class="stage-btn-header">
                     <span class="stage-btn-title">3. JavaScript & DOM</span>
                     <span class="stage-btn-count">10 ข้อ</span>
@@ -1652,7 +1752,7 @@
                 </div>
 
                 <!-- Stage 4: Server -->
-                <div class="stage-select-btn" id="stage-card-4" onclick="App.selectStage(4)">
+                <div class="stage-select-btn" id="stage-card-4" data-stage-id="4" onclick="App.selectStage(4)">
                   <div class="stage-btn-header">
                     <span class="stage-btn-title">4. Server & Backend</span>
                     <span class="stage-btn-count">10 ข้อ</span>
@@ -1661,27 +1761,38 @@
                 </div>
 
                 <!-- Stage 5: Mixed All-Star Quest (20 Qs) -->
-                <div class="stage-select-btn" id="stage-card-5" onclick="App.selectStage(5)" style="border-color: var(--blox-gold);">
+                <div class="stage-select-btn" id="stage-card-5" data-stage-id="5" onclick="App.selectStage(5)" style="border-color: var(--blox-gold); grid-column: 1 / -1;">
                   <div class="stage-btn-header">
-                    <span class="stage-btn-title" style="color: var(--blox-yellow);">🌟 5. Mixed All-Star</span>
-                    <span class="stage-btn-count" style="background: var(--blox-gold);">20 ข้อ</span>
+                    <span class="stage-btn-title" style="color: var(--blox-yellow);">🌟 5. Mixed All-Star (Boss Quest)</span>
+                    <span class="stage-btn-count" style="background: var(--blox-gold); color: #000;">20 ข้อ</span>
                   </div>
                   <span class="stage-btn-desc">สุ่มโจทย์รวมทุกหมวดหมู่ บอสไททันยักษ์!</span>
                 </div>
+              </div>
+            </div>
 
-                <!-- Stage 6: Speed & Accuracy Code Typing Challenge (10 Qs) -->
-                <div class="stage-select-btn" id="stage-card-6" onclick="App.selectStage(6)" style="border-color: var(--blox-cyan); background: rgba(0, 240, 255, 0.08);">
-                  <div class="stage-btn-header">
-                    <span class="stage-btn-title" style="color: var(--blox-cyan);">⌨️ 6. Code Typing Quest</span>
-                    <span class="stage-btn-count" style="background: var(--blox-cyan); color: #000;">10 ข้อท้าทาย</span>
+            <!-- Dedicated Typing Mini-Game Panel (Visible when Typing Mode is selected) -->
+            <div class="form-group-box" id="typing-mode-container" style="display: none; flex: 1; flex-direction: column; gap: 0.6rem;">
+              <div class="typing-mode-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                  <div style="font-family: var(--font-blox-title); font-size: 1.05rem; color: var(--blox-cyan); display: flex; align-items: center; gap: 0.4rem;">
+                    <span>⌨️</span> <span>Code Typing Mini-Game</span>
                   </div>
-                  <span class="stage-btn-desc">พิมพ์คำสั่งโค้ดรวดเร็ว วัดความเร็ว WPM และความแม่นยำ!</span>
+                  <span style="font-size: 0.72rem; font-weight: 700; background: var(--blox-cyan); color: #000; padding: 0.2rem 0.5rem; border-radius: 8px;">10 ข้อท้าทาย</span>
+                </div>
+                <p style="font-size: 0.82rem; color: #cbd5e1; margin: 0 0 0.6rem 0; line-height: 1.4;">
+                  ประลองความเร็วการพิมพ์โค้ดจริง (HTML, CSS, JavaScript) วัดความเร็วการพิมพ์ระดับ WPM และความถูกต้อง พร้อมระบบคำนวณคะแนนแบบเรียลไทม์!
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                  <span class="typing-feat-pill">⚡ Live WPM Speed</span>
+                  <span class="typing-feat-pill">🎯 Real-time Accuracy</span>
+                  <span class="typing-feat-pill">🔊 Sound & TTS</span>
                 </div>
               </div>
             </div>
 
             <!-- Big Start Button -->
-            <button class="big-blox-action-btn" onclick="App.startGameSession()">
+            <button class="big-blox-action-btn" id="main-start-game-btn" onclick="App.startGameSession()">
               🚀 START GAME / เริ่มการผจญภัย
             </button>
           </div>
@@ -1701,7 +1812,6 @@
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(2, this)">🎨 2. CSS</button>
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(3, this)">⚡ 3. JavaScript</button>
             <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(4, this)">☁️ 4. Server & Cloud</button>
-            <button class="lesson-cat-pill" onclick="App.filterLessonsCategory(6, this)">⌨️ 6. Code Typing</button>
           </div>
         </div>
 
@@ -4722,6 +4832,7 @@
       constructor() {
         this.selectedCharacter = 1;
         this.selectedWallpaper = 1;
+        this.selectedMode = 'quest'; // 'quest' | 'typing'
         this.selectedStage = 1;
         this.reviewRating = 5;
         this.teacherAuthenticated = false;
@@ -4902,10 +5013,57 @@
         AudioEngine.playCoinChime();
       }
 
+      selectGameMode(mode) {
+        this.selectedMode = mode;
+        const questBtn = document.getElementById('mode-card-quest');
+        const typingBtn = document.getElementById('mode-card-typing');
+        const modeLabel = document.getElementById('mode-selected-label');
+        const stageGridContainer = document.getElementById('stage-selection-container');
+        const typingInfoContainer = document.getElementById('typing-mode-container');
+        const startBtn = document.getElementById('main-start-game-btn');
+
+        if (mode === 'typing') {
+          if (questBtn) questBtn.classList.remove('selected');
+          if (typingBtn) typingBtn.classList.add('selected');
+          if (modeLabel) {
+            modeLabel.textContent = 'Code Typing Quest (มินิเกม)';
+            modeLabel.style.color = 'var(--blox-cyan)';
+          }
+          if (stageGridContainer) stageGridContainer.style.display = 'none';
+          if (typingInfoContainer) typingInfoContainer.style.display = 'flex';
+          if (startBtn) {
+            startBtn.innerHTML = '⌨️ START TYPING QUEST / เริ่มมินิเกมพิมพ์โค้ด';
+            startBtn.style.background = 'linear-gradient(135deg, #00f0ff 0%, #a855f7 100%)';
+            startBtn.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.4)';
+          }
+          this.selectedStage = 6;
+        } else {
+          if (questBtn) questBtn.classList.add('selected');
+          if (typingBtn) typingBtn.classList.remove('selected');
+          if (modeLabel) {
+            modeLabel.textContent = 'RPG Vocab Quest';
+            modeLabel.style.color = 'var(--blox-cyan)';
+          }
+          if (stageGridContainer) stageGridContainer.style.display = 'block';
+          if (typingInfoContainer) typingInfoContainer.style.display = 'none';
+          if (startBtn) {
+            startBtn.innerHTML = '🚀 START GAME / เริ่มการผจญภัย';
+            startBtn.style.background = 'linear-gradient(135deg, #00f0ff 0%, #0077ff 100%)';
+            startBtn.style.boxShadow = 'var(--btn-shadow-blue)';
+          }
+          if (this.selectedStage === 6 || !this.selectedStage) {
+            this.selectedStage = 1;
+          }
+          this.selectStage(this.selectedStage);
+        }
+        AudioEngine.playCoinChime();
+      }
+
       selectStage(id) {
         this.selectedStage = id;
-        document.querySelectorAll('.stage-select-btn').forEach((s, idx) => {
-          s.classList.toggle('selected', idx + 1 === id);
+        document.querySelectorAll('.stage-select-btn').forEach((s) => {
+          const sId = parseInt(s.getAttribute('data-stage-id') || s.id.replace('stage-card-', ''), 10);
+          s.classList.toggle('selected', sId === id);
         });
         AudioEngine.playCoinChime();
       }
@@ -4942,7 +5100,7 @@
         if (nameInput && !nameInput.value.trim()) nameInput.value = studentName;
         if (classInput && !classInput.value.trim()) classInput.value = classLevel;
 
-        const stage = this.selectedStage || 1;
+        const stage = (this.selectedMode === 'typing') ? 6 : (this.selectedStage || 1);
         const charId = this.selectedCharacter || 1;
         const wallId = this.selectedWallpaper || 1;
 
@@ -4955,7 +5113,7 @@
         if (!container) return;
         container.innerHTML = '';
 
-        const allLessons = [...VOCAB_DATABASE, ...CODE_TYPING_SNIPPETS];
+        const allLessons = [...VOCAB_DATABASE];
 
         allLessons.forEach(v => {
           const card = document.createElement('div');

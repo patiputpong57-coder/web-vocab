@@ -2989,13 +2989,19 @@
           '<nav>': 'Navigation tag',
           '<section>': 'Section tag',
           '<article>': 'Article tag',
+          '<aside>': 'Aside tag',
+          '<main>': 'Main tag',
           '<title>': 'Title tag',
           '<style>': 'Style tag',
           '<script>': 'Script tag',
           '<link>': 'Link tag',
           '<meta>': 'Meta tag',
           '<br>': 'Break line tag',
-          '<hr>': 'Horizontal rule tag'
+          '<hr>': 'Horizontal rule tag',
+          '<audio>': 'Audio tag',
+          '<video>': 'Video tag',
+          '<canvas>': 'Canvas tag',
+          '<iframe>': 'Inline frame tag'
         };
 
         const lowerStr = str.toLowerCase();
@@ -3003,13 +3009,9 @@
           return htmlTagMap[lowerStr];
         }
 
-        // 2. Generic HTML Tag Sanitization: Extract tag name (e.g. `<audio>` -> "audio tag")
-        if (/^<\/?([a-z0-9_-]+)(\s[^>]*)?>$/i.test(str)) {
-          const match = str.match(/^<\/?([a-z0-9_-]+)/i);
-          if (match && match[1]) {
-            return `${match[1]} tag`;
-          }
-        }
+        // 2. Generic HTML Tag Sanitization: Strip/convert any HTML tags (<tag> -> "tag tag")
+        str = str.replace(/<\/([a-zA-Z0-9_-]+)>/g, 'closing $1 tag ');
+        str = str.replace(/<([a-zA-Z0-9_-]+)[^>]*>/g, '$1 tag ');
 
         // 3. General cleaning: Remove HTML/XML brackets safely by transforming `<` to space and `>` to space
         return str
@@ -3039,13 +3041,16 @@
           enUtter.lang = 'en-US';
           enUtter.rate = 0.90;
           enUtter.pitch = 1.0;
+          enUtter.onerror = () => { /* Suppress audio speech errors gracefully */ };
 
           const voices = window.speechSynthesis.getVoices() || [];
           const enVoice = voices.find(v => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.startsWith('en')));
           if (enVoice) enUtter.voice = enVoice;
 
           window.speechSynthesis.speak(enUtter);
-        } catch(e) {}
+        } catch(e) {
+          console.warn('Speech synthesis safe notice:', e);
+        }
       }
 
       startBGM() {
@@ -4314,24 +4319,17 @@
             const normalized = customQ.map((q, idx) => {
               if (!q || typeof q !== 'object') return null;
 
-              // 1. Map stage_id (number) -> Match game stage
-              let stageNum = 1;
-              if (q.stage_id !== undefined && q.stage_id !== null && !isNaN(parseInt(q.stage_id, 10))) {
-                stageNum = parseInt(q.stage_id, 10);
-              } else {
-                stageNum = QuestionHelper.mapCategoryToStage(q.category);
-              }
-
-              // 2. Map category (text) -> Match category
-              const categoryStr = String(q.category || stageNames[stageNum] || `Stage ${stageNum}`).trim();
+              // 1. Map category (text) -> Match category & derive stage (No stage_id expected in schema)
+              const categoryStr = String(q.category || '').trim();
+              const stageNum = QuestionHelper.mapCategoryToStage(categoryStr);
               const stageName = stageNames[stageNum] || categoryStr || `Stage ${stageNum}`;
 
-              // 3. Map correct_option (handles 'Choice A', 'option_a', 'A', etc.)
+              // 2. Map correct_option (handles 'Choice A', 'option_a', 'A', etc.)
               const rawCorrect = (q.correct_option !== undefined && q.correct_option !== null) ? q.correct_option : 'Choice A';
               const correctKey = QuestionHelper.normalizeCorrectOption(rawCorrect, q); // 'option_a', 'option_b', etc.
               const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A', 'B', 'C', 'D'
 
-              // 4. Map option_a, option_b, option_c, option_d (text) -> Choice options A, B, C, D
+              // 3. Map option_a, option_b, option_c, option_d (text) -> Choice options A, B, C, D
               const optionA = (q.option_a !== undefined && q.option_a !== null) ? String(q.option_a) : (q.term || 'Option A');
               const optionB = (q.option_b !== undefined && q.option_b !== null) ? String(q.option_b) : 'Option B';
               const optionC = (q.option_c !== undefined && q.option_c !== null) ? String(q.option_c) : 'Option C';
@@ -4341,18 +4339,17 @@
               let term = QuestionHelper.getCorrectOptionTerm(dummyItem, correctKey);
               if (!term) term = (DEFAULT_VOCAB_DATABASE[idx % DEFAULT_VOCAB_DATABASE.length] || {}).term || 'Code';
 
-              // 5. Map question (text) -> Question title
+              // 4. Map question (text) -> Question title
               const questionTitle = q.question || q.scenario || 'โจทย์คำถามการพัฒนาเว็บไซต์';
 
-              // 6. Map explanation (text) -> Explanation modal text
+              // 5. Map explanation (text) -> Explanation modal text
               const explanationText = q.explanation || q.ttsTh || `เฉลย: ${term}`;
 
               return {
                 id: q.id || (idx + 1),
-                stage_id: stageNum,
                 stage: stageNum,
                 stageName: stageName,
-                category: categoryStr,
+                category: categoryStr || stageName,
                 question: questionTitle,
                 scenario: questionTitle,
                 term: term,

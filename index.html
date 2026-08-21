@@ -584,6 +584,32 @@
       font-weight: 600;
     }
 
+    .typing-level-btn {
+      background: rgba(22, 33, 66, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .typing-level-btn:hover {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .typing-level-btn.selected {
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.18);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+    }
+
     /* Stage Levels Grid */
     .stages-selection-grid {
       display: grid;
@@ -1778,15 +1804,35 @@
                   <div style="font-family: var(--font-blox-title); font-size: 1.05rem; color: var(--blox-cyan); display: flex; align-items: center; gap: 0.4rem;">
                     <span>⌨️</span> <span>Code Typing Mini-Game</span>
                   </div>
-                  <span style="font-size: 0.72rem; font-weight: 700; background: var(--blox-cyan); color: #000; padding: 0.2rem 0.5rem; border-radius: 8px;">10 ข้อท้าทาย</span>
+                  <span style="font-size: 0.72rem; font-weight: 700; background: var(--blox-cyan); color: #000; padding: 0.2rem 0.5rem; border-radius: 8px;">10 ข้อสุ่มคำสั้น</span>
                 </div>
                 <p style="font-size: 0.82rem; color: #cbd5e1; margin: 0 0 0.6rem 0; line-height: 1.4;">
-                  ประลองความเร็วการพิมพ์โค้ดจริง (HTML, CSS, JavaScript) วัดความเร็วการพิมพ์ระดับ WPM และความถูกต้อง พร้อมระบบคำนวณคะแนนแบบเรียลไทม์!
+                  ประลองความเร็วการพิมพ์คำสั้น (Short Words) วัดความเร็วระดับ WPM และความแม่นยำ เลือกระดับที่ต้องการเล่น:
                 </p>
+
+                <!-- Sub-Level Selector Buttons -->
+                <div class="typing-level-selector" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.6rem;">
+                  <button type="button" class="typing-level-btn selected" id="typing-level-btn-html" onclick="App.selectTypingSubLevel('html')">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-weight: 800; font-size: 0.88rem; color: #fff;">🌐 Level 1: HTML</span>
+                      <span style="font-size: 0.68rem; background: var(--blox-cyan); color: #000; padding: 0.1rem 0.35rem; border-radius: 6px; font-weight: 700;">Short Tags</span>
+                    </div>
+                    <span style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; display: block;">&lt;b&gt;, &lt;a&gt;, &lt;div&gt;, &lt;p&gt;, &lt;h1&gt;, &lt;img&gt;</span>
+                  </button>
+
+                  <button type="button" class="typing-level-btn" id="typing-level-btn-css" onclick="App.selectTypingSubLevel('css')">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-weight: 800; font-size: 0.88rem; color: #fff;">🎨 Level 2: CSS</span>
+                      <span style="font-size: 0.68rem; background: var(--blox-purple); color: #fff; padding: 0.1rem 0.35rem; border-radius: 6px; font-weight: 700;">Properties</span>
+                    </div>
+                    <span style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; display: block;">color, margin, padding, border, flex, font</span>
+                  </button>
+                </div>
+
                 <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
                   <span class="typing-feat-pill">⚡ Live WPM Speed</span>
                   <span class="typing-feat-pill">🎯 Real-time Accuracy</span>
-                  <span class="typing-feat-pill">🔊 Sound & TTS</span>
+                  <span class="typing-feat-pill">🔊 Sound & Pronunciation</span>
                 </div>
               </div>
             </div>
@@ -1844,7 +1890,9 @@
           <button class="stage-tab-btn" id="lb-stage-3" onclick="App.filterLeaderboardStage(3)">3. JS Logic</button>
           <button class="stage-tab-btn" id="lb-stage-4" onclick="App.filterLeaderboardStage(4)">4. Server & Cloud</button>
           <button class="stage-tab-btn" id="lb-stage-5" onclick="App.filterLeaderboardStage(5)">🌟 5. Boss Quest</button>
-          <button class="stage-tab-btn" id="lb-stage-6" onclick="App.filterLeaderboardStage(6)">⌨️ 6. Code Typing</button>
+          <button class="stage-tab-btn" id="lb-stage-6" onclick="App.filterLeaderboardStage(6)">⌨️ 6. Typing (All)</button>
+          <button class="stage-tab-btn" id="lb-stage-6-html" onclick="App.filterLeaderboardStage('6-html')">⌨️ 6-1. HTML Tags</button>
+          <button class="stage-tab-btn" id="lb-stage-6-css" onclick="App.filterLeaderboardStage('6-css')">⌨️ 6-2. CSS Props</button>
         </div>
 
         <div class="leaderboard-table-wrap">
@@ -1934,7 +1982,9 @@
               <option value="3">3. JS Logic</option>
               <option value="4">4. Server & Cloud</option>
               <option value="5">5. Boss Quest</option>
-              <option value="6">6. Code Typing Quest</option>
+              <option value="6">6. Typing (All)</option>
+              <option value="6-html">6-1. HTML Tags</option>
+              <option value="6-css">6-2. CSS Props</option>
             </select>
           </div>
 
@@ -2178,13 +2228,25 @@
 
           <!-- Stage 6: Code Typing Terminal UI -->
           <div id="typing-challenge-container" style="display: none; width: 100%; flex-direction: column; gap: 0.6rem;">
-            <div class="typing-target-box" style="background: rgba(9, 14, 32, 0.95); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.85rem 1.1rem; font-family: var(--font-code); font-size: 1.15rem; color: #fff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); display: flex; align-items: center; justify-content: space-between; overflow-x: auto;">
-              <div id="typing-target-display" style="letter-spacing: 0.5px; white-space: nowrap;"></div>
+            <!-- Sub-stage header bar with switchers -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(14, 22, 50, 0.9); border: 1.5px solid rgba(0, 240, 255, 0.3); border-radius: 10px; padding: 0.4rem 0.8rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="game-typing-level-badge" style="font-size: 0.76rem; font-weight: 800; background: var(--blox-cyan); color: #000; padding: 0.2rem 0.55rem; border-radius: 6px;">🌐 LEVEL 1: HTML TAGS</span>
+                <span style="font-size: 0.8rem; color: #94a3b8;" id="game-typing-q-progress">คำที่ 1/10</span>
+              </div>
+              <div style="display: flex; gap: 0.35rem;">
+                <button type="button" class="icon-toggle-btn" id="game-typing-switch-html" style="font-size: 0.75rem; padding: 0.2rem 0.55rem;" onclick="Game.switchTypingSubLevel('html')">🌐 Level 1: HTML</button>
+                <button type="button" class="icon-toggle-btn" id="game-typing-switch-css" style="font-size: 0.75rem; padding: 0.2rem 0.55rem;" onclick="Game.switchTypingSubLevel('css')">🎨 Level 2: CSS</button>
+              </div>
+            </div>
+
+            <div class="typing-target-box" style="background: rgba(9, 14, 32, 0.95); border: 2px solid var(--blox-cyan); border-radius: 12px; padding: 0.85rem 1.1rem; font-family: var(--font-code); font-size: 1.35rem; color: #fff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); display: flex; align-items: center; justify-content: space-between; overflow-x: auto;">
+              <div id="typing-target-display" style="letter-spacing: 1px; white-space: nowrap; font-weight: 700;"></div>
               <button class="icon-toggle-btn" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-left: 0.8rem; flex-shrink: 0; background: rgba(0,240,255,0.2); border-color: var(--blox-cyan);" onclick="Game.speakCurrentTypingTarget()">🔊 ฟัง</button>
             </div>
 
             <div style="display: flex; gap: 0.6rem; align-items: center;">
-              <input type="text" id="typing-input-field" class="form-input-control" style="flex: 1; font-family: var(--font-code); font-size: 1.05rem; padding: 0.75rem 1rem; border-color: var(--blox-cyan); background: rgba(14, 22, 50, 0.95); color: #00f0ff;" placeholder="⌨️ พิมพ์โค้ดตามข้อความด้านบนให้ถูกต้องและรวดเร็ว..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="Game.handleTypingInput(this.value)" onkeydown="if(event.key === 'Enter') Game.submitTypingAnswer();">
+              <input type="text" id="typing-input-field" class="form-input-control" style="flex: 1; font-family: var(--font-code); font-size: 1.1rem; padding: 0.75rem 1rem; border-color: var(--blox-cyan); background: rgba(14, 22, 50, 0.95); color: #00f0ff;" placeholder="⌨️ พิมพ์คำสั้นตามข้อความด้านบนให้ถูกต้องแล้วกด Enter..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="Game.handleTypingInput(this.value)" onkeydown="if(event.key === 'Enter') Game.submitTypingAnswer();">
               <button class="big-blox-action-btn" id="typing-submit-btn" style="min-width: 130px; font-size: 0.95rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, #00f0ff, #3b82f6); color: #000;" onclick="Game.submitTypingAnswer()">⚡ ส่งคำตอบ</button>
             </div>
 
@@ -2471,22 +2533,57 @@
     };
 
     /**
-     * Stage 6: Code Typing Challenge Dataset (12 Real-World Code Snippets)
+     * Stage 6: Code Typing Challenge Datasets
+     * Level 1: HTML Short Tags
+     * Level 2: CSS Properties
      */
-    const CODE_TYPING_SNIPPETS = [
-      { id: 101, stage: 6, stageName: "6. Code Typing", term: '<meta charset="UTF-8">', scenario: 'กำหนดการเข้ารหัสอักขระภาษาไทยและสากลของเอกสาร HTML', explanation: '<meta charset="UTF-8"> ใช้สำหรับระบุ Character Encoding ให้รองรับภาษาไทยและอักขระสากลได้อย่างถูกต้อง', code: '<meta charset="UTF-8">', ttsEn: 'meta charset UTF-8', ttsTh: 'กำหนดการเข้ารหัสอักขระภาษาไทยและสากล', codeExample: '<meta charset="UTF-8">' },
-      { id: 102, stage: 6, stageName: "6. Code Typing", term: 'display: flex; justify-content: center;', scenario: 'จัดตำแหน่งองค์ประกอบ UI ให้อยู่กึ่งกลางหน้าจอแนวนอน', explanation: 'display: flex ทำงานร่วมกับ justify-content: center เพื่อจัด Alignment ให้อยู่ตรงกลางแกนหลัก', code: 'display: flex; justify-content: center;', ttsEn: 'display flex justify content center', ttsTh: 'จัดตำแหน่งองค์ประกอบ UI ให้อยู่กึ่งกลาง', codeExample: '.container { display: flex; justify-content: center; }' },
-      { id: 103, stage: 6, stageName: "6. Code Typing", term: 'document.getElementById("app")', scenario: 'คำสั่ง JavaScript สำหรับเข้าถึง DOM Element ด้วย id', explanation: 'document.getElementById() เป็นคำสั่งพื้นฐานในการค้นหา Node ในเอกสาร HTML อย่างรวดเร็ว', code: 'document.getElementById("app")', ttsEn: 'document getElementById app', ttsTh: 'เข้าถึงองค์ประกอบ DOM ด้วย id', codeExample: 'const app = document.getElementById("app");' },
-      { id: 104, stage: 6, stageName: "6. Code Typing", term: '<link rel="stylesheet" href="style.css">', scenario: 'แท็ก HTML เชื่อมต่อไฟล์สไตล์ชีต CSS ภายนอก', explanation: '<link rel="stylesheet"> นำเข้าไฟล์ CSS เพื่อตกแต่งหน้าเว็บแยกจากโครงสร้าง HTML', code: '<link rel="stylesheet" href="style.css">', ttsEn: 'link rel stylesheet href style.css', ttsTh: 'เชื่อมต่อไฟล์ CSS ภายนอกเข้าสู่เอกสาร HTML', codeExample: '<link rel="stylesheet" href="style.css">' },
-      { id: 105, stage: 6, stageName: "6. Code Typing", term: 'addEventListener("click", () => {})', scenario: 'ฟังก์ชันดักจับเหตุการณ์ Event Listener เมื่อผู้ใช้คลิก', explanation: 'addEventListener("click", callback) ทำให้องค์ประกอบตอบสนองต่อการคลิกของผู้เล่น', code: 'addEventListener("click", () => {})', ttsEn: 'addEventListener click', ttsTh: 'ดักฟังเหตุการณ์การคลิกเมาส์ของผู้ใช้', codeExample: 'btn.addEventListener("click", () => { console.log("clicked"); });' },
-      { id: 106, stage: 6, stageName: "6. Code Typing", term: 'box-shadow: 0 4px 15px rgba(0,0,0,0.3);', scenario: 'คำสั่ง CSS สร้างมิติแสงเงาให้บล็อกองค์ประกอบแบบ 3D', explanation: 'box-shadow กำหนดเงาแนวนอน แนวตั้ง รัศมีการเบลอ และสี RGBA', code: 'box-shadow: 0 4px 15px rgba(0,0,0,0.3);', ttsEn: 'box shadow 0 4px 15px rgba 0 0 0 0.3', ttsTh: 'สร้างมิติแสงเงาให้บล็อกองค์ประกอบแบบ 3D', codeExample: '.card { box-shadow: 0 4px 15px rgba(0,0,0,0.3); }' },
-      { id: 107, stage: 6, stageName: "6. Code Typing", term: 'fetch("https://api.example.com/data")', scenario: 'ฟังก์ชัน Asynchronous ดึงข้อมูล REST API จากเซิร์ฟเวอร์', explanation: 'fetch() ส่ง HTTP Request แบบ Promise ช่วยโหลดข้อมูลแบบเบื้องหลังโดยไม่ต้องรีเฟรชหน้าเว็บ', code: 'fetch("https://api.example.com/data")', ttsEn: 'fetch api data', ttsTh: 'ดึงข้อมูล REST API จากเซิร์ฟเวอร์', codeExample: 'fetch("https://api.example.com/data").then(res => res.json());' },
-      { id: 108, stage: 6, stageName: "6. Code Typing", term: 'localStorage.setItem("user", "Roblox");', scenario: 'บันทึกข้อมูลถาวรลงใน Web Storage ของเบราว์เซอร์', explanation: 'localStorage.setItem(key, value) บันทึกข้อมูลค้างไว้ในเครื่องไคลเอนต์แม้ปิดแท็บ', code: 'localStorage.setItem("user", "Roblox");', ttsEn: 'localStorage setItem user Roblox', ttsTh: 'บันทึกข้อมูลถาวรบนเบราว์เซอร์ไคลเอนต์', codeExample: 'localStorage.setItem("user", "Roblox");' },
-      { id: 109, stage: 6, stageName: "6. Code Typing", term: '<button class="btn-primary">Click</button>', scenario: 'แท็กปุ่มกด Action Button พร้อมคลาสสไตล์ลิ่ง', explanation: '<button> ใช้สร้างปุ่มแบบ Interactive พร้อมคลาสเพื่อตกแต่งสไตล์สวยงาม', code: '<button class="btn-primary">Click</button>', ttsEn: 'button class btn-primary Click', ttsTh: 'ปุ่มกดสำหรับให้ผู้ใช้โต้ตอบในระบบเว็บ', codeExample: '<button class="btn-primary">Click</button>' },
-      { id: 110, stage: 6, stageName: "6. Code Typing", term: 'JSON.stringify(responsePayload);', scenario: 'ฟังก์ชันแปลง JavaScript Object ให้เป็นข้อความ JSON', explanation: 'JSON.stringify() เข้ารหัสโครงสร้างข้อมูลให้อยู่ในรูปสตริงเพื่อส่งผ่านเน็ตเวิร์ก', code: 'JSON.stringify(responsePayload);', ttsEn: 'JSON stringify responsePayload', ttsTh: 'แปลง JavaScript Object เป็นข้อความ JSON string', codeExample: 'const jsonStr = JSON.stringify(responsePayload);' },
-      { id: 111, stage: 6, stageName: "6. Code Typing", term: '<input type="password" required>', scenario: 'ฟิลด์กรอกรหัสผ่านที่บังคับกรอกข้อมูลก่อนกดส่งฟอร์ม', explanation: '<input type="password"> ซ่อนตัวอักษรที่พิมพ์เป็นจุดกลม และ required บังคับกรอก', code: '<input type="password" required>', ttsEn: 'input type password required', ttsTh: 'ช่องกรอกรหัสผ่านที่จำเป็นต้องกรอกก่อนส่งฟอร์ม', codeExample: '<input type="password" required>' },
-      { id: 112, stage: 6, stageName: "6. Code Typing", term: 'background: linear-gradient(135deg, #00f0ff, #a855f7);', scenario: 'คำสั่ง CSS สร้างพื้นหลังไล่เฉดสีฟ้าไซเบอร์และม่วงเมจิก', explanation: 'linear-gradient(มุม, สีเริ่มต้น, สีสิ้นสุด) สร้างกราเดียนต์สีที่ทันสมัย', code: 'background: linear-gradient(135deg, #00f0ff, #a855f7);', ttsEn: 'background linear gradient 135deg', ttsTh: 'สร้างพื้นหลังไล่เฉดสีฟ้าไซเบอร์และม่วงเมจิก', codeExample: 'background: linear-gradient(135deg, #00f0ff, #a855f7);' }
+    const CODE_TYPING_HTML_SNIPPETS = [
+      { id: 101, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<b>', code: '<b>', scenario: 'แท็ก HTML กำหนดตัวอักษรหนา (Bold Text)', explanation: '<b> ใช้กำหนดให้ข้อความแสดงผลเป็นตัวหนา', ttsEn: 'tag b bold', ttsTh: 'แท็กตัวอักษรหนา bold', codeExample: '<b>Roblox</b>' },
+      { id: 102, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<a>', code: '<a>', scenario: 'แท็ก HTML สร้างไฮเปอร์ลิงก์เชื่อมโยง (Anchor Link)', explanation: '<a> ใช้สำหรับสร้างลิงก์เชื่อมต่อไปยัง URL อื่น', ttsEn: 'tag a anchor', ttsTh: 'แท็กสร้างลิงก์ anchor link', codeExample: '<a href="#">Link</a>' },
+      { id: 103, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<div>', code: '<div>', scenario: 'แท็ก HTML บล็อกจัดกลุ่มเลย์เอาต์ (Division Block)', explanation: '<div> กล่องคอนเทนเนอร์แบบ Block สำหรับจัดกลุ่มองค์ประกอบ', ttsEn: 'tag div division', ttsTh: 'แท็กจัดกลุ่มเลย์เอาต์ div', codeExample: '<div>Content</div>' },
+      { id: 104, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<p>', code: '<p>', scenario: 'แท็ก HTML ย่อหน้าข้อความ (Paragraph)', explanation: '<p> ใช้สำหรับแบ่งย่อหน้าข้อความเอกสาร', ttsEn: 'tag p paragraph', ttsTh: 'แท็กย่อหน้าข้อความ paragraph', codeExample: '<p>Hello World</p>' },
+      { id: 105, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<h1>', code: '<h1>', scenario: 'แท็ก HTML หัวข้อหลักระดับสูงสุด (Heading 1)', explanation: '<h1> หัวข้อหลักที่มีความสำคัญสูงสุดในหน้าเว็บ', ttsEn: 'tag h1 heading', ttsTh: 'แท็กหัวข้อหลักระดับหนึ่ง h1', codeExample: '<h1>Title</h1>' },
+      { id: 106, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<img>', code: '<img>', scenario: 'แท็ก HTML แสดงรูปภาพบนหน้าเว็บ (Image)', explanation: '<img> แท็กแบบ Self-closing สำหรับแสดงภาพ', ttsEn: 'tag img image', ttsTh: 'แท็กแสดงรูปภาพ img', codeExample: '<img src="pic.jpg">' },
+      { id: 107, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<span>', code: '<span>', scenario: 'แท็ก HTML กล่องข้อความแบบอินไลน์ (Inline Span)', explanation: '<span> กล่องข้อความแบบ Inline สำหรับจัดสไตล์เฉพาะจุด', ttsEn: 'tag span inline', ttsTh: 'แท็กอินไลน์ข้อความ span', codeExample: '<span>Text</span>' },
+      { id: 108, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<br>', code: '<br>', scenario: 'แท็ก HTML ขึ้นบรรทัดใหม่ (Line Break)', explanation: '<br> แท็กตัดขึ้นบรรทัดใหม่โดยไม่ต้องเปิดย่อหน้าใหม่', ttsEn: 'tag br break', ttsTh: 'แท็กขึ้นบรรทัดใหม่ line break', codeExample: '<br>' },
+      { id: 109, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<ul>', code: '<ul>', scenario: 'แท็ก HTML รายการแบบไม่มีลำดับ (Unordered List)', explanation: '<ul> สร้างรายการจุด Bullet แบบไม่มีตัวเลขกำกับ', ttsEn: 'tag ul unordered list', ttsTh: 'แท็กรายการแบบไม่มีลำดับ ul', codeExample: '<ul><li>Item</li></ul>' },
+      { id: 110, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<li>', code: '<li>', scenario: 'แท็ก HTML สมาชิกรายการย่อย (List Item)', explanation: '<li> สมาชิกแต่ละรายการภายใน ul หรือ ol', ttsEn: 'tag li list item', ttsTh: 'แท็กสมาชิกรายการ list item', codeExample: '<li>First</li>' },
+      { id: 111, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<nav>', code: '<nav>', scenario: 'แท็ก HTML เมนูนำทางของเว็บไซต์ (Navigation)', explanation: '<nav> องค์ประกอบทางความหมายระบุโซนเมนูนำทาง', ttsEn: 'tag nav navigation', ttsTh: 'แท็กเมนูนำทาง navigation', codeExample: '<nav>Menu</nav>' },
+      { id: 112, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<form>', code: '<form>', scenario: 'แท็ก HTML แบบฟอร์มรับส่งข้อมูล (Form)', explanation: '<form> สร้างฟอร์มรวบรวมข้อมูลเพื่อส่งไปยังเซิร์ฟเวอร์', ttsEn: 'tag form input form', ttsTh: 'แท็กแบบฟอร์ม form', codeExample: '<form></form>' },
+      { id: 113, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<input>', code: '<input>', scenario: 'แท็ก HTML ฟิลด์รับข้อมูลจากผู้ใช้ (Input Field)', explanation: '<input> ช่องสำหรับให้ผู้ใช้พิมพ์ข้อความหรือเลือกข้อมูล', ttsEn: 'tag input field', ttsTh: 'แท็กช่องกรอกข้อมูล input', codeExample: '<input type="text">' },
+      { id: 114, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<button>', code: '<button>', scenario: 'แท็ก HTML ปุ่มกดโต้ตอบแอ็กชัน (Button)', explanation: '<button> ปุ่มกดสำหรับคลิกเพื่อสั่งการทำงาน', ttsEn: 'tag button click', ttsTh: 'แท็กปุ่มกด button', codeExample: '<button>Click</button>' },
+      { id: 115, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<table>', code: '<table>', scenario: 'แท็ก HTML ตารางแสดงข้อมูลแบบแถวและคอลัมน์ (Table)', explanation: '<table> โครงสร้างแสดงผลข้อมูลแบบตาราง', ttsEn: 'tag table data', ttsTh: 'แท็กตารางข้อมูล table', codeExample: '<table></table>' },
+      { id: 116, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<tr>', code: '<tr>', scenario: 'แท็ก HTML แถวแนวนอนในตาราง (Table Row)', explanation: '<tr> กำหนดแถวข้อมูลแนวนอนใน Table', ttsEn: 'tag tr table row', ttsTh: 'แท็กแถวตาราง table row', codeExample: '<tr></tr>' },
+      { id: 117, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<td>', code: '<td>', scenario: 'แท็ก HTML เซลล์ข้อมูลในตาราง (Table Data)', explanation: '<td> ช่องเก็บข้อมูลเซลล์มาตรฐานใน Table Row', ttsEn: 'tag td table data', ttsTh: 'แท็กเซลล์ข้อมูล table data', codeExample: '<td>Data</td>' },
+      { id: 118, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<ol>', code: '<ol>', scenario: 'แท็ก HTML รายการเรียงลำดับตัวเลข (Ordered List)', explanation: '<ol> รายการที่มีตัวเลขลำดับกำกับ 1, 2, 3...', ttsEn: 'tag ol ordered list', ttsTh: 'แท็กรายการเรียงลำดับ ol', codeExample: '<ol><li>1</li></ol>' },
+      { id: 119, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<hr>', code: '<hr>', scenario: 'แท็ก HTML เส้นคั่นแนวนอน (Horizontal Rule)', explanation: '<hr> เส้นคั่นแบ่งเนื้อหาเชิงความหมายแนวนอน', ttsEn: 'tag hr horizontal rule', ttsTh: 'แท็กเส้นคั่นแนวนอน hr', codeExample: '<hr>' },
+      { id: 120, stage: 6, subStage: 'html', stageName: "Stage 6 - HTML Typing", term: '<code>', code: '<code>', scenario: 'แท็ก HTML แสดงข้อความโค้ดคอมพิวเตอร์ (Code)', explanation: '<code> จัดรูปแบบตัวอักษรให้เป็นแบบ Monospace สำหรับโค้ด', ttsEn: 'tag code snippet', ttsTh: 'แท็กแสดงโค้ด code', codeExample: '<code>let x = 1;</code>' }
     ];
+
+    const CODE_TYPING_CSS_SNIPPETS = [
+      { id: 201, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'color', code: 'color', scenario: 'คำสั่ง CSS กำหนดสีของตัวอักษรและข้อความ (Text Color)', explanation: 'color ใช้กำหนดสีของข้อความ เช่น color: #00f0ff;', ttsEn: 'property color', ttsTh: 'พร็อพเพอร์ตี้สีตัวอักษร color', codeExample: 'color: #00f0ff;' },
+      { id: 202, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'margin', code: 'margin', scenario: 'คำสั่ง CSS กำหนดระยะห่างภายนอกขอบของบล็อก (Outer Spacing)', explanation: 'margin สร้างช่องว่างรอบนอกของกล่ององค์ประกอบ', ttsEn: 'property margin', ttsTh: 'พร็อพเพอร์ตี้ระยะห่างภายนอก margin', codeExample: 'margin: 10px;' },
+      { id: 203, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'padding', code: 'padding', scenario: 'คำสั่ง CSS กำหนดระยะห่างภายในขอบของบล็อก (Inner Spacing)', explanation: 'padding สร้างพื้นที่ว่างด้านในระหว่างเนื้อหาและเส้นขอบ', ttsEn: 'property padding', ttsTh: 'พร็อพเพอร์ตี้ระยะห่างภายใน padding', codeExample: 'padding: 15px;' },
+      { id: 204, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'border', code: 'border', scenario: 'คำสั่ง CSS กำหนดเส้นขอบขององค์ประกอบ (Element Border)', explanation: 'border กำหนดความหนา ชนิดเส้น และสีของขอบ', ttsEn: 'property border', ttsTh: 'พร็อพเพอร์ตี้เส้นขอบ border', codeExample: 'border: 1px solid #fff;' },
+      { id: 205, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'width', code: 'width', scenario: 'คำสั่ง CSS กำหนดความกว้างขององค์ประกอบ (Width Dimension)', explanation: 'width กำหนดขนาดแนวนอนขององค์ประกอบ เช่น 100px, 50%', ttsEn: 'property width', ttsTh: 'พร็อพเพอร์ตี้ความกว้าง width', codeExample: 'width: 100%;' },
+      { id: 206, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'height', code: 'height', scenario: 'คำสั่ง CSS กำหนดความสูงขององค์ประกอบ (Height Dimension)', explanation: 'height กำหนดขนาดแนวตั้งขององค์ประกอบ', ttsEn: 'property height', ttsTh: 'พร็อพเพอร์ตี้ความสูง height', codeExample: 'height: 200px;' },
+      { id: 207, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'font', code: 'font', scenario: 'คำสั่ง CSS ชวเลขรวมรูปแบบและตระกูลแบบอักษร (Font Style)', explanation: 'font กำหนด font-size, font-family, font-weight', ttsEn: 'property font', ttsTh: 'พร็อพเพอร์ตี้แบบอักษร font', codeExample: 'font: bold 16px Inter;' },
+      { id: 208, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'background', code: 'background', scenario: 'คำสั่ง CSS กำหนดพื้นหลัง สี หรือรูปภาพ (Background)', explanation: 'background กำหนดสีพื้นหลัง กราเดียนต์ หรือรูปภาพประกอบ', ttsEn: 'property background', ttsTh: 'พร็อพเพอร์ตี้พื้นหลัง background', codeExample: 'background: #0f172a;' },
+      { id: 209, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'flex', code: 'flex', scenario: 'คำสั่ง CSS ชวเลขกำหนดการยืดหดตัวของไอเทม Flexbox (Flex)', explanation: 'flex กำหนด flex-grow, flex-shrink, flex-basis', ttsEn: 'property flex', ttsTh: 'พร็อพเพอร์ตี้การยืดหยุ่น flex', codeExample: 'flex: 1;' },
+      { id: 210, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'display', code: 'display', scenario: 'คำสั่ง CSS กำหนดรูปแบบการแสดงผลบล็อกและเลย์เอาต์ (Display)', explanation: 'display กำหนด block, inline, flex, grid หรือ none', ttsEn: 'property display', ttsTh: 'พร็อพเพอร์ตี้รูปแบบแสดงผล display', codeExample: 'display: flex;' },
+      { id: 211, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'grid', code: 'grid', scenario: 'คำสั่ง CSS กำหนดเลย์เอาต์แบบกริดสองมิติ (CSS Grid)', explanation: 'grid สร้างเลย์เอาต์ตารางแถวและคอลัมน์แบบ Responsive', ttsEn: 'property grid', ttsTh: 'พร็อพเพอร์ตี้เลย์เอาต์กริด grid', codeExample: 'display: grid;' },
+      { id: 212, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'gap', code: 'gap', scenario: 'คำสั่ง CSS กำหนดระยะห่างระหว่างแถวและคอลัมน์ (Grid/Flex Gap)', explanation: 'gap กำหนดช่องว่างระหว่างไอเทมใน flex และ grid', ttsEn: 'property gap', ttsTh: 'พร็อพเพอร์ตี้ช่องว่างระหว่างไอเทม gap', codeExample: 'gap: 1rem;' },
+      { id: 213, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'opacity', code: 'opacity', scenario: 'คำสั่ง CSS กำหนดระดับความโปร่งแสงขององค์ประกอบ (Opacity)', explanation: 'opacity กำหนดความทึบแสงระหว่าง 0.0 (โปร่งใส) ถึง 1.0 (ทึบ)', ttsEn: 'property opacity', ttsTh: 'พร็อพเพอร์ตี้ความโปร่งแสง opacity', codeExample: 'opacity: 0.8;' },
+      { id: 214, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'cursor', code: 'cursor', scenario: 'คำสั่ง CSS กำหนดรูปแบบตัวชี้เมาส์เมื่อวางเหนือบล็อก (Cursor)', explanation: 'cursor เปลี่ยนรูปเมาส์ เช่น pointer, default, text', ttsEn: 'property cursor', ttsTh: 'พร็อพเพอร์ตี้ตัวชี้เมาส์ cursor', codeExample: 'cursor: pointer;' },
+      { id: 215, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'overflow', code: 'overflow', scenario: 'คำสั่ง CSS จัดการเนื้อหาที่ล้นเกินขนาดกล่อง (Overflow)', explanation: 'overflow จัดการเนื้อหาล้น เช่น hidden, auto, scroll', ttsEn: 'property overflow', ttsTh: 'พร็อพเพอร์ตี้การจัดการเนื้อหาล้น overflow', codeExample: 'overflow: hidden;' },
+      { id: 216, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'position', code: 'position', scenario: 'คำสั่ง CSS กำหนดกลไกการจัดวางตำแหน่งองค์ประกอบ (Positioning)', explanation: 'position กำหนด static, relative, absolute, fixed, sticky', ttsEn: 'property position', ttsTh: 'พร็อพเพอร์ตี้การจัดวางตำแหน่ง position', codeExample: 'position: relative;' },
+      { id: 217, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'top', code: 'top', scenario: 'คำสั่ง CSS กำหนดระยะเยื้องจากขอบบน (Top Offset)', explanation: 'top กำหนดตำแหน่งพิกัดด้านบนสำหรับองค์ประกอบแบบ Positioned', ttsEn: 'property top', ttsTh: 'พร็อพเพอร์ตี้ระยะเยื้องด้านบน top', codeExample: 'top: 0;' },
+      { id: 218, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'left', code: 'left', scenario: 'คำสั่ง CSS กำหนดระยะเยื้องจากขอบซ้าย (Left Offset)', explanation: 'left กำหนดตำแหน่งพิกัดด้านซ้ายสำหรับองค์ประกอบแบบ Positioned', ttsEn: 'property left', ttsTh: 'พร็อพเพอร์ตี้ระยะเยื้องด้านซ้าย left', codeExample: 'left: 0;' },
+      { id: 219, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'right', code: 'right', scenario: 'คำสั่ง CSS กำหนดระยะเยื้องจากขอบขวา (Right Offset)', explanation: 'right กำหนดตำแหน่งพิกัดด้านขวาสำหรับองค์ประกอบแบบ Positioned', ttsEn: 'property right', ttsTh: 'พร็อพเพอร์ตี้ระยะเยื้องด้านขวา right', codeExample: 'right: 0;' },
+      { id: 220, stage: 6, subStage: 'css', stageName: "Stage 6 - CSS Typing", term: 'bottom', code: 'bottom', scenario: 'คำสั่ง CSS กำหนดระยะเยื้องจากขอบล่าง (Bottom Offset)', explanation: 'bottom กำหนดตำแหน่งพิกัดด้านล่างสำหรับองค์ประกอบแบบ Positioned', ttsEn: 'property bottom', ttsTh: 'พร็อพเพอร์ตี้ระยะเยื้องด้านล่าง bottom', codeExample: 'bottom: 0;' }
+    ];
+
+    const CODE_TYPING_SNIPPETS = [...CODE_TYPING_HTML_SNIPPETS, ...CODE_TYPING_CSS_SNIPPETS];
 
     /**
      * Question Helper: Handles robust mapping, normalization, and comparison
@@ -3552,13 +3649,14 @@
         window.addEventListener('resize', resize);
       }
 
-      startSession(studentId, studentName, classLevel, stageId, characterId, wallpaperId) {
+      startSession(studentId, studentName, classLevel, stageId, characterId, wallpaperId, typingSubLevel) {
         this.studentId = studentId || 'Robloxian';
         this.studentName = studentName || 'Robloxian';
         this.classLevel = classLevel || 'ปวช. 2/1';
         this.stageId = stageId || 1;
         this.characterId = characterId || 1;
         this.wallpaperId = wallpaperId || 1;
+        this.typingSubLevel = typingSubLevel || (typeof App !== 'undefined' ? App.typingSubLevel : 'html') || 'html';
 
         // 1. Reset Game Values
         this.playerHP = 3;
@@ -3591,7 +3689,11 @@
         if (this.stageId === 5) {
           pool = QuestionHelper.shuffleArray([...sourceData]).slice(0, 20);
         } else if (this.stageId === 6) {
-          pool = QuestionHelper.shuffleArray([...CODE_TYPING_SNIPPETS]).slice(0, 10);
+          if (this.typingSubLevel === 'css') {
+            pool = QuestionHelper.shuffleArray([...CODE_TYPING_CSS_SNIPPETS]).slice(0, 10);
+          } else {
+            pool = QuestionHelper.shuffleArray([...CODE_TYPING_HTML_SNIPPETS]).slice(0, 10);
+          }
         } else {
           pool = QuestionHelper.shuffleArray(
             sourceData.filter(q => q && (q.stage === this.stageId || Number(q.stage) === this.stageId || QuestionHelper.mapCategoryToStage(q.category) === this.stageId))
@@ -3600,7 +3702,11 @@
 
         // Failsafe: if filtered pool is empty, fallback to default stage questions
         if (!pool || pool.length === 0) {
-          pool = QuestionHelper.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId || QuestionHelper.mapCategoryToStage(q.stageName) === this.stageId)).slice(0, 10);
+          if (this.stageId === 6) {
+            pool = QuestionHelper.shuffleArray([...CODE_TYPING_HTML_SNIPPETS]).slice(0, 10);
+          } else {
+            pool = QuestionHelper.shuffleArray(DEFAULT_VOCAB_DATABASE.filter(q => q.stage === this.stageId || QuestionHelper.mapCategoryToStage(q.stageName) === this.stageId)).slice(0, 10);
+          }
         }
         // Double failsafe: if still empty, grab any questions
         if (!pool || pool.length === 0) {
@@ -3680,8 +3786,14 @@
         const qIconEl = document.getElementById('q-icon-badge');
 
         if (qIdxEl) qIdxEl.textContent = idx + 1;
-        if (qTextEl) qTextEl.textContent = this.activeQuestion.scenario || "พิมพ์คำสั่งโค้ดต่อไปนี้ให้ถูกต้อง";
-        if (qTagEl) qTagEl.textContent = this.activeQuestion.stageName || (this.stageId === 6 ? "6. CODE TYPING" : "WEB VOCAB");
+        if (qTextEl) qTextEl.textContent = this.activeQuestion.scenario || "พิมพ์คำสั้นต่อไปนี้ให้ถูกต้องและรวดเร็ว";
+        if (qTagEl) {
+          if (this.stageId === 6) {
+            qTagEl.textContent = (this.typingSubLevel === 'css') ? "6. CSS PROPERTIES" : "6. HTML SHORT TAGS";
+          } else {
+            qTagEl.textContent = this.activeQuestion.stageName || "WEB VOCAB";
+          }
+        }
         if (qIconEl) qIconEl.textContent = this.stageId === 6 ? '⌨️' : (isBoss ? '👑' : '🎮');
 
         // 1. Immediate Monster Spawn with Teacher Configured Speed
@@ -3814,6 +3926,37 @@
           setTimeout(() => inputField.focus(), 100);
         }
 
+        // Update Sub-stage Badge & Switcher Buttons
+        const levelBadge = document.getElementById('game-typing-level-badge');
+        const qProgress = document.getElementById('game-typing-q-progress');
+        const switchHtml = document.getElementById('game-typing-switch-html');
+        const switchCss = document.getElementById('game-typing-switch-css');
+
+        if (levelBadge) {
+          if (this.typingSubLevel === 'css') {
+            levelBadge.textContent = '🎨 LEVEL 2: CSS PROPERTIES';
+            levelBadge.style.background = 'var(--blox-purple)';
+            levelBadge.style.color = '#fff';
+          } else {
+            levelBadge.textContent = '🌐 LEVEL 1: HTML TAGS';
+            levelBadge.style.background = 'var(--blox-cyan)';
+            levelBadge.style.color = '#000';
+          }
+        }
+
+        if (qProgress) {
+          qProgress.textContent = `คำที่ ${this.currentQIdx + 1}/10`;
+        }
+
+        if (switchHtml) {
+          switchHtml.style.background = (this.typingSubLevel !== 'css') ? 'rgba(0,240,255,0.3)' : 'rgba(255,255,255,0.08)';
+          switchHtml.style.borderColor = (this.typingSubLevel !== 'css') ? 'var(--blox-cyan)' : 'rgba(255,255,255,0.2)';
+        }
+        if (switchCss) {
+          switchCss.style.background = (this.typingSubLevel === 'css') ? 'rgba(168,85,247,0.35)' : 'rgba(255,255,255,0.08)';
+          switchCss.style.borderColor = (this.typingSubLevel === 'css') ? 'var(--blox-purple)' : 'rgba(255,255,255,0.2)';
+        }
+
         const targetCode = this.activeQuestion.code || this.activeQuestion.term || '';
         const targetDisplay = document.getElementById('typing-target-display');
         if (targetDisplay) {
@@ -3831,6 +3974,13 @@
         if (accEl) accEl.textContent = '100%';
         if (wpmEl) wpmEl.textContent = '0 WPM';
         if (timeEl) timeEl.textContent = '0.0s';
+      }
+
+      switchTypingSubLevel(subLevel) {
+        if (this.typingSubLevel === subLevel && this.isPlaying) return;
+        this.typingSubLevel = subLevel;
+        if (typeof App !== 'undefined') App.selectTypingSubLevel(subLevel);
+        this.startSession(this.studentId, this.studentName, this.classLevel, 6, this.characterId, this.wallpaperId, subLevel);
       }
 
       handleTypingInput(typed) {
@@ -4052,7 +4202,16 @@
         if (this.combo === 5) this.grantPowerup('fix');
 
         this.updateHUD();
-        // NOTE: Modal stays open centered on screen until player clicks "Next Question".
+
+        // Stage 6 Typing Quest: Auto-advance after brief visual explosion for fast typing flow
+        if (this.stageId === 6) {
+          if (expModal) expModal.classList.remove('show');
+          setTimeout(() => {
+            if (this.isPlaying && !this.isGameOver) {
+              this.proceedToNextQuestion();
+            }
+          }, 350);
+        }
       }
 
       processWrongAnswer() {
@@ -4067,7 +4226,7 @@
 
         // Display centered explanation popup overlay (Modal 6) with correct answer & Thai explanation
         const expModal = document.getElementById('modal-question-explanation');
-        if (expModal) {
+        if (expModal && this.stageId !== 6) {
           document.getElementById('modal-exp-icon').textContent = '❌';
           const titleEl = document.getElementById('modal-exp-title');
           if (titleEl) {
@@ -4084,7 +4243,15 @@
         this.createFloatingText("SPEED UP! ⚡⚡", targetX, (this.canvas.height / 2) - 60, '#ff3366');
 
         this.updateHUD();
-        // NOTE: Modal stays open centered on screen until player clicks "Next Question".
+
+        // Stage 6 Typing Quest: Auto-advance after brief delay
+        if (this.stageId === 6) {
+          setTimeout(() => {
+            if (this.isPlaying && !this.isGameOver) {
+              this.proceedToNextQuestion();
+            }
+          }, 500);
+        }
       }
 
       proceedToNextQuestion() {
@@ -4776,7 +4943,7 @@
 
         let stageDisplayName = `Stage ${this.stageId}`;
         if (this.stageId === 5) stageDisplayName = "Stage 5 - Boss Quest";
-        else if (this.stageId === 6) stageDisplayName = "Stage 6 - Code Typing";
+        else if (this.stageId === 6) stageDisplayName = (this.typingSubLevel === 'css') ? "Stage 6 - CSS Typing" : "Stage 6 - HTML Typing";
         else if (this.stageQuestions[0] && this.stageQuestions[0].stageName) stageDisplayName = this.stageQuestions[0].stageName;
 
         const scorePayload = {
@@ -4802,7 +4969,7 @@
 
       playAgain() {
         document.getElementById('modal-stage-result').classList.remove('show');
-        this.startSession(this.studentId, this.studentName, this.classLevel, this.stageId, this.characterId, this.wallpaperId);
+        this.startSession(this.studentId, this.studentName, this.classLevel, this.stageId, this.characterId, this.wallpaperId, this.typingSubLevel);
       }
 
       returnHomeAndReview() {
@@ -4834,6 +5001,7 @@
         this.selectedWallpaper = 1;
         this.selectedMode = 'quest'; // 'quest' | 'typing'
         this.selectedStage = 1;
+        this.typingSubLevel = 'html'; // 'html' | 'css'
         this.reviewRating = 5;
         this.teacherAuthenticated = false;
         this.cachedScores = [];
@@ -5068,6 +5236,15 @@
         AudioEngine.playCoinChime();
       }
 
+      selectTypingSubLevel(subLevel) {
+        this.typingSubLevel = subLevel;
+        const htmlBtn = document.getElementById('typing-level-btn-html');
+        const cssBtn = document.getElementById('typing-level-btn-css');
+        if (htmlBtn) htmlBtn.classList.toggle('selected', subLevel === 'html');
+        if (cssBtn) cssBtn.classList.toggle('selected', subLevel === 'css');
+        AudioEngine.playCoinChime();
+      }
+
       handleStudentIdInput(val) {
         const id = val.trim();
         const seq = this.getEntrySequence(id);
@@ -5103,8 +5280,9 @@
         const stage = (this.selectedMode === 'typing') ? 6 : (this.selectedStage || 1);
         const charId = this.selectedCharacter || 1;
         const wallId = this.selectedWallpaper || 1;
+        const typingSub = this.typingSubLevel || 'html';
 
-        Game.startSession(studentId, studentName, classLevel, stage, charId, wallId);
+        Game.startSession(studentId, studentName, classLevel, stage, charId, wallId, typingSub);
       }
 
       // Lessons View
@@ -5224,15 +5402,21 @@
           });
         }
 
-        // 2. Stage Filter (all, 1, 2, 3, 4, 5)
+        // 2. Stage Filter (all, 1, 2, 3, 4, 5, 6, 6-html, 6-css)
         if (this.currentLbStageFilter !== 'all') {
-          const targetStage = Number(this.currentLbStageFilter);
+          const filterVal = String(this.currentLbStageFilter).toLowerCase();
           scores = scores.filter(s => {
-            const stStr = String(s.stage || s.stage_name || '');
+            const stStr = String(s.stage || s.stage_name || '').toLowerCase();
+            if (filterVal === '6-html') {
+              return stStr.includes('html') && (stStr.includes('typing') || stStr.includes('6'));
+            }
+            if (filterVal === '6-css') {
+              return stStr.includes('css') && (stStr.includes('typing') || stStr.includes('6'));
+            }
             const stageNum = QuestionHelper.mapCategoryToStage(stStr);
             const rawMatch = stStr.match(/(\d+)/);
             const foundNum = rawMatch ? parseInt(rawMatch[1], 10) : stageNum;
-            return foundNum === targetStage;
+            return foundNum === Number(filterVal);
           });
         }
 
@@ -5550,12 +5734,19 @@
             
             let matchStage = true;
             if (selectedStage !== 'all') {
-              const targetStage = Number(selectedStage);
-              const stStr = String(s.stage || s.stage_name || '');
-              const stageNum = QuestionHelper.mapCategoryToStage(stStr);
-              const rawMatch = stStr.match(/(\d+)/);
-              const foundNum = rawMatch ? parseInt(rawMatch[1], 10) : stageNum;
-              matchStage = (foundNum === targetStage);
+              const selStr = String(selectedStage).toLowerCase();
+              const stStr = String(s.stage || s.stage_name || '').toLowerCase();
+              if (selStr === '6-html') {
+                matchStage = stStr.includes('html') && (stStr.includes('typing') || stStr.includes('6'));
+              } else if (selStr === '6-css') {
+                matchStage = stStr.includes('css') && (stStr.includes('typing') || stStr.includes('6'));
+              } else {
+                const targetStage = Number(selectedStage);
+                const stageNum = QuestionHelper.mapCategoryToStage(stStr);
+                const rawMatch = stStr.match(/(\d+)/);
+                const foundNum = rawMatch ? parseInt(rawMatch[1], 10) : stageNum;
+                matchStage = (foundNum === targetStage);
+              }
             }
 
             return matchSearch && matchClass && matchStage;

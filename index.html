@@ -175,8 +175,13 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       transition: all 0.2s;
+    }
+
+    .nav-tab-btn svg {
+      flex-shrink: 0;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .nav-tab-btn:hover {
@@ -184,11 +189,20 @@
       background: rgba(255, 255, 255, 0.08);
     }
 
+    .nav-tab-btn:hover svg {
+      transform: scale(1.15) translateY(-1px);
+    }
+
     .nav-tab-btn.active {
       color: #000;
       background: var(--blox-cyan);
       font-weight: 700;
       box-shadow: 0 2px 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .nav-tab-btn.active svg path {
+      stroke: #000;
+      fill: rgba(0, 0, 0, 0.2);
     }
 
     .nav-controls-group {
@@ -710,6 +724,49 @@
 
     .lb-table tr:hover {
       background: rgba(0, 240, 255, 0.06);
+    }
+
+    .lb-stage-col {
+      min-width: 160px;
+      width: 175px;
+      white-space: nowrap;
+    }
+
+    .leaderboard-stage-tabs {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.2rem;
+      scrollbar-width: thin;
+    }
+
+    .stage-tab-btn {
+      background: rgba(20, 29, 64, 0.85);
+      border: 1.5px solid rgba(0, 240, 255, 0.25);
+      color: #94a3b8;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .stage-tab-btn:hover {
+      color: #fff;
+      border-color: var(--blox-cyan);
+      background: rgba(0, 240, 255, 0.15);
+    }
+
+    .stage-tab-btn.active {
+      color: #000;
+      background: var(--blox-cyan);
+      border-color: var(--blox-cyan);
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
     }
 
     /* ==========================================================================
@@ -1235,19 +1292,23 @@
         <span class="nav-brand-badge" style="background: linear-gradient(135deg, #a855f7, #ec4899); box-shadow: 0 0 8px rgba(168,85,247,0.5);">RPG QUEST</span>
       </div>
 
-      <!-- 4 Core Tabs -->
+      <!-- 4 Core Tabs (Roblox-style Blocky Gaming Icons) -->
       <div class="nav-tabs-group">
         <button class="nav-tab-btn active" id="tab-btn-home" onclick="App.showView('home')">
-          <span>🏠</span> <span class="tab-text">หน้าแรก (Home)</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 10.5L12 3.5L20 10.5V20.5H15V14.5H9V20.5H4V10.5Z" fill="rgba(0, 240, 255, 0.25)" stroke="#00f0ff" stroke-width="2" stroke-linejoin="bevel"/></svg>
+          <span class="tab-text">หน้าแรก (Home)</span>
         </button>
         <button class="nav-tab-btn" id="tab-btn-lessons" onclick="App.showView('lessons')">
-          <span>📖</span> <span class="tab-text">บทเรียน (Lessons)</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15zM8 7h8M8 11h6" fill="rgba(168, 85, 247, 0.25)" stroke="#c084fc" stroke-width="2" stroke-linejoin="bevel"/></svg>
+          <span class="tab-text">บทเรียน (Lessons)</span>
         </button>
         <button class="nav-tab-btn" id="tab-btn-leaderboard" onclick="App.showView('leaderboard')">
-          <span>🏆</span> <span class="tab-text">อันดับ (Leaderboard)</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M7 3H17V9C17 11.76 14.76 14 12 14C9.24 14 7 11.76 7 9V3ZM7 5H4V8C4 9.66 5.34 11 7 11V5ZM17 5H20V8C20 9.66 18.66 11 17 11V5ZM10 14V17H14V14M8 20H16V21H8V20Z" fill="rgba(255, 215, 0, 0.25)" stroke="#ffd700" stroke-width="2" stroke-linejoin="bevel"/></svg>
+          <span class="tab-text">อันดับ (Leaderboard)</span>
         </button>
         <button class="nav-tab-btn" id="tab-btn-teacher" onclick="App.openTeacherAuth()">
-          <span>📊</span> <span class="tab-text">สำหรับครู (Teacher)</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 2L4 6V12C4 17.5 7.5 21.5 12 22C16.5 21.5 20 17.5 20 12V6L12 2Z" fill="rgba(239, 68, 68, 0.25)" stroke="#f87171" stroke-width="2" stroke-linejoin="bevel"/><path d="M12 8V12M12 16H12.01" stroke="#ffffff" stroke-width="2" stroke-linecap="square"/></svg>
+          <span class="tab-text">สำหรับครู (Teacher)</span>
         </button>
       </div>
 
@@ -1522,18 +1583,29 @@
       </div>
 
       <!-- ====================================================================
-           VIEW 3: LEADERBOARD (Top Ranks with 🥇 🥈 🥉 Filters)
+           VIEW 3: LEADERBOARD (Top Ranks with Stage & Time Filters)
            ==================================================================== -->
       <div class="view-screen" id="view-leaderboard">
-        <div class="leaderboard-filters-bar">
+        <div class="leaderboard-filters-bar" style="display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between; align-items: center;">
           <div style="font-family: var(--font-blox-title); font-size: 1.3rem; color: var(--blox-yellow);">
             🏆 ตารางอันดับยอดฝีมือ (TOP LEADERBOARD)
           </div>
           <div class="filter-time-group">
-            <button class="filter-time-btn active" id="lb-filter-today" onclick="App.filterLeaderboard('today')">📅 วันนี้</button>
-            <button class="filter-time-btn" id="lb-filter-7days" onclick="App.filterLeaderboard('7days')">⚡ 7 วัน</button>
-            <button class="filter-time-btn" id="lb-filter-30days" onclick="App.filterLeaderboard('30days')">🌟 30 วัน</button>
+            <button class="filter-time-btn active" id="lb-filter-today" onclick="App.filterLeaderboardTime('today')">📅 วันนี้</button>
+            <button class="filter-time-btn" id="lb-filter-7days" onclick="App.filterLeaderboardTime('7days')">⚡ 7 วัน</button>
+            <button class="filter-time-btn" id="lb-filter-30days" onclick="App.filterLeaderboardTime('30days')">🌟 30 วัน</button>
+            <button class="filter-time-btn" id="lb-filter-all" onclick="App.filterLeaderboardTime('all')">♾️ ทั้งหมด</button>
           </div>
+        </div>
+
+        <!-- Leaderboard Stage Filter Tabs -->
+        <div class="leaderboard-stage-tabs">
+          <button class="stage-tab-btn active" id="lb-stage-all" onclick="App.filterLeaderboardStage('all')">🌐 ทุกด่าน (All Stages)</button>
+          <button class="stage-tab-btn" id="lb-stage-1" onclick="App.filterLeaderboardStage(1)">1. HTML Structure</button>
+          <button class="stage-tab-btn" id="lb-stage-2" onclick="App.filterLeaderboardStage(2)">2. CSS Styling</button>
+          <button class="stage-tab-btn" id="lb-stage-3" onclick="App.filterLeaderboardStage(3)">3. JS Logic</button>
+          <button class="stage-tab-btn" id="lb-stage-4" onclick="App.filterLeaderboardStage(4)">4. Server & Cloud</button>
+          <button class="stage-tab-btn" id="lb-stage-5" onclick="App.filterLeaderboardStage(5)">🌟 5. Boss Quest</button>
         </div>
 
         <div class="leaderboard-table-wrap">
@@ -1544,10 +1616,10 @@
                 <th>รหัสนักเรียน</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th>ระดับชั้น</th>
-                <th>ด่าน</th>
+                <th class="lb-stage-col">ด่าน</th>
                 <th>คะแนน (🪙)</th>
                 <th>ความแม่นยำ</th>
-                <th>วันที่บันทึก</th>
+                <th style="min-width: 140px;">วันที่ & เวลา</th>
               </tr>
             </thead>
             <tbody id="leaderboard-tbody">
@@ -1649,11 +1721,11 @@
               <thead>
                 <tr>
                   <th style="width: 45px;">ID</th>
-                  <th style="width: 90px;">ด่าน</th>
-                  <th>โจทย์คำถาม</th>
-                  <th>คำศัพท์ที่ถูกต้อง</th>
-                  <th>คำอธิบายภาษาไทย</th>
-                  <th style="width: 140px; text-align: center;">การจัดการ</th>
+                  <th class="lb-stage-col" style="min-width: 160px; width: 175px; white-space: nowrap;">ด่าน / หมวดหมู่</th>
+                  <th style="min-width: 240px;">โจทย์คำถาม</th>
+                  <th style="min-width: 140px;">คำศัพท์ที่ถูกต้อง</th>
+                  <th style="min-width: 220px;">คำอธิบายภาษาไทย</th>
+                  <th style="width: 140px; text-align: center; white-space: nowrap;">การจัดการ</th>
                 </tr>
               </thead>
               <tbody id="questions-tbody">
@@ -4195,7 +4267,7 @@
 
         const timeUsedSec = Math.round((Date.now() - this.startTime) / 1000);
         const totalQ = this.stageQuestions.length;
-        const accuracy = Math.round((this.correctCount / (totalQ || 1)) * 100);
+        const accuracy = Math.min(Math.max(Math.round((this.correctCount / (totalQ || 1)) * 100), 0), 100);
 
         const pillsContainer = document.getElementById('res-item-pills');
         if (pillsContainer) {
@@ -4294,8 +4366,25 @@
         this.selectedStage = 1;
         this.reviewRating = 5;
         this.teacherAuthenticated = false;
+        this.cachedScores = [];
+        this.currentLbTimeFilter = 'today';
+        this.currentLbStageFilter = 'all';
 
         this.init();
+      }
+
+      formatDateTime(isoString) {
+        if (!isoString) return '-';
+        try {
+          const d = new Date(isoString);
+          if (isNaN(d.getTime())) return '-';
+          const pad = n => String(n).padStart(2, '0');
+          const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+          const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          return `${date} ${time}`;
+        } catch (e) {
+          return '-';
+        }
       }
 
       async init() {
@@ -4565,55 +4654,125 @@
         });
       }
 
-      // Leaderboard
-      async loadLeaderboard(timeFilter = 'today') {
+      // Leaderboard with Stage & Time Filters
+      async loadLeaderboard(forceRefresh = false) {
         const tbody = document.getElementById('leaderboard-tbody');
         if (!tbody) return;
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">กำลังโหลดข้อมูลอันดับ...</td></tr>';
 
-        const scores = await Supabase.fetchScores();
-        if (!scores || scores.length === 0) {
+        if (this.cachedScores.length === 0 || forceRefresh) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">กำลังโหลดข้อมูลอันดับ...</td></tr>';
+          try {
+            this.cachedScores = await Supabase.fetchScores();
+          } catch (e) {
+            console.warn('Leaderboard loading fallback:', e);
+            this.cachedScores = [];
+          }
+        }
+
+        this.applyLeaderboardFilters();
+      }
+
+      applyLeaderboardFilters() {
+        const tbody = document.getElementById('leaderboard-tbody');
+        if (!tbody) return;
+
+        let scores = Array.isArray(this.cachedScores) ? [...this.cachedScores] : [];
+        if (scores.length === 0) {
           tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ยังไม่มีข้อมูลผลคะแนนในระบบ</td></tr>';
           return;
         }
 
+        const now = Date.now();
+        const oneDayMs = 24 * 60 * 60 * 1000;
+
+        // 1. Time Filter
+        if (this.currentLbTimeFilter === 'today') {
+          const startOfToday = new Date();
+          startOfToday.setHours(0, 0, 0, 0);
+          scores = scores.filter(s => {
+            const t = s.created_at ? new Date(s.created_at).getTime() : now;
+            return t >= startOfToday.getTime();
+          });
+        } else if (this.currentLbTimeFilter === '7days') {
+          scores = scores.filter(s => {
+            const t = s.created_at ? new Date(s.created_at).getTime() : now;
+            return (now - t) <= 7 * oneDayMs;
+          });
+        } else if (this.currentLbTimeFilter === '30days') {
+          scores = scores.filter(s => {
+            const t = s.created_at ? new Date(s.created_at).getTime() : now;
+            return (now - t) <= 30 * oneDayMs;
+          });
+        }
+
+        // 2. Stage Filter (all, 1, 2, 3, 4, 5)
+        if (this.currentLbStageFilter !== 'all') {
+          const targetStage = Number(this.currentLbStageFilter);
+          scores = scores.filter(s => {
+            const stStr = String(s.stage || s.stage_name || '');
+            const stageNum = QuestionHelper.mapCategoryToStage(stStr);
+            const rawMatch = stStr.match(/(\d+)/);
+            const foundNum = rawMatch ? parseInt(rawMatch[1], 10) : stageNum;
+            return foundNum === targetStage;
+          });
+        }
+
         // Strictly sort by highest score DESC
-        const sorted = [...scores].sort((a, b) => (b.score || 0) - (a.score || 0));
+        const sorted = scores.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+
+        if (sorted.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ไม่พบข้อมูลอันดับในหมวดหมู่ที่เลือก</td></tr>';
+          return;
+        }
 
         tbody.innerHTML = '';
-        sorted.slice(0, 20).forEach((s, idx) => {
+        sorted.slice(0, 50).forEach((s, idx) => {
           const tr = document.createElement('tr');
           const trophy = idx === 0 ? '🥇 1' : (idx === 1 ? '🥈 2' : (idx === 2 ? '🥉 3' : `#${idx + 1}`));
-          const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('th-TH') : '-';
+          const dateStr = this.formatDateTime(s.created_at);
           const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
           const stageVal = s.stage || s.stage_name || 'Stage 1';
           const scoreVal = Number(s.score || 0);
-          const accVal = s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100);
+          const accVal = Math.min(Math.max(Number(s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100)), 0), 100);
 
           tr.innerHTML = `
             <td style="font-weight: 800; color: ${idx < 3 ? 'var(--blox-yellow)' : '#fff'};">${trophy}</td>
-            <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id}</td>
-            <td style="font-weight: 600;">${s.student_name}</td>
+            <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id || '-'}</td>
+            <td style="font-weight: 600;">${s.student_name || 'Robloxian'}</td>
             <td>${gradeVal}</td>
             <td><span class="nav-brand-badge">${stageVal}</span></td>
             <td style="font-family: var(--font-blox-title); color: var(--blox-yellow);">${scoreVal.toLocaleString()} 🪙</td>
             <td style="font-weight: 700; color: var(--blox-green);">${accVal}%</td>
-            <td style="color: #94a3b8; font-size: 0.8rem;">${dateStr}</td>
+            <td style="color: #94a3b8; font-size: 0.78rem; font-family: var(--font-code); white-space: nowrap;">${dateStr}</td>
           `;
           tbody.appendChild(tr);
         });
 
         // Update Mini-Leaderboard Overlay
-        if (sorted[0]) document.getElementById('mini-lb-1').innerHTML = `<span>🥇 1. ${sorted[0].student_name}</span> <span>${(sorted[0].score||0).toLocaleString()}</span>`;
-        if (sorted[1]) document.getElementById('mini-lb-2').innerHTML = `<span>🥈 2. ${sorted[1].student_name}</span> <span>${(sorted[1].score||0).toLocaleString()}</span>`;
-        if (sorted[2]) document.getElementById('mini-lb-3').innerHTML = `<span>🥉 3. ${sorted[2].student_name}</span> <span>${(sorted[2].score||0).toLocaleString()}</span>`;
+        const allSorted = [...this.cachedScores].sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+        if (allSorted[0]) document.getElementById('mini-lb-1').innerHTML = `<span>🥇 1. ${allSorted[0].student_name}</span> <span>${(allSorted[0].score||0).toLocaleString()}</span>`;
+        if (allSorted[1]) document.getElementById('mini-lb-2').innerHTML = `<span>🥈 2. ${allSorted[1].student_name}</span> <span>${(allSorted[1].score||0).toLocaleString()}</span>`;
+        if (allSorted[2]) document.getElementById('mini-lb-3').innerHTML = `<span>🥉 3. ${allSorted[2].student_name}</span> <span>${(allSorted[2].score||0).toLocaleString()}</span>`;
       }
 
-      filterLeaderboard(filter) {
+      filterLeaderboard(timeFilter) {
+        this.filterLeaderboardTime(timeFilter);
+      }
+
+      filterLeaderboardTime(timeFilter) {
         document.querySelectorAll('.filter-time-btn').forEach(b => b.classList.remove('active'));
-        const btn = document.getElementById(`lb-filter-${filter}`);
+        const btn = document.getElementById(`lb-filter-${timeFilter}`);
         if (btn) btn.classList.add('active');
-        this.loadLeaderboard(filter);
+        this.currentLbTimeFilter = timeFilter;
+        this.applyLeaderboardFilters();
+      }
+
+      filterLeaderboardStage(stageFilter) {
+        document.querySelectorAll('.stage-tab-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById(`lb-stage-${stageFilter}`);
+        if (btn) btn.classList.add('active');
+        this.currentLbStageFilter = stageFilter;
+        this.applyLeaderboardFilters();
       }
 
       // Teacher Dashboard
@@ -4744,66 +4903,116 @@
       }
 
       async renderTeacherAnalytics() {
-        const scores = await Supabase.fetchScores();
-        const entriesCount = scores.length;
-        const avgScore = entriesCount > 0 ? Math.round(scores.reduce((acc, s) => acc + (s.accuracy !== undefined ? s.accuracy : (s.percentage || 0)), 0) / entriesCount) : 0;
-        const clears = scores.filter(s => (s.accuracy !== undefined ? s.accuracy : (s.percentage || 0)) >= 60).length;
-        const clearRate = entriesCount > 0 ? Math.round((clears / entriesCount) * 100) : 0;
+        try {
+          const scores = await Supabase.fetchScores();
+          const entriesCount = scores.length;
+          
+          // Total Average Score Bug Fix: Cap at max 100%
+          const avgScoreRaw = entriesCount > 0 
+            ? (scores.reduce((acc, s) => acc + (s.accuracy !== undefined ? Number(s.accuracy) : (Number(s.percentage) || 0)), 0) / entriesCount) 
+            : 0;
+          const avgScore = Math.min(Math.max(Math.round(avgScoreRaw), 0), 100);
 
-        document.getElementById('t-stat-entries').textContent = entriesCount;
-        document.getElementById('t-stat-avg-score').textContent = `${avgScore}%`;
-        document.getElementById('t-stat-clear-rate').textContent = `${clearRate}%`;
+          const clears = scores.filter(s => (s.accuracy !== undefined ? Number(s.accuracy) : (Number(s.percentage) || 0)) >= 60).length;
+          const clearRateRaw = entriesCount > 0 ? ((clears / entriesCount) * 100) : 0;
+          const clearRate = Math.min(Math.max(Math.round(clearRateRaw), 0), 100);
 
-        const classMap = {};
-        scores.forEach(s => {
-          const cl = s.grade || s.class_level || 'ปวช. 2/1';
-          const acc = s.accuracy !== undefined ? s.accuracy : (s.percentage || 0);
-          if (!classMap[cl]) classMap[cl] = { count: 0, sumPercent: 0 };
-          classMap[cl].count++;
-          classMap[cl].sumPercent += acc;
-        });
+          document.getElementById('t-stat-entries').textContent = entriesCount;
+          document.getElementById('t-stat-avg-score').textContent = `${avgScore}%`;
+          document.getElementById('t-stat-clear-rate').textContent = `${clearRate}%`;
 
-        const breakdownList = document.getElementById('teacher-class-breakdown-list');
-        if (breakdownList) {
-          breakdownList.innerHTML = Object.keys(classMap).map(cl => `
-            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
-              <span><strong>ห้อง:</strong> ${cl} (${classMap[cl].count} คน)</span>
-              <span style="color: var(--blox-cyan);">คะแนนเฉลี่ย: ${Math.round(classMap[cl].sumPercent / classMap[cl].count)}%</span>
-            </div>
-          `).join('') || '<div style="color: #94a3b8; font-size: 0.82rem;">ยังไม่มีข้อมูลผลคะแนน</div>';
+          const classMap = {};
+          scores.forEach(s => {
+            const cl = s.grade || s.class_level || 'ปวช. 2/1';
+            const acc = Math.min(Math.max(Number(s.accuracy !== undefined ? s.accuracy : (s.percentage || 0)), 0), 100);
+            if (!classMap[cl]) classMap[cl] = { count: 0, sumPercent: 0 };
+            classMap[cl].count++;
+            classMap[cl].sumPercent += acc;
+          });
+
+          const breakdownList = document.getElementById('teacher-class-breakdown-list');
+          if (breakdownList) {
+            breakdownList.innerHTML = Object.keys(classMap).map(cl => {
+              const classAvg = Math.min(Math.max(Math.round(classMap[cl].sumPercent / classMap[cl].count), 0), 100);
+              return `
+                <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                  <span><strong>ห้อง:</strong> ${cl} (${classMap[cl].count} คน)</span>
+                  <span style="color: var(--blox-cyan);">คะแนนเฉลี่ย: ${classAvg}%</span>
+                </div>
+              `;
+            }).join('') || '<div style="color: #94a3b8; font-size: 0.82rem;">ยังไม่มีข้อมูลผลคะแนน</div>';
+          }
+        } catch (e) {
+          console.warn('renderTeacherAnalytics fallback:', e);
         }
       }
 
       async renderItemTrackerTable() {
         const tbody = document.getElementById('tracker-tbody');
         if (!tbody) return;
-        const scores = await Supabase.fetchScores();
-        const search = (document.getElementById('tracker-search-input')?.value || '').toLowerCase().trim();
 
-        tbody.innerHTML = '';
-        scores.filter(s => !search || s.student_name.toLowerCase().includes(search) || s.student_id.includes(search)).forEach(s => {
-          const tr = document.createElement('tr');
-          const history = Array.isArray(s.answers_history) ? s.answers_history : [true, true, true, false, true];
+        try {
+          const scores = await Supabase.fetchScores();
+          const search = (document.getElementById('tracker-search-input')?.value || '').toLowerCase().trim();
+          const classFilterSelect = document.getElementById('tracker-class-filter');
 
-          const pillsHtml = history.map((isOk, idx) => `
-            <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${idx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${idx + 1}</div>
-          `).join('');
+          // Dynamic Grade Dropdown: populate unique grades from scores
+          if (classFilterSelect) {
+            const currentSelected = classFilterSelect.value || 'all';
+            const uniqueGrades = [...new Set(scores.map(s => (s.grade || s.class_level || '').trim()).filter(Boolean))].sort();
+            
+            let optionsHtml = `<option value="all">ทุกระดับชั้น (All Grades)</option>`;
+            uniqueGrades.forEach(g => {
+              optionsHtml += `<option value="${g}">${g}</option>`;
+            });
+            classFilterSelect.innerHTML = optionsHtml;
+            classFilterSelect.value = uniqueGrades.includes(currentSelected) ? currentSelected : 'all';
+          }
 
-          const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
-          const stageVal = s.stage || s.stage_name || 'Stage 1';
-          const accVal = s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100);
-          const scoreVal = (s.score || 0).toLocaleString();
+          const selectedClass = classFilterSelect ? classFilterSelect.value : 'all';
 
-          tr.innerHTML = `
-            <td><strong>${s.student_name}</strong> <span style="font-size: 0.75rem; color: #94a3b8;">(${s.student_id})</span></td>
-            <td>${gradeVal}</td>
-            <td><span class="nav-brand-badge">${stageVal}</span></td>
-            <td style="color: var(--blox-yellow); font-weight: 700;">${scoreVal} (${accVal}%)</td>
-            <td><div class="answer-tracker-pill-group">${pillsHtml}</div></td>
-            <td style="color: #94a3b8; font-size: 0.78rem;">${new Date(s.created_at || Date.now()).toLocaleTimeString('th-TH')}</td>
-          `;
-          tbody.appendChild(tr);
-        });
+          tbody.innerHTML = '';
+          const filtered = scores.filter(s => {
+            const gradeVal = (s.grade || s.class_level || 'ปวช. 2/1').trim();
+            const sName = String(s.student_name || '').toLowerCase();
+            const sId = String(s.student_id || '').toLowerCase();
+            const matchSearch = !search || sName.includes(search) || sId.includes(search);
+            const matchClass = (selectedClass === 'all') || (gradeVal === selectedClass);
+            return matchSearch && matchClass;
+          });
+
+          if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 1.5rem;">ไม่พบข้อมูลผลคะแนนที่ตรงกับเงื่อนไขการค้นหา</td></tr>';
+            return;
+          }
+
+          filtered.forEach(s => {
+            const tr = document.createElement('tr');
+            const history = Array.isArray(s.answers_history) ? s.answers_history : [true, true, true, false, true];
+
+            const pillsHtml = history.map((isOk, idx) => `
+              <div class="tracker-box ${isOk ? 'correct' : 'wrong'}" title="ข้อ ${idx + 1}: ${isOk ? 'ถูกต้อง' : 'ตอบผิด'}">${idx + 1}</div>
+            `).join('');
+
+            const gradeVal = s.grade || s.class_level || 'ปวช. 2/1';
+            const stageVal = s.stage || s.stage_name || 'Stage 1';
+            const accVal = Math.min(Math.max(Number(s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100)), 0), 100);
+            const scoreVal = (s.score || 0).toLocaleString();
+            const dateStr = this.formatDateTime(s.created_at);
+
+            tr.innerHTML = `
+              <td><strong>${s.student_name || 'Robloxian'}</strong> <span style="font-size: 0.75rem; color: #94a3b8;">(${s.student_id || '-'})</span></td>
+              <td>${gradeVal}</td>
+              <td><span class="nav-brand-badge">${stageVal}</span></td>
+              <td style="color: var(--blox-yellow); font-weight: 700;">${scoreVal} (${accVal}%)</td>
+              <td><div class="answer-tracker-pill-group">${pillsHtml}</div></td>
+              <td style="color: #94a3b8; font-size: 0.78rem; font-family: var(--font-code); white-space: nowrap;">${dateStr}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } catch (e) {
+          console.warn('renderItemTrackerTable fallback:', e);
+        }
       }
 
       renderTeacherQuestionsTable() {
@@ -4817,7 +5026,7 @@
           const expDisplay = q.explanation || q.ttsTh || '-';
           tr.innerHTML = `
             <td>${q.id}</td>
-            <td><span class="nav-brand-badge">${catDisplay}</span></td>
+            <td class="lb-stage-col"><span class="nav-brand-badge" style="white-space: nowrap; display: inline-block; font-size: 0.78rem;">${catDisplay}</span></td>
             <td style="max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${q.scenario}</td>
             <td style="font-family: var(--font-code); color: var(--blox-yellow);">${q.term}</td>
             <td style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #cbd5e1;">${expDisplay}</td>

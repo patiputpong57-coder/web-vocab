@@ -783,35 +783,72 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
     }
 
     .lesson-term-badge {
       font-family: var(--font-code);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--blox-yellow);
       background: rgba(0, 0, 0, 0.4);
-      padding: 0.25rem 0.55rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 6px;
       border: 1px solid rgba(255, 215, 0, 0.3);
+      word-break: break-all;
+    }
+
+    .lesson-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
     }
 
     .lesson-audio-btn {
       background: #25335e;
       border: 1.5px solid #435691;
       color: #fff;
-      padding: 0.25rem 0.55rem;
-      border-radius: 8px;
+      padding: 0.22rem 0.45rem;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.8rem;
-      display: flex;
+      font-size: 0.76rem;
+      display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.2rem;
+      transition: all 0.15s ease;
+      font-family: var(--font-ui);
+      white-space: nowrap;
     }
 
     .lesson-audio-btn:hover {
       background: var(--blox-cyan);
       color: #000;
+    }
+
+    .lesson-code-btn {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      border: 1.5px solid #38bdf8;
+      color: #fff;
+      padding: 0.22rem 0.45rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      transition: all 0.15s ease;
+      font-family: var(--font-ui);
+      white-space: nowrap;
+    }
+
+    .lesson-code-btn:hover {
+      background: #38bdf8;
+      color: #041026;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
     }
 
     .lesson-desc-th {
@@ -1369,6 +1406,97 @@
       text-align: center;
       box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
       animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 2-Column Split View & Code Example Box Styles for Explanation Modal */
+    .grid { display: grid; }
+    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    .gap-4 { gap: 1rem; }
+    .gap-3 { gap: 0.75rem; }
+    .bg-white { background-color: #ffffff !important; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important; }
+
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+    .modal-card-split {
+      max-width: 860px !important;
+      width: 95% !important;
+      max-height: 90vh;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .exp-left-pane {
+      background: rgba(10, 16, 38, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      justify-content: flex-start;
+    }
+
+    .exp-right-pane {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 220px;
+    }
+
+    .exp-code-header {
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.6rem 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .exp-code-body {
+      margin: 0;
+      padding: 1rem 1.1rem;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+      tab-size: 2;
+      font-weight: 500;
+    }
+
+    .exp-copy-btn {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .exp-copy-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: #0f172a;
     }
 
     @keyframes popIn {
@@ -2433,20 +2561,61 @@
   </div>
 
   <!-- ==========================================================================
-       MODAL 6: QUESTION FEEDBACK & EXPLANATION (CENTERED POPUP OVERLAY)
+       MODAL 6: QUESTION FEEDBACK & EXPLANATION (2-COLUMN SPLIT VIEW POPUP)
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-question-explanation">
-    <div class="blox-modal-card" style="max-width: 520px; text-align: center;">
-      <div style="font-size: 3rem; margin-bottom: 0.2rem;" id="modal-exp-icon">✅</div>
-      <h2 class="modal-title" id="modal-exp-title" style="font-size: 1.45rem; margin-bottom: 0.2rem;">ถูกต้อง! (Correct)</h2>
-      <div style="font-family: var(--font-code); font-size: 1.25rem; color: var(--blox-yellow); margin-bottom: 0.8rem;" id="modal-exp-term"></div>
-      
-      <!-- Clean Thai Explanation Text at 18px, Light/Regular Font Weight 300, No heavy highlights -->
-      <div style="background: rgba(10, 16, 38, 0.65); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 1.2rem; text-align: left;">
-        <div style="font-size: 0.8rem; color: var(--blox-cyan); margin-bottom: 0.35rem; font-weight: 600;">📖 คำอธิบายเฉลยภาษาไทย (Explanation):</div>
-        <div id="modal-exp-text" style="font-family: var(--font-ui); font-size: 18px; font-weight: 300; line-height: 1.5; color: #ffffff; text-shadow: none;"></div>
+    <div class="blox-modal-card modal-card-split" style="max-width: 860px; width: 95%; max-height: 90vh; overflow-y: auto; text-align: left;">
+      <!-- Modal Header: Result Status Icon + Title -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1rem; text-align: center;">
+        <span style="font-size: 2.2rem; line-height: 1;" id="modal-exp-icon">✅</span>
+        <h2 class="modal-title" id="modal-exp-title" style="font-size: 1.5rem; margin-bottom: 0;">ถูกต้อง! (Correct)</h2>
       </div>
 
+      <!-- 2-Column Split View (grid-cols-1 md:grid-cols-2) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" style="display: grid; gap: 1rem; margin-bottom: 1.25rem;">
+        <!-- Left Side: Dark Theme Layout (Question, Correct Answer, Explanation) -->
+        <div class="exp-left-pane">
+          <div>
+            <div style="font-size: 0.78rem; color: var(--blox-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
+              ❓ โจทย์คำถาม (Question):
+            </div>
+            <div id="modal-exp-question" style="font-family: var(--font-ui); font-size: 0.95rem; font-weight: 400; line-height: 1.5; color: #e2e8f0;"></div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--blox-yellow); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
+              🎯 คำตอบที่ถูกต้อง (Correct Answer):
+            </div>
+            <div id="modal-exp-term" style="font-family: var(--font-code); font-size: 1.15rem; font-weight: 700; color: var(--blox-yellow); background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 8px; padding: 0.45rem 0.75rem; word-break: break-all;"></div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--blox-green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
+              📖 คำอธิบายเฉลย (Explanation):
+            </div>
+            <div id="modal-exp-text" style="font-family: var(--font-ui); font-size: 0.95rem; font-weight: 300; line-height: 1.55; color: #ffffff; text-shadow: none;"></div>
+          </div>
+        </div>
+
+        <!-- Right Side: Code Example Box (bg-white, font-mono, syntax-friendly styling) -->
+        <div class="exp-right-pane bg-white">
+          <div class="exp-code-header">
+            <span style="font-size: 0.8rem; font-weight: 700; color: #334155; font-family: var(--font-ui); display: flex; align-items: center; gap: 0.4rem;">
+              💻 ตัวอย่างโค้ด (Code Example)
+            </span>
+            <button type="button" class="exp-copy-btn" id="modal-exp-copy-btn" onclick="Game.copyModalCodeExample()" title="คัดลอกโค้ด">
+              📋 Copy
+            </button>
+          </div>
+          <pre class="exp-code-body font-mono"><code id="modal-exp-code" class="font-mono"></code></pre>
+          <div style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 0.45rem 0.9rem; font-size: 0.74rem; color: #64748b; font-family: var(--font-ui); display: flex; align-items: center; justify-content: space-between;">
+            <span>⚡ ตัวอย่างการใช้งานโค้ดจริง</span>
+            <span style="font-size: 0.7rem; color: #94a3b8;">Web Dev Standard</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Action Button -->
       <button class="big-blox-action-btn" style="width: 100%; font-size: 1.15rem; padding: 0.85rem; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); box-shadow: var(--btn-shadow-green);" onclick="Game.proceedToNextQuestion()">
         ข้อถัดไป (Next Question) ➡️
       </button>
@@ -2511,11 +2680,64 @@
             <input type="text" id="modal-q-explanation" class="form-input-control" placeholder="เช่น <a> คือ Anchor Tag สำหรับสร้างลิงก์">
           </div>
         </div>
+
+        <div class="form-group-box">
+          <label class="form-label-title">ตัวอย่างโค้ด (Code Example)</label>
+          <textarea id="modal-q-code-example" class="form-input-control font-mono" rows="2" placeholder="เช่น <a href='https://google.com'>Link</a> หรือ color: #00f0ff;"></textarea>
+        </div>
       </div>
 
       <div style="display: flex; gap: 0.6rem;">
         <button class="icon-toggle-btn" style="flex: 1; padding: 0.75rem; border-radius: 12px; justify-content: center;" onclick="App.closeAddQuestionModal()">ยกเลิก</button>
         <button class="big-blox-action-btn" style="flex: 1; font-size: 1.05rem; padding: 0.75rem; border-radius: 12px;" onclick="App.saveTeacherQuestion()">บันทึกข้อสอบ 💾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 7: LESSON CODE EXAMPLE VIEWER (CLEAN WHITE MONOSPACE CODE BOX)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-lesson-code">
+    <div class="blox-modal-card" style="max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto; text-align: left;">
+      <!-- Modal Header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.9rem; gap: 0.5rem;">
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+            <span class="nav-brand-badge" id="lesson-modal-category" style="font-size: 0.75rem; padding: 0.15rem 0.55rem;">HTML Tags</span>
+            <span style="font-family: var(--font-code); font-size: 1.25rem; font-weight: 700; color: var(--blox-yellow);" id="lesson-modal-term">&lt;tag&gt;</span>
+          </div>
+          <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.45; margin: 0;" id="lesson-modal-desc">
+            คำอธิบายบทเรียน
+          </div>
+        </div>
+        <button class="icon-toggle-btn" style="padding: 0.35rem 0.65rem; font-size: 0.85rem;" onclick="App.closeLessonCodeModal()" title="ปิดหน้าต่าง">✖</button>
+      </div>
+
+      <!-- Code Container (bg-white, font-mono, syntax-friendly styling) -->
+      <div class="exp-right-pane bg-white" style="margin-bottom: 1.1rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.25);">
+        <div class="exp-code-header">
+          <span style="font-size: 0.82rem; font-weight: 700; color: #334155; font-family: var(--font-ui); display: flex; align-items: center; gap: 0.4rem;">
+            💻 ตัวอย่างโค้ด (Code Example)
+          </span>
+          <button type="button" class="exp-copy-btn" id="lesson-modal-copy-btn" onclick="App.copyLessonCode()" title="คัดลอกโค้ด">
+            📋 Copy
+          </button>
+        </div>
+        <pre class="exp-code-body font-mono" style="font-size: 0.92rem; padding: 1rem 1.1rem; max-height: 360px; overflow: auto;"><code id="lesson-modal-code-snippet" class="font-mono"></code></pre>
+        <div style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 0.45rem 0.9rem; font-size: 0.74rem; color: #64748b; font-family: var(--font-ui); display: flex; align-items: center; justify-content: space-between;">
+          <span>⚡ ตัวอย่างโค้ดสำหรับนำไปฝึกเขียนหรือใช้งานจริง</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Syntax Preview</span>
+        </div>
+      </div>
+
+      <!-- Modal Footer Action -->
+      <div style="display: flex; justify-content: flex-end; gap: 0.6rem;">
+        <button class="icon-toggle-btn" style="padding: 0.6rem 1.1rem; font-size: 0.9rem; border-radius: 10px;" onclick="AudioEngine.speakEnglish(document.getElementById('lesson-modal-term').textContent)">
+          🔊 ฟังเสียงอ่าน (EN)
+        </button>
+        <button class="big-blox-action-btn" style="min-width: 130px; font-size: 0.95rem; padding: 0.6rem 1.2rem; border-radius: 10px; background: #25335e; border: 2px solid #435691;" onclick="App.closeLessonCodeModal()">
+          ปิดหน้าต่าง (Close) ✖
+        </button>
       </div>
     </div>
   </div>
@@ -2683,7 +2905,7 @@
         ttsEn: "HTML tag",
         ttsTh: "คือแท็กรากฐานของเอกสารเว็บเพจทั้งหมด",
         scenario: "🌐 ต้องการเริ่มต้นเขียนโครงสร้างเว็บไซต์ใหม่ทั้งหมด ต้องใช้แท็กรากฐานตัวใดครอบโค้ดทั้งหน้าเว็บ?",
-        codeExample: "<!DOCTYPE html>\n<html>\n  ...\n</html>"
+        codeExample: "<!DOCTYPE html>\n<html lang=\"th\">\n  <head>...</head>\n  <body>...</body>\n</html>"
       },
       {
         id: 2, stage: 1, stageName: "HTML Tags",
@@ -2691,7 +2913,7 @@
         ttsEn: "Head tag",
         ttsTh: "ส่วนเก็บข้อมูลเมตาดาต้า ชื่อหน้าเว็บ และลิงก์สไตล์ชีต",
         scenario: "⚙️ ต้องการกำหนดชื่อแท็บบนเบราว์เซอร์ (Title) และเชื่อมต่อไฟล์ CSS ต้องวางคำสั่งไว้ในส่วนใด?",
-        codeExample: "<head>\n  <title>My Site</title>\n</head>"
+        codeExample: "<head>\n  <meta charset=\"UTF-8\">\n  <title>Roblox Web</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>"
       },
       {
         id: 3, stage: 1, stageName: "HTML Tags",
@@ -2699,7 +2921,7 @@
         ttsEn: "Body tag",
         ttsTh: "ส่วนแสดงผลเนื้อหาหลักที่ผู้ใช้มองเห็นบนหน้าเว็บ",
         scenario: "🎨 ต้องการวางข้อความ รูปภาพ ปุ่มกด และคอนเทนต์ทั้งหมดให้ผู้เข้าชมมองเห็น ต้องเขียนไว้ในแท็กใด?",
-        codeExample: "<body>\n  <h1>Welcome</h1>\n</body>"
+        codeExample: "<body>\n  <h1>Roblox Vocab Regent</h1>\n  <p>ยินดีต้อนรับสู่โลกเขียนโค้ด!</p>\n</body>"
       },
       {
         id: 4, stage: 1, stageName: "HTML Tags",
@@ -2707,7 +2929,7 @@
         ttsEn: "H1 heading tag",
         ttsTh: "แท็กหัวข้อหลักที่มีขนาดใหญ่และสำคัญที่สุดสำหรับ SEO",
         scenario: "📢 ต้องการสร้างหัวข้อข่าวหลักที่มีขนาดตัวอักษรใหญ่ที่สุดและสำคัญที่สุดในหน้าเว็บ ควรใช้แท็กใด?",
-        codeExample: "<h1>ข่าวเด่นประจำวัน</h1>"
+        codeExample: "<!-- Heading ระดับสำคัญสูงสุด -->\n<h1>หัวข้อข่าวเด่นประจำวัน</h1>\n<p>เนื้อหาข่าว...</p>"
       },
       {
         id: 5, stage: 1, stageName: "HTML Tags",
@@ -2715,7 +2937,7 @@
         ttsEn: "Paragraph tag",
         ttsTh: "แท็กพารากราฟสำหรับแสดงย่อหน้าข้อความบทความ",
         scenario: "📝 ต้องการเขียนเนื้อหาบทความแบ่งเป็นย่อหน้าให้อ่านง่ายเป็นระเบียบบนหน้าเว็บ ควรใช้แท็กใด?",
-        codeExample: "<p>เนื้อหาบทความย่อหน้าที่หนึ่ง...</p>"
+        codeExample: "<p>\n  แท็กนี้ใช้สำหรับเขียนย่อหน้าข้อความ\n  เพื่อจัดระเบียบเนื้อหาให้อ่านง่าย\n</p>"
       },
       {
         id: 6, stage: 1, stageName: "HTML Tags",
@@ -2723,7 +2945,7 @@
         ttsEn: "Anchor hyperlink tag",
         ttsTh: "แท็กสร้างไฮเปอร์ลิงก์เชื่อมโยงไปยังหน้าเว็บอื่น",
         scenario: "🔗 ต้องการสร้างปุ่มลิงก์ให้ผู้ใช้คลิกแล้วเปิดหน้าเว็บ Google ทันที ต้องใช้แท็กใด?",
-        codeExample: "<a href='https://google.com'>ค้นหา</a>"
+        codeExample: "<!-- ลิงก์เชื่อมโยงไปยังภายนอก -->\n<a href=\"https://google.com\" target=\"_blank\">\n  คลิกเพื่อเปิดหน้าค้นหา 🌐\n</a>"
       },
       {
         id: 7, stage: 1, stageName: "HTML Tags",
@@ -2731,7 +2953,7 @@
         ttsEn: "Image tag",
         ttsTh: "แท็กสำหรับฝังรูปภาพลงในหน้าเว็บไซต์",
         scenario: "🖼️ ต้องการนำรูปภาพผลงานหรือรูปสัตว์เลี้ยงมาแสดงผลบนหน้าเว็บไซต์ ต้องใช้แท็กใด?",
-        codeExample: "<img src='photo.jpg' alt='ภาพ'>"
+        codeExample: "<!-- แท็กแสดงรูปภาพ (Self-closing) -->\n<img src=\"avatar.png\" alt=\"Roblox Hero\" width=\"120\">"
       },
       {
         id: 8, stage: 1, stageName: "HTML Tags",
@@ -2739,7 +2961,7 @@
         ttsEn: "Button tag",
         ttsTh: "แท็กปุ่มกดสำหรับสั่งการหรือส่งข้อมูลฟอร์ม",
         scenario: "🔘 ต้องการสร้างปุ่มกดสำหรับให้ผู้เล่นคลิกเพื่อ 'เริ่มเกม' หรือ 'สั่งซื้อสินค้า' ต้องใช้แท็กใด?",
-        codeExample: "<button type='button'>เริ่มเกม</button>"
+        codeExample: "<!-- ปุ่มกดสั่งการ -->\n<button type=\"button\" onclick=\"startGame()\">\n  🎮 เริ่มเล่นเกม (Start)\n</button>"
       },
       {
         id: 9, stage: 1, stageName: "HTML Tags",
@@ -2747,7 +2969,7 @@
         ttsEn: "Division block tag",
         ttsTh: "แท็กจัดกลุ่มเนื้อหาแบบกล่องบล็อกเลเวล",
         scenario: "📦 ต้องการสร้างกล่องคอนเทนเนอร์สำหรับจัดกลุ่มเนื้อหาและใส่สไตล์ CSS เป็นหมวดหมู่ ควรใช้แท็กใด?",
-        codeExample: "<div class='card'>\n  <p>Hello</p>\n</div>"
+        codeExample: "<!-- กล่องคอนเทนเนอร์จัดกลุ่ม -->\n<div class=\"hero-card\">\n  <h2>Level 1</h2>\n  <p>Score: 500</p>\n</div>"
       },
       {
         id: 10, stage: 1, stageName: "HTML Tags",
@@ -2755,7 +2977,7 @@
         ttsEn: "Footer tag",
         ttsTh: "แท็กส่วนท้ายของหน้าเว็บสำหรับใส่ลิขสิทธิ์และข้อมูลติดต่อ",
         scenario: "📜 แถบด้านล่างสุดของเว็บไซต์สำหรับใส่ลิขสิทธิ์ © 2026 และช่องทางติดต่อ ควรใช้แท็ก Semantic ใด?",
-        codeExample: "<footer>\n  © 2026 Roblox Regent\n</footer>"
+        codeExample: "<!-- ส่วนท้ายเอกสาร Semantic Footer -->\n<footer>\n  <p>© 2026 Roblox Regent. All rights reserved.</p>\n</footer>"
       },
 
       // --- STAGE 2: CSS & Styling Attributes ---
@@ -2765,7 +2987,7 @@
         ttsEn: "Color property",
         ttsTh: "คำสั่งกำหนดสีของตัวอักษรข้อความ",
         scenario: "🎨 ต้องการเปลี่ยนสีตัวหนังสือของหัวข้อข่าวให้กลายเป็นสีฟ้าสดใส (Cyan) ต้องใช้คุณสมบัติ CSS ใด?",
-        codeExample: "h1 { color: #00f0ff; }"
+        codeExample: "/* กำหนดสีตัวหนังสือ */\nh1 {\n  color: #00f0ff; /* Neon Cyan */\n}"
       },
       {
         id: 12, stage: 2, stageName: "CSS Styling",
@@ -2773,7 +2995,7 @@
         ttsEn: "Background color property",
         ttsTh: "คำสั่งกำหนดสีพื้นหลังขององค์ประกอบ",
         scenario: "🌈 ต้องการเปลี่ยนสีพื้นหลังของการ์ดตัวละครให้กลายเป็นสีน้ำเงินเข้ม ต้องใช้คำสั่ง CSS ใด?",
-        codeExample: ".card { background-color: #121b3b; }"
+        codeExample: "/* กำหนดสีพื้นหลัง */\n.game-panel {\n  background-color: #121b3b;\n}"
       },
       {
         id: 13, stage: 2, stageName: "CSS Styling",
@@ -2781,7 +3003,7 @@
         ttsEn: "Font size property",
         ttsTh: "คำสั่งกำหนดขนาดความใหญ่ของตัวหนังสือ",
         scenario: "🔍 ตัวหนังสือเล็กเกินไปจนอ่านไม่ออก! ต้องการเพิ่มขนาดตัวอักษรให้ใหญ่เป็น 24px ต้องใช้คำสั่งใด?",
-        codeExample: "p { font-size: 24px; }"
+        codeExample: "/* ปรับขนาดตัวหนังสือ */\n.main-title {\n  font-size: 24px;\n  font-weight: 700;\n}"
       },
       {
         id: 14, stage: 2, stageName: "CSS Styling",
@@ -2789,7 +3011,7 @@
         ttsEn: "Margin property",
         ttsTh: "ระยะเว้นว่างภายนอกขอบของกล่อง",
         scenario: "↔️ กล่องข้อความสองกล่องเบียดชิดกันเกินไป! ต้องการเพิ่มระยะห่างภายนอกเส้นขอบ ต้องใช้คำสั่งใด?",
-        codeExample: ".box { margin: 15px; }"
+        codeExample: "/* ระยะห่างภายนอกขอบกล่อง */\n.box {\n  margin: 16px auto; /* บน-ล่าง 16px, ซ้าย-ขวา กึ่งกลาง */\n}"
       },
       {
         id: 15, stage: 2, stageName: "CSS Styling",
@@ -2797,7 +3019,7 @@
         ttsEn: "Padding property",
         ttsTh: "ระยะเว้นว่างภายในระหว่างเนื้อหากับขอบกล่อง",
         scenario: "📦 ตัวหนังสือชิดขอบการ์ดมากเกินไป ต้องการเพิ่มระยะเว้นว่างภายในกล่องเพื่อความสวยงาม ต้องใช้คำสั่งใด?",
-        codeExample: ".card { padding: 1.2rem; }"
+        codeExample: "/* ระยะเว้นว่างภายในกล่อง */\n.card {\n  padding: 1.2rem 1.5rem;\n  border: 1px solid #334155;\n}"
       },
       {
         id: 16, stage: 2, stageName: "CSS Styling",
@@ -2805,7 +3027,7 @@
         ttsEn: "Border radius property",
         ttsTh: "คำสั่งปรับมุมกล่องให้โค้งมนนุ่มนวล",
         scenario: "🔲 ต้องการปรับมุมของการ์ดปุ่มกดที่เหลี่ยมคมให้กลายเป็นมุมโค้งมนสวยงามสไตล์โมเดิร์น ต้องใช้คำสั่งใด?",
-        codeExample: ".btn { border-radius: 16px; }"
+        codeExample: "/* ปรับมุมกล่องให้โค้งมน */\n.btn-play {\n  border-radius: 14px;\n  background: #10b981;\n}"
       },
       {
         id: 17, stage: 2, stageName: "CSS Styling",
@@ -2813,7 +3035,7 @@
         ttsEn: "Display flex layout",
         ttsTh: "จัดเลย์เอาต์ยืดหยุ่นหนึ่งมิติ ทั้งแนวนอนและแนวตั้ง",
         scenario: "🧩 ต้องการจัดวางปุ่มกด 3 ปุ่มให้อยู่กึ่งกลางหน้าจอและเรียงแถวแนวนอนอย่างยืดหยุ่น ต้องใช้ระบบใด?",
-        codeExample: ".container { display: flex; justify-content: center; }"
+        codeExample: "/* จัดเลย์เอาต์ยืดหยุ่น */\n.nav-menu {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}"
       },
       {
         id: 18, stage: 2, stageName: "CSS Styling",
@@ -2821,7 +3043,7 @@
         ttsEn: "Z index property",
         ttsTh: "กำหนดลำดับการซ้อนทับเลเยอร์หน้าหลังตามแกนแซด",
         scenario: "🛡️ ต้องการกำหนดให้หน้าต่างป็อปอัปแจ้งเตือนแสดงผลลอยอยู่ด้านบนสุดเหนือเนื้อหาทั้งหมด ต้องใช้คำสั่งใด?",
-        codeExample: ".modal { z-index: 100; }"
+        codeExample: "/* ลำดับเลเยอร์หน้า-หลัง */\n.popup-modal {\n  position: fixed;\n  z-index: 100; /* ลอยอยู่บนสุด */\n}"
       },
       {
         id: 19, stage: 2, stageName: "CSS Styling",
@@ -2829,7 +3051,7 @@
         ttsEn: "Box shadow property",
         ttsTh: "คำสั่งสร้างเงาและมิติแสงเรืองรองให้กล่อง",
         scenario: "✨ ต้องการสร้างเอฟเฟกต์เงาเรืองแสงสีฟ้า (Neon Glow) รอบกล่องตัวละคร ต้องใช้คำสั่งใด?",
-        codeExample: ".card { box-shadow: 0 0 20px #00f0ff; }"
+        codeExample: "/* สร้างเงาเรืองแสง Neon */\n.glowing-box {\n  box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);\n}"
       },
       {
         id: 20, stage: 2, stageName: "CSS Styling",
@@ -2837,7 +3059,7 @@
         ttsEn: "Media query",
         ttsTh: "คำสั่งสำหรับทำเว็บให้รองรับหน้าจอมือถือและแท็บเล็ต",
         scenario: "📱 ต้องการเขียนสไตล์ปรับแต่งหน้าเว็บเฉพาะเมื่อเปิดบนหน้าจอมือถือที่มีขนาดไม่เกิน 768px ต้องใช้คำสั่งใด?",
-        codeExample: "@media (max-width: 768px) { ... }"
+        codeExample: "/* Responsive สำหรับจอมือถือ */\n@media (max-width: 768px) {\n  .container {\n    flex-direction: column;\n  }\n}"
       },
 
       // --- STAGE 3: JavaScript & DOM Logic ---
@@ -2847,7 +3069,7 @@
         ttsEn: "Let and Const keywords",
         ttsTh: "คำสั่งสำหรับประกาศตัวแปรเก็บข้อมูลในจาวาสคริปต์",
         scenario: "💾 ต้องการสร้างกล่องเก็บข้อมูลคะแนนของผู้เล่น (Variable) ใน JavaScript ที่แก้ไขค่าได้ ต้องใช้คำสั่งใด?",
-        codeExample: "let score = 0;\nconst maxHP = 3;"
+        codeExample: "// ประกาศตัวแปรแก้ไขได้ และค่าคงที่\nlet playerCoins = 150;\nconst MAX_LIVES = 3;\n\nplayerCoins += 50; // Coins = 200"
       },
       {
         id: 22, stage: 3, stageName: "JavaScript Logic",
@@ -2855,7 +3077,7 @@
         ttsEn: "Function declaration",
         ttsTh: "ชุดคำสั่งที่รวมกันเพื่อทำงานเฉพาะและเรียกใช้ซ้ำได้",
         scenario: "⚙️ ต้องการเขียนชุดคำสั่งการยิงเวทมนตร์เลเซอร์เก็บไว้เพื่อเรียกใช้งานซ้ำๆ ทุกครั้งที่กดปุ่ม ต้องสร้างอะไร?",
-        codeExample: "function shootLaser() { ... }"
+        codeExample: "// สร้างฟังก์ชันยิงเลเซอร์\nfunction shootLaser(target) {\n  target.hp -= 25;\n  console.log('Laser fired! 💥');\n}"
       },
       {
         id: 23, stage: 3, stageName: "JavaScript Logic",
@@ -2863,7 +3085,7 @@
         ttsEn: "Add event listener",
         ttsTh: "เมธอดคอยดักจับเหตุการณ์คลิกหรือกดแป้นพิมพ์ของผู้ใช้",
         scenario: "🖱️ ต้องการให้โปรแกรมคอยดักฟังเหตุการณ์เมื่อผู้ใช้ 'คลิกปุ่มเริ่มเกม' เพื่อเล่นเสียงและเปิดหน้าต่าง ต้องใช้คำสั่งใด?",
-        codeExample: "btn.addEventListener('click', () => { ... });"
+        codeExample: "// ดักจับเหตุการณ์คลิกปุ่ม\nconst btn = document.getElementById('play-btn');\nbtn.addEventListener('click', () => {\n  console.log('Game Started! 🚀');\n});"
       },
       {
         id: 24, stage: 3, stageName: "JavaScript Logic",
@@ -2871,7 +3093,7 @@
         ttsEn: "Get element by ID",
         ttsTh: "เมธอดค้นหาและดึงองค์ประกอบในหน้าเว็บตามรหัสไอดี",
         scenario: "🎯 ต้องการค้นหาและดึงองค์ประกอบ HTML ที่มีรหัส id='hud-score' มาอัปเดตตัวเลขใน JavaScript ต้องใช้คำสั่งใด?",
-        codeExample: "const el = document.getElementById('hud-score');"
+        codeExample: "// ค้นหา Element ตาม ID\nconst scoreEl = document.getElementById('hud-score');\nscoreEl.textContent = 'Score: 999';"
       },
       {
         id: 25, stage: 3, stageName: "JavaScript Logic",
@@ -2879,7 +3101,7 @@
         ttsEn: "Console log method",
         ttsTh: "เมธอดพิมพ์ข้อความตรวจสอบค่าตัวแปรลงใน Developer Console",
         scenario: "🐞 โค้ดเกิดบั๊ก! ต้องการพิมพ์ค่าตัวแปรพลังชีวิตออกมาดูในแท็บ Console เพื่อดีบักหาข้อผิดพลาด ต้องใช้คำสั่งใด?",
-        codeExample: "console.log('Current HP:', playerHP);"
+        codeExample: "// พิมพ์ตรวจสอบค่าใน Console\nlet bossHP = 1000;\nconsole.log('Current Boss HP:', bossHP);"
       },
       {
         id: 26, stage: 3, stageName: "JavaScript Logic",
@@ -2887,7 +3109,7 @@
         ttsEn: "Array data structure",
         ttsTh: "โครงสร้างข้อมูลเก็บรายการลำดับของสมาชิกในเครื่องหมายก้ามปู",
         scenario: "📋 ต้องการเก็บรายชื่อเพื่อน 5 คนไว้ในตัวแปรตัวเดียวในรูปแบบรายการเรียงลำดับดัชนี ต้องใช้โครงสร้างใด?",
-        codeExample: "const friends = ['บอย', 'กาย', 'มิน'];"
+        codeExample: "// โครงสร้างข้อมูลเก็บรายการสมาชิก\nconst inventory = ['Sword 🗡️', 'Potion 🧪', 'Shield 🛡️'];\nconsole.log(inventory[0]); // 'Sword 🗡️'"
       },
       {
         id: 27, stage: 3, stageName: "JavaScript Logic",
@@ -2895,7 +3117,7 @@
         ttsEn: "Local storage object",
         ttsTh: "ที่เก็บข้อมูลถาวรบนเบราว์เซอร์ ไม่หายแม้ปิดเครื่อง",
         scenario: "💾 ต้องการบันทึกคะแนนสูงสุดของผู้เล่นเก็บไว้ในเครื่องของผู้ใช้ ไม่ให้คะแนนหายแม้ปิดแท็บเบราว์เซอร์ไปแล้ว?",
-        codeExample: "localStorage.setItem('highScore', 500);"
+        codeExample: "// บันทึกและดึงข้อมูลจากเบราว์เซอร์\nlocalStorage.setItem('highScore', '2500');\nconst best = localStorage.getItem('highScore');"
       },
       {
         id: 28, stage: 3, stageName: "JavaScript Logic",
@@ -2903,7 +3125,7 @@
         ttsEn: "Fetch API",
         ttsTh: "ฟังก์ชันส่งคำขอรับส่งข้อมูลกับเซิร์ฟเวอร์หรือเอพีไอ",
         scenario: "📡 ต้องการส่งคะแนนเกมจากหน้าเว็บขึ้นไปบันทึกลงฐานข้อมูล Supabase Cloud แบบ Asynchronous ต้องใช้คำสั่งใด?",
-        codeExample: "fetch('https://api.../scores', { method: 'POST' });"
+        codeExample: "// ส่งคำขอ HTTP Asynchronous\nfetch('https://api.example.com/scores')\n  .then(res => res.json())\n  .then(data => console.log(data));"
       },
       {
         id: 29, stage: 3, stageName: "JavaScript Logic",
@@ -2911,7 +3133,7 @@
         ttsEn: "Async Await syntax",
         ttsTh: "ไวยากรณ์จัดการการทำงานแบบอะซิงโครนัสให้อ่านง่ายเป็นลำดับ",
         scenario: "⏳ ต้องการรอให้เซิร์ฟเวอร์ตอบกลับผลการบันทึกข้อมูลคะแนนให้เสร็จสิ้นก่อนจึงค่อยแสดงหน้าต่างผลคะแนน ต้องใช้คู่คำสั่งใด?",
-        codeExample: "async function sync() {\n  await fetch(...);\n}"
+        codeExample: "// ดึงข้อมูล Asynchronous ที่อ่านง่าย\nasync function loadPlayerScore() {\n  const res = await fetch('/api/score');\n  const data = await res.json();\n  return data;\n}"
       },
       {
         id: 30, stage: 3, stageName: "JavaScript Logic",
@@ -2919,7 +3141,7 @@
         ttsEn: "Math random function",
         ttsTh: "ฟังก์ชันสุ่มตัวเลขทศนิยมระหว่างศูนย์ถึงหนึ่ง",
         scenario: "🎲 ต้องการสุ่มเลือกมอนสเตอร์ที่จะเกิด หรือสุ่มคำถามจากคลังข้อสอบ ต้องใช้ฟังก์ชันคณิตศาสตร์ใด?",
-        codeExample: "const rand = Math.floor(Math.random() * 10);"
+        codeExample: "// สุ่มตัวเลขระหว่าง 1 ถึง 10\nconst randomDmg = Math.floor(Math.random() * 10) + 1;\nconsole.log(`Damage: ${randomDmg}`);"
       },
 
       // --- STAGE 4: Server, Database & Cloud ---
@@ -2929,7 +3151,7 @@
         ttsEn: "Supabase Backend Platform",
         ttsTh: "แพลตฟอร์มฐานข้อมูลและบริการหลังบ้านระบบคลาวด์",
         scenario: "⚡ แพลตฟอร์ม Cloud Database PostgreSQL แบบ Open-source ยอดนิยมที่ให้บริการ REST API และจัดเก็บข้อมูลคะแนนคืออะไร?",
-        codeExample: "https://hdmxkdvawfpgujboxllu.supabase.co"
+        codeExample: "// เชื่อมต่อ Supabase Cloud Database\nconst supabaseUrl = 'https://xyz.supabase.co';\nconst { data, error } = await supabase\n  .from('scores')\n  .select('*');"
       },
       {
         id: 32, stage: 4, stageName: "Server & Cloud",
@@ -2937,7 +3159,7 @@
         ttsEn: "REST API Architecture",
         ttsTh: "สถาปัตยกรรมเชื่อมต่อแลกเปลี่ยนข้อมูลผ่านเอชทีทีพี",
         scenario: "🔌 มาตรฐานการเชื่อมต่อและแลกเปลี่ยนข้อมูลระหว่างแอปพลิเคชันกับเซิร์ฟเวอร์โดยใช้คำสั่ง GET, POST, PATCH คืออะไร?",
-        codeExample: "GET /rest/v1/scores?select=*"
+        codeExample: "// แลกเปลี่ยนข้อมูลด้วย REST Endpoint\n// GET    /api/v1/players\n// POST   /api/v1/players\n// DELETE /api/v1/players/1"
       },
       {
         id: 33, stage: 4, stageName: "Server & Cloud",
@@ -2945,7 +3167,7 @@
         ttsEn: "HTTP Status 200 OK",
         ttsTh: "รหัสสถานะแสดงว่าคำขอข้อมูลสำเร็จสมบูรณ์ ไร้ข้อผิดพลาด",
         scenario: "✅ เซิร์ฟเวอร์ตอบกลับรหัสสถานะใด เพื่อยืนยันว่าการส่งคะแนนหรือดึงข้อมูลสำเร็จเรียบร้อย ไร้ปัญหา?",
-        codeExample: "HTTP/1.1 200 OK"
+        codeExample: "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n  \"status\": \"success\",\n  \"code\": 200\n}"
       },
       {
         id: 34, stage: 4, stageName: "Server & Cloud",
@@ -2953,7 +3175,7 @@
         ttsEn: "HTTP Status 404 Not Found",
         ttsTh: "รหัสสถานะแจ้งเตือนว่าไม่พบหน้าเว็บหรือทรัพยากรที่ร้องขอ",
         scenario: "❌ เมื่อผู้เล่นหรือเบราว์เซอร์พิมพ์ URL ผิดและไม่พบหน้าเว็บที่ต้องการ เซิร์ฟเวอร์จะส่งรหัสแจ้งเตือนใด?",
-        codeExample: "404 Not Found"
+        codeExample: "HTTP/1.1 404 Not Found\nContent-Type: application/json\n\n{\n  \"error\": \"Requested page or asset not found\"\n}"
       },
       {
         id: 35, stage: 4, stageName: "Server & Cloud",
@@ -2961,7 +3183,7 @@
         ttsEn: "JSON data format",
         ttsTh: "รูปแบบข้อความมาตรฐานสากลสำหรับส่งข้อมูลระหว่างหน้าเว็บกับเซิร์ฟเวอร์",
         scenario: "📄 รูปแบบข้อความ Key-Value น้ำหนักเบาที่เป็นมาตรฐานสากลในการรับส่งข้อมูลระหว่าง Client กับ API คืออะไร?",
-        codeExample: "{ 'student_id': '660123', 'score': 1000 }"
+        codeExample: "{\n  \"student_id\": \"6601234\",\n  \"student_name\": \"Robloxian\",\n  \"score\": 1500,\n  \"stage\": 4\n}"
       },
       {
         id: 36, stage: 4, stageName: "Server & Cloud",
@@ -2969,7 +3191,7 @@
         ttsEn: "POST HTTP Method",
         ttsTh: "คำขอเอชทีทีพีสำหรับส่งข้อมูลใหม่ไปบันทึกลงเซิร์ฟเวอร์",
         scenario: "📤 ต้องการส่งข้อมูลผลคะแนนของผู้เรียนชุดใหม่ขึ้นไปสร้างและบันทึกในฐานข้อมูล ต้องใช้ HTTP Method ใด?",
-        codeExample: "fetch(url, { method: 'POST', body: ... });"
+        codeExample: "// ส่งข้อมูลใหม่ไปบันทึกบน Server\nfetch('/api/scores', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ score: 1500 })\n});"
       },
       {
         id: 37, stage: 4, stageName: "Server & Cloud",
@@ -2977,7 +3199,7 @@
         ttsEn: "Git push command",
         ttsTh: "คำสั่งอัปโหลดโค้ดขึ้นไปเก็บบนคลาวด์รีโพซิทอรี เช่น กิตฮับ",
         scenario: "🚀 เขียนโค้ดเกมเสร็จสมบูรณ์แล้ว ต้องการอัปโหลดไฟล์ทั้งหมดขึ้นไปเก็บบน GitHub Cloud ต้องใช้คำสั่ง Git ใด?",
-        codeExample: "git push -u origin main"
+        codeExample: "# อัปโหลดโค้ดขึ้น GitHub Cloud\ngit add .\ngit commit -m 'feat: Add 2-column explanation modal'\ngit push origin main"
       },
       {
         id: 38, stage: 4, stageName: "Server & Cloud",
@@ -2985,7 +3207,7 @@
         ttsEn: "Node JS Runtime",
         ttsTh: "สภาพแวดล้อมรันไทม์สำหรับรันภาษาจาวาสคริปต์ฝั่งเซิร์ฟเวอร์",
         scenario: "⚡ รันไทม์ยอดนิยมที่ทำให้นักพัฒนาสามารถเขียนภาษา JavaScript บนฝั่งเซิร์ฟเวอร์ (Backend) ได้คืออะไร?",
-        codeExample: "node server.js"
+        codeExample: "// รันเซิร์ฟเวอร์ด้วย Node.js\nconst http = require('http');\nconst server = http.createServer((req, res) => {\n  res.end('Hello from Node.js backend!');\n});\nserver.listen(3000);"
       },
       {
         id: 39, stage: 4, stageName: "Server & Cloud",
@@ -2993,7 +3215,7 @@
         ttsEn: "Network port endpoint",
         ttsTh: "ช่องทางการเชื่อมต่อเครือข่ายสำหรับแยกแยะบริการเซิร์ฟเวอร์",
         scenario: "🚪 ช่องทางเข้าออกเครือข่ายสำหรับบริการเว็บไซต์ เช่น พอร์ต 80 สำหรับ HTTP และพอร์ต 443 สำหรับ HTTPS เรียกว่าอะไร?",
-        codeExample: "const PORT = 3000;"
+        codeExample: "// กำหนดพอร์ตสำหรับเซิร์ฟเวอร์\nconst PORT = process.env.PORT || 3000;\nserver.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});"
       },
       {
         id: 40, stage: 4, stageName: "Server & Cloud",
@@ -3001,7 +3223,7 @@
         ttsEn: "Vercel Cloud Platform",
         ttsTh: "แพลตฟอร์มคลาวด์สำหรับฝากและเผยแพร่หน้าเว็บออนไลน์ฟรี",
         scenario: "☁️ บริการ Cloud Hosting ยอดนิยมสำหรับ Deploy เผยแพร่ผลงานเว็บแอปพลิเคชันขึ้นสู่โลกออนไลน์อย่างรวดเร็วคืออะไร?",
-        codeExample: "https://roblox-vocab.vercel.app"
+        codeExample: "// vercel.json configuration\n{\n  \"version\": 2,\n  \"name\": \"roblox-vocab-regent\",\n  \"routes\": [{ \"src\": \"/(.*)\", \"dest\": \"/index.html\" }]\n}"
       }
     ];
 
@@ -4152,7 +4374,7 @@
         // 1. Immediately play English audio pronunciation of vocabulary word
         AudioEngine.speakEnglish(this.activeQuestion.ttsEn || this.activeQuestion.term);
 
-        // 2. Display centered explanation popup overlay (Modal 6)
+        // 2. Display 2-column split view explanation popup overlay (Modal 6)
         const expModal = document.getElementById('modal-question-explanation');
         if (expModal) {
           document.getElementById('modal-exp-icon').textContent = '✅';
@@ -4161,8 +4383,26 @@
             titleEl.textContent = 'ถูกต้อง! (Correct)';
             titleEl.style.color = 'var(--blox-green)';
           }
-          document.getElementById('modal-exp-term').textContent = this.activeQuestion.term;
-          document.getElementById('modal-exp-text').textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
+          const qEl = document.getElementById('modal-exp-question');
+          if (qEl) {
+            qEl.textContent = this.activeQuestion.scenario || this.activeQuestion.question || 'คำถามสำหรับการทดสอบ';
+          }
+          const termEl = document.getElementById('modal-exp-term');
+          if (termEl) {
+            termEl.textContent = this.activeQuestion.term || 'ถูกต้อง';
+          }
+          const textEl = document.getElementById('modal-exp-text');
+          if (textEl) {
+            textEl.textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
+          }
+          const codeEl = document.getElementById('modal-exp-code');
+          if (codeEl) {
+            const snippet = this.activeQuestion.codeExample || this.activeQuestion.code || `// ${this.activeQuestion.term}\nconsole.log("${this.activeQuestion.term}");`;
+            codeEl.textContent = snippet;
+          }
+          const copyBtn = document.getElementById('modal-exp-copy-btn');
+          if (copyBtn) copyBtn.textContent = '📋 Copy';
+
           expModal.classList.add('show');
         }
 
@@ -4224,7 +4464,7 @@
           e.speed = Math.min(e.speed + penalty, 5.0);
         });
 
-        // Display centered explanation popup overlay (Modal 6) with correct answer & Thai explanation
+        // Display 2-column split view explanation popup overlay (Modal 6) with Question, Answer, Thai explanation & Code Example
         const expModal = document.getElementById('modal-question-explanation');
         if (expModal && this.stageId !== 6) {
           document.getElementById('modal-exp-icon').textContent = '❌';
@@ -4233,8 +4473,26 @@
             titleEl.textContent = 'ตอบผิด! (Incorrect)';
             titleEl.style.color = '#f87171';
           }
-          document.getElementById('modal-exp-term').textContent = `เฉลยที่ถูกต้อง: ${this.activeQuestion.term}`;
-          document.getElementById('modal-exp-text').textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
+          const qEl = document.getElementById('modal-exp-question');
+          if (qEl) {
+            qEl.textContent = this.activeQuestion.scenario || this.activeQuestion.question || 'คำถามสำหรับการทดสอบ';
+          }
+          const termEl = document.getElementById('modal-exp-term');
+          if (termEl) {
+            termEl.textContent = `เฉลยที่ถูกต้อง: ${this.activeQuestion.term}`;
+          }
+          const textEl = document.getElementById('modal-exp-text');
+          if (textEl) {
+            textEl.textContent = this.activeQuestion.explanation || this.activeQuestion.ttsTh || `เฉลย: ${this.activeQuestion.term}`;
+          }
+          const codeEl = document.getElementById('modal-exp-code');
+          if (codeEl) {
+            const snippet = this.activeQuestion.codeExample || this.activeQuestion.code || `// ${this.activeQuestion.term}\nconsole.log("${this.activeQuestion.term}");`;
+            codeEl.textContent = snippet;
+          }
+          const copyBtn = document.getElementById('modal-exp-copy-btn');
+          if (copyBtn) copyBtn.textContent = '📋 Copy';
+
           expModal.classList.add('show');
         }
 
@@ -4251,6 +4509,44 @@
               this.proceedToNextQuestion();
             }
           }, 500);
+        }
+      }
+
+      copyModalCodeExample() {
+        const codeEl = document.getElementById('modal-exp-code');
+        const copyBtn = document.getElementById('modal-exp-copy-btn');
+        if (!codeEl) return;
+        const text = codeEl.textContent || '';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            if (copyBtn) {
+              copyBtn.textContent = '✅ Copied!';
+              setTimeout(() => { if (copyBtn) copyBtn.textContent = '📋 Copy'; }, 2000);
+            }
+          }).catch(() => {
+            this.fallbackCopyText(text, copyBtn);
+          });
+        } else {
+          this.fallbackCopyText(text, copyBtn);
+        }
+      }
+
+      fallbackCopyText(text, copyBtn) {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (copyBtn) {
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => { if (copyBtn) copyBtn.textContent = '📋 Copy'; }, 2000);
+          }
+        } catch (e) {
+          if (copyBtn) copyBtn.textContent = '📋 Copied!';
         }
       }
 
@@ -5082,7 +5378,7 @@
                 term: term,
                 ttsEn: q.ttsEn || term,
                 ttsTh: explanationText,
-                codeExample: q.codeExample || `// ${term}`,
+                codeExample: q.codeExample || q.code_example || q.code || (DEFAULT_VOCAB_DATABASE.find(d => d.term === term) || {}).codeExample || `// ${term}\nconsole.log("${term}");`,
                 option_a: optionA,
                 option_b: optionB,
                 option_c: optionC,
@@ -5297,7 +5593,7 @@
           const card = document.createElement('div');
           card.className = 'lesson-item-card';
           card.setAttribute('data-stage', v.stage);
-          card.setAttribute('data-search', `${v.term} ${v.ttsTh || ''} ${v.scenario || ''}`.toLowerCase());
+          card.setAttribute('data-search', `${v.term} ${v.ttsTh || ''} ${v.scenario || ''} ${v.codeExample || ''}`.toLowerCase());
 
           const top = document.createElement('div');
           top.className = 'lesson-card-top';
@@ -5306,20 +5602,33 @@
           badge.className = 'lesson-term-badge';
           badge.textContent = v.term;
 
+          const btnGroup = document.createElement('div');
+          btnGroup.className = 'lesson-btn-group';
+
           const audioBtn = document.createElement('button');
           audioBtn.className = 'lesson-audio-btn';
-          audioBtn.innerHTML = '<span>🔊</span> ฟัง (EN)';
+          audioBtn.innerHTML = '<span>🔊</span> ฟัง';
+          audioBtn.title = 'ฟังเสียงอ่านภาษาอังกฤษ (Listen)';
           audioBtn.onclick = () => AudioEngine.speakEnglish(v.ttsEn || v.term);
 
+          const codeBtn = document.createElement('button');
+          codeBtn.className = 'lesson-code-btn';
+          codeBtn.innerHTML = '<span>💻</span> ดูโค้ด';
+          codeBtn.title = 'คลิกเพื่อดูตัวอย่างโค้ด HTML/CSS (View Code)';
+          codeBtn.onclick = () => this.openLessonCodeModal(v.id);
+
+          btnGroup.appendChild(audioBtn);
+          btnGroup.appendChild(codeBtn);
+
           top.appendChild(badge);
-          top.appendChild(audioBtn);
+          top.appendChild(btnGroup);
 
           const desc = document.createElement('div');
           desc.className = 'lesson-desc-th';
           desc.textContent = v.ttsTh || v.explanation || v.scenario;
 
           const example = document.createElement('div');
-          example.className = 'lesson-example-code';
+          example.className = 'lesson-example-code font-mono';
           example.textContent = v.codeExample || v.code || `// ${v.term}`;
 
           card.appendChild(top);
@@ -5327,6 +5636,74 @@
           card.appendChild(example);
           container.appendChild(card);
         });
+      }
+
+      openLessonCodeModal(id) {
+        const item = VOCAB_DATABASE.find(q => q.id === id) || DEFAULT_VOCAB_DATABASE.find(q => q.id === id);
+        if (!item) return;
+
+        const termEl = document.getElementById('lesson-modal-term');
+        if (termEl) termEl.textContent = item.term || 'Code';
+
+        const catEl = document.getElementById('lesson-modal-category');
+        if (catEl) catEl.textContent = item.category || item.stageName || `Stage ${item.stage || 1}`;
+
+        const descEl = document.getElementById('lesson-modal-desc');
+        if (descEl) descEl.textContent = item.ttsTh || item.explanation || item.scenario || item.definitionTh || '';
+
+        const codeEl = document.getElementById('lesson-modal-code-snippet');
+        if (codeEl) {
+          codeEl.textContent = item.codeExample || item.code || `// ${item.term}\nconsole.log("${item.term}");`;
+        }
+
+        const copyBtn = document.getElementById('lesson-modal-copy-btn');
+        if (copyBtn) copyBtn.textContent = '📋 Copy';
+
+        const modal = document.getElementById('modal-lesson-code');
+        if (modal) modal.classList.add('show');
+      }
+
+      closeLessonCodeModal() {
+        const modal = document.getElementById('modal-lesson-code');
+        if (modal) modal.classList.remove('show');
+      }
+
+      copyLessonCode() {
+        const codeEl = document.getElementById('lesson-modal-code-snippet');
+        const copyBtn = document.getElementById('lesson-modal-copy-btn');
+        if (!codeEl) return;
+        const text = codeEl.textContent || '';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            if (copyBtn) {
+              copyBtn.textContent = '✅ Copied!';
+              setTimeout(() => { if (copyBtn) copyBtn.textContent = '📋 Copy'; }, 2000);
+            }
+          }).catch(() => {
+            this.fallbackCopyLessonText(text, copyBtn);
+          });
+        } else {
+          this.fallbackCopyLessonText(text, copyBtn);
+        }
+      }
+
+      fallbackCopyLessonText(text, copyBtn) {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (copyBtn) {
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => { if (copyBtn) copyBtn.textContent = '📋 Copy'; }, 2000);
+          }
+        } catch (e) {
+          if (copyBtn) copyBtn.textContent = '📋 Copied!';
+        }
       }
 
       filterLessons() {
@@ -5987,6 +6364,8 @@
         document.getElementById('modal-q-choice-c').value = '';
         document.getElementById('modal-q-choice-d').value = '';
         document.getElementById('modal-q-explanation').value = '';
+        const codeExEl = document.getElementById('modal-q-code-example');
+        if (codeExEl) codeExEl.value = '';
         document.getElementById('modal-add-question').classList.add('show');
       }
 
@@ -6007,6 +6386,8 @@
         document.getElementById('modal-q-choice-d').value = q.option_d || '';
         document.getElementById('modal-q-correct').value = correctLetter;
         document.getElementById('modal-q-explanation').value = q.explanation || q.ttsTh || '';
+        const codeExEl = document.getElementById('modal-q-code-example');
+        if (codeExEl) codeExEl.value = q.codeExample || q.code || '';
         document.getElementById('modal-add-question').classList.add('show');
       }
 
@@ -6027,6 +6408,7 @@
         const choiceD = document.getElementById('modal-q-choice-d').value.trim();
         const rawCorrect = document.getElementById('modal-q-correct').value;
         const explanation = document.getElementById('modal-q-explanation').value.trim();
+        const codeExample = (document.getElementById('modal-q-code-example') ? document.getElementById('modal-q-code-example').value.trim() : '');
 
         if (!questionText || !choiceA) {
           alert('กรุณากรอกโจทย์คำถามและตัวเลือกที่ถูกต้อง');
@@ -6037,9 +6419,10 @@
         const correctKey = QuestionHelper.normalizeCorrectOption(rawCorrect, dummyQ);
         const choiceLetter = correctKey.replace('option_', '').toUpperCase(); // 'A', 'B', 'C', 'D'
         const chosenTerm = (correctKey === 'option_a' ? choiceA : (correctKey === 'option_b' ? choiceB : (correctKey === 'option_c' ? choiceC : choiceD))) || choiceA;
+        const finalCodeExample = codeExample || `// ${chosenTerm}\nconsole.log("${chosenTerm}");`;
 
         // Payload for Supabase questions table:
-        // category, question, option_a, option_b, option_c, option_d, correct_option, explanation
+        // category, question, option_a, option_b, option_c, option_d, correct_option, explanation, code_example
         const questionPayload = {
           category: categoryName,
           question: questionText,
@@ -6065,7 +6448,7 @@
                 term: chosenTerm,
                 ttsEn: chosenTerm,
                 ttsTh: explanation || `เฉลย: ${chosenTerm}`,
-                codeExample: `// ${chosenTerm}`,
+                codeExample: finalCodeExample,
                 correct_choice: `Choice ${choiceLetter}`,
                 correct_letter: choiceLetter,
                 ...questionPayload
@@ -6083,7 +6466,7 @@
               ttsEn: chosenTerm,
               ttsTh: explanation || `เฉลย: ${chosenTerm}`,
               scenario: questionText,
-              codeExample: `// ${chosenTerm}`,
+              codeExample: finalCodeExample,
               correct_choice: `Choice ${choiceLetter}`,
               correct_letter: choiceLetter,
               ...questionPayload

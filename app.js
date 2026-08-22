@@ -261,9 +261,11 @@ class VocabGameApp {
     const expBox = document.getElementById('quiz-explanation-box');
     const expText = document.getElementById('quiz-explanation-text');
     const expExample = document.getElementById('quiz-example-text');
-    if (expBox && expText && expExample) {
-      expText.textContent = `${currentQ.term}: ${currentQ.definitionEn}`;
-      expExample.textContent = `ตัวอย่าง: "${currentQ.example}"`;
+    if (expBox && expText) {
+      expText.textContent = `${currentQ.term}: ${currentQ.definitionEn || currentQ.definitionTh || currentQ.explanation || ''}`;
+      if (expExample) {
+        expExample.textContent = currentQ.codeExample ? `ตัวอย่างโค้ด:\n${currentQ.codeExample}` : `ตัวอย่าง: "${currentQ.example || currentQ.term}"`;
+      }
       expBox.classList.add('show');
     }
 
@@ -292,9 +294,11 @@ class VocabGameApp {
     const expBox = document.getElementById('quiz-explanation-box');
     const expText = document.getElementById('quiz-explanation-text');
     const expExample = document.getElementById('quiz-example-text');
-    if (expBox && expText && expExample) {
-      expText.textContent = `หมดเวลา! ${currentQ.term}: ${currentQ.definitionEn}`;
-      expExample.textContent = `ตัวอย่าง: "${currentQ.example}"`;
+    if (expBox && expText) {
+      expText.textContent = `หมดเวลา! ${currentQ.term}: ${currentQ.definitionEn || currentQ.definitionTh || currentQ.explanation || ''}`;
+      if (expExample) {
+        expExample.textContent = currentQ.codeExample ? `ตัวอย่างโค้ด:\n${currentQ.codeExample}` : `ตัวอย่าง: "${currentQ.example || currentQ.term}"`;
+      }
       expBox.classList.add('show');
     }
 

@@ -51,7 +51,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "อัตราส่วนร้อยละของผู้เข้าชมเว็บไซต์ที่เปลี่ยนมาเป็นลูกค้าหรือทำตามเป้าหมาย",
     definitionEn: "The percentage of website visitors who complete a desired action or purchase.",
-    example: "Optimizing our checkout page boosted the conversion rate by 15%."
+    example: "Optimizing our checkout page boosted the conversion rate by 15%.",
+    codeExample: "// คำนวณ Conversion Rate (%)\nconst conversions = 150;\nconst totalVisitors = 3000;\nconst conversionRate = (conversions / totalVisitors) * 100;\nconsole.log(`CR: ${conversionRate}%`); // 5%"
   },
   {
     id: 2,
@@ -61,7 +62,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "การปรับแต่งเว็บไซต์เพื่อให้ติดอันดับต้นๆ บนหน้าค้นหาของ Search Engine ตามธรรมชาติ",
     definitionEn: "The process of improving website visibility in organic search engine results.",
-    example: "Investing in content SEO helped us generate organic traffic without paid ads."
+    example: "Investing in content SEO helped us generate organic traffic without paid ads.",
+    codeExample: "<!-- Meta Tags for Search Engine Optimization -->\n<meta name=\"description\" content=\"Roblox Vocab Regent เกมฝึกศัพท์เว็บ\">\n<meta name=\"keywords\" content=\"HTML, CSS, JavaScript, WebDev\">\n<link rel=\"canonical\" href=\"https://example.com/\">"
   },
   {
     id: 3,
@@ -71,7 +73,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "อัตราส่วนคลิกต่อการมองเห็นโฆษณา (จำนวนคลิกหารด้วยจำนวนครั้งที่โฆษณาแสดง)",
     definitionEn: "The ratio of users who click on a specific link to the number of total users who view a page or ad.",
-    example: "A catchy headline directly increases the CTR of digital banner ads."
+    example: "A catchy headline directly increases the CTR of digital banner ads.",
+    codeExample: "// Click-Through Rate (CTR) Calculation\nconst clicks = 450;\nconst impressions = 10000;\nconst ctr = (clicks / impressions) * 100;\nconsole.log(`CTR: ${ctr.toFixed(2)}%`); // 4.50%"
   },
   {
     id: 4,
@@ -81,7 +84,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "ต้นทุนเฉลี่ยที่ใช้ในการหาลูกค้าใหม่ 1 ราย (รวมงบการตลาดและการขาย)",
     definitionEn: "The total cost of sales and marketing efforts needed to acquire a new customer.",
-    example: "Our CAC must remain lower than customer lifetime value for sustainable growth."
+    example: "Our CAC must remain lower than customer lifetime value for sustainable growth.",
+    codeExample: "// Customer Acquisition Cost (CAC)\nconst marketingSpend = 50000;\nconst newCustomers = 250;\nconst cac = marketingSpend / newCustomers;\nconsole.log(`CAC: ฿${cac}/user`); // ฿200/user"
   },
   {
     id: 5,
@@ -91,7 +95,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "มูลค่ารวมโดยประมาณที่ลูกค้า 1 รายจะสร้างรายได้ให้กับธุรกิจตลอดช่วงเวลาที่เป็นลูกค้า",
     definitionEn: "The total revenue a business can reasonably expect from a single customer account throughout the relationship.",
-    example: "Subscription models thrive when customer LTV is significantly higher than CAC."
+    example: "Subscription models thrive when customer LTV is significantly higher than CAC.",
+    codeExample: "// Customer Lifetime Value (LTV)\nconst avgOrderValue = 1200;\nconst purchaseFrequency = 4;\nconst customerLifespanYears = 3;\nconst ltv = avgOrderValue * purchaseFrequency * customerLifespanYears;\nconsole.log(`LTV: ฿${ltv}`); // ฿14,400"
   },
   {
     id: 6,
@@ -100,7 +105,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "การเชื่อมโยงช่องทางการขายและการบริการทั้งออนไลน์และออฟไลน์เข้าด้วยกันอย่างไร้รอยต่อ",
     definitionEn: "An integrated approach that provides customers a unified shopping experience across all online and physical channels.",
-    example: "The brand uses an omnichannel strategy allowing customers to buy online and pick up in-store."
+    example: "The brand uses an omnichannel strategy allowing customers to buy online and pick up in-store.",
+    codeExample: "// Unified Omnichannel Cart Sync\nasync function syncUserCart(userId) {\n  const onlineCart = await fetchOnlineCart(userId);\n  const posStoreCart = await fetchInStoreCart(userId);\n  return mergeUnifiedCart(onlineCart, posStoreCart);\n}"
   },
   {
     id: 7,
@@ -109,7 +115,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "การยิงโฆษณาซ้ำไปยังผู้ใช้งานที่เคยเข้าชมเว็บไซต์หรือสนใจสินค้ามาก่อน",
     definitionEn: "A form of online advertising that targets users who have previously visited your website or interacted with your brand.",
-    example: "Retargeting campaigns help remind cart-abandoners to complete their orders."
+    example: "Retargeting campaigns help remind cart-abandoners to complete their orders.",
+    codeExample: "<!-- Facebook / Google Retargeting Pixel -->\n<script>\n  fbq('track', 'AddToCart', {\n    content_name: 'Premium Course',\n    value: 990,\n    currency: 'THB'\n  });\n</script>"
   },
   {
     id: 8,
@@ -118,7 +125,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "การทดสอบเปรียบเทียบชิ้นงาน 2 รูปแบบเพื่อดูว่าแบบใดให้ผลลัพธ์ที่ดีกว่า",
     definitionEn: "A method of comparing two versions of a webpage or app against each other to determine which one performs better.",
-    example: "We ran A/B testing on the CTA button colors to see which generated more sign-ups."
+    example: "We ran A/B testing on the CTA button colors to see which generated more sign-ups.",
+    codeExample: "// A/B Test Variant Routing\nconst userVariant = Math.random() < 0.5 ? 'variant_A' : 'variant_B';\nif (userVariant === 'variant_A') {\n  renderGreenButton();\n} else {\n  renderBlueButton();\n}"
   },
   {
     id: 9,
@@ -127,7 +135,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "โมเดลธุรกิจค้าปลีกที่ผู้ขายไม่ต้องสต็อกสินค้า แต่ส่งคำสั่งซื้อให้ซัพพลายเออร์จัดส่งตรงถึงลูกค้า",
     definitionEn: "A retail fulfillment method where a store doesn't keep the products it sells in stock; third-party suppliers ship them.",
-    example: "Dropshipping allows new entrepreneurs to start an online store with minimal upfront capital."
+    example: "Dropshipping allows new entrepreneurs to start an online store with minimal upfront capital.",
+    codeExample: "// Dropshipping API Order Forwarding\nasync function fulfillOrder(order) {\n  return await supplierAPI.post('/orders/create', {\n    supplierSku: order.sku,\n    customerAddress: order.shippingAddress\n  });\n}"
   },
   {
     id: 10,
@@ -136,7 +145,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "การทำการตลาดโดยร่วมมือกับผู้มีอิทธิพลบนโลกออนไลน์เพื่อสร้างความน่าเชื่อถือและยอดขาย",
     definitionEn: "A marketing strategy that focuses on using key leaders or creators to drive brand message to a larger market.",
-    example: "Micro-influencer marketing often yields higher engagement rates than celebrity endorsements."
+    example: "Micro-influencer marketing often yields higher engagement rates than celebrity endorsements.",
+    codeExample: "// Influencer Campaign UTM Tracking\nconst affiliateUrl = 'https://store.com/promo?utm_source=tiktok&utm_medium=influencer&utm_campaign=hero_july';"
   },
   {
     id: 11,
@@ -145,7 +155,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "เส้นทางของลูกค้าตั้งแต่เริ่มรู้จักแบรนด์ สนใจ พิจารณา ไปจนถึงการตัดสินใจซื้อ",
     definitionEn: "The step-by-step visual representation of the journey a customer takes from awareness to making a purchase.",
-    example: "Email marketing automations guide potential leads smoothly through each stage of the sales funnel."
+    example: "Email marketing automations guide potential leads smoothly through each stage of the sales funnel.",
+    codeExample: "// Sales Funnel State Machine\nconst FunnelStages = ['AWARENESS', 'INTEREST', 'DECISION', 'ACTION'];\nlet currentStage = FunnelStages[0];"
   },
   {
     id: 12,
@@ -154,7 +165,8 @@ const VOCAB_DATABASE = [
     category: "marketing",
     definitionTh: "อัตราการสูญเสียหรือยกเลิกการใช้บริการของลูกค้าในช่วงระยะเวลาหนึ่ง",
     definitionEn: "The annual or monthly percentage rate at which customers stop subscribing to a service.",
-    example: "Improving customer onboarding helped reduce our monthly churn rate to under 2%."
+    example: "Improving customer onboarding helped reduce our monthly churn rate to under 2%.",
+    codeExample: "// Monthly Churn Rate Calculation\nconst lostCustomers = 12;\nconst startCustomers = 400;\nconst churnRate = (lostCustomers / startCustomers) * 100;\nconsole.log(`Churn: ${churnRate}%`); // 3%"
   },
 
   // --- FinTech & Payments ---
@@ -165,7 +177,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "ระบบตัวกลางที่ทำหน้าที่ประมวลผลและเชื่อมต่อการชำระเงินออนไลน์ระหว่างร้านค้ากับธนาคาร",
     definitionEn: "A merchant service provided by an e-commerce application service provider that authorizes card or direct payments.",
-    example: "Stripe and PayPal are popular payment gateways for international transactions."
+    example: "Stripe and PayPal are popular payment gateways for international transactions.",
+    codeExample: "// Stripe Payment Gateway Checkout\nconst session = await stripe.checkout.sessions.create({\n  payment_method_types: ['card', 'promptpay'],\n  line_items: [{ price: 'price_123', quantity: 1 }],\n  mode: 'payment'\n});"
   },
   {
     id: 14,
@@ -174,7 +187,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "เทคโนโลยีการเก็บข้อมูลแบบกระจายศูนย์ (Decentralized) ที่ปลอดภัยและไม่สามารถแก้ไขย้อนหลังได้",
     definitionEn: "A decentralized, distributed digital ledger that records transactions across many computers securely.",
-    example: "Supply chains use blockchain to guarantee the authenticity and provenance of luxury goods."
+    example: "Supply chains use blockchain to guarantee the authenticity and provenance of luxury goods.",
+    codeExample: "// Blockchain Block Structure\nclass Block {\n  constructor(index, timestamp, data, previousHash = '') {\n    this.index = index;\n    this.timestamp = timestamp;\n    this.data = data;\n    this.previousHash = previousHash;\n    this.hash = this.calculateHash();\n  }\n}"
   },
   {
     id: 15,
@@ -183,7 +197,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "สัญญาอัจฉริยะในรูปแบบโค้ดที่สามารถดำเนินการได้เองอัตโนมัติเมื่อตรงตามเงื่อนไขที่กำหนด",
     definitionEn: "Self-executing contracts with the terms of agreement directly written into lines of code on a blockchain.",
-    example: "Smart contracts automate payouts to freelance contractors immediately upon project delivery."
+    example: "Smart contracts automate payouts to freelance contractors immediately upon project delivery.",
+    codeExample: "// Solidity Smart Contract Example\n// SPDX-License-Identifier: MIT\ncontract DigitalEscrow {\n  address public buyer;\n  address public seller;\n  function releaseFunds() external {\n    require(msg.sender == buyer, 'Only buyer');\n    payable(seller).transfer(address(this).balance);\n  }\n}"
   },
   {
     id: 16,
@@ -193,7 +208,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "กระบวนการตรวจสอบและยืนยันตัวตนของลูกค้าเพื่อป้องกันการฉ้อโกงและการฟอกเงิน",
     definitionEn: "The mandatory process of identifying and verifying the identity of a client when opening an account.",
-    example: "Digital banking apps require facial recognition and ID scan as part of strict KYC regulations."
+    example: "Digital banking apps require facial recognition and ID scan as part of strict KYC regulations.",
+    codeExample: "// KYC Verification Flow\nconst kycPayload = {\n  nationalId: '1100500123456',\n  faceVerificationScore: 0.98,\n  verifiedAt: new Date().toISOString()\n};"
   },
   {
     id: 17,
@@ -203,7 +219,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "การกู้ยืมเงินระหว่างบุคคลกับบุคคลโดยตรงผ่านแพลตฟอร์มดิจิทัลโดยไม่ผ่านสถาบันการเงินดั้งเดิม",
     definitionEn: "A form of direct financing that allows individuals to borrow and lend money to each other without financial institution intermediaries.",
-    example: "P2P lending platforms provide small business owners with alternative funding sources."
+    example: "P2P lending platforms provide small business owners with alternative funding sources.",
+    codeExample: "// Peer-to-Peer Loan Match Engine\nfunction matchLender(loanRequest, investors) {\n  return investors.filter(inv => inv.maxRisk >= loanRequest.grade);\n}"
   },
   {
     id: 18,
@@ -212,7 +229,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "กระเป๋าเงินอิเล็กทรอนิกส์สำหรับจัดเก็บเงิน ข้อมูลบัตรเครดิต และทำธุรกรรมผ่านมือถือ",
     definitionEn: "A financial account that allows users to store funds, make digital payments, and track payment histories on devices.",
-    example: "Apple Pay and TrueMoney Wallet allow quick contactless checkout in retail stores."
+    example: "Apple Pay and TrueMoney Wallet allow quick contactless checkout in retail stores.",
+    codeExample: "// PromptPay QR Code Generation\nconst qrPayload = generatePromptPayQR('0812345678', 250.00);"
   },
   {
     id: 19,
@@ -222,7 +240,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "ระบบการเงินแบบกระจายศูนย์บนบล็อกเชนที่ไม่ต้องพึ่งพาตัวกลางทางการเงินเช่นธนาคาร",
     definitionEn: "An umbrella term for financial services built on public blockchain networks, bypassing traditional intermediaries.",
-    example: "DeFi protocols enable lending and borrowing via automated liquidity pools."
+    example: "DeFi protocols enable lending and borrowing via automated liquidity pools.",
+    codeExample: "// Code example for DeFi\nconsole.log('DeFi');"
   },
   {
     id: 20,
@@ -231,7 +250,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "เศรษฐศาสตร์ของโทเคนดิจิทัล รวมถึงอุปสงค์ อุปทาน การจัดสรร และการสร้างแรงจูงใจในการถือครอง",
     definitionEn: "The study and design of the economics, supply, distribution, and incentive mechanisms of a cryptocurrency token.",
-    example: "A sustainable tokenomics design prevents hyper-inflation in Web3 ecosystems."
+    example: "A sustainable tokenomics design prevents hyper-inflation in Web3 ecosystems.",
+    codeExample: "// Code example for Tokenomics\nconsole.log('Tokenomics');"
   },
   {
     id: 21,
@@ -240,7 +260,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "ธนาคารดิจิทัล 100% ที่ให้บริการผ่านแอปพลิเคชันโดยไม่มีสาขาทางกายภาพ",
     definitionEn: "A type of direct bank that operates exclusively online without traditional physical branch networks.",
-    example: "Neobanks attract digital natives through zero fees and intuitive financial tracking features."
+    example: "Neobanks attract digital natives through zero fees and intuitive financial tracking features.",
+    codeExample: "// Code example for Neobank\nconsole.log('Neobank');"
   },
   {
     id: 22,
@@ -249,7 +270,8 @@ const VOCAB_DATABASE = [
     category: "fintech",
     definitionTh: "การทำธุรกรรมการเงินและการโอนเงินระหว่างผู้ส่งและผู้รับที่อยู่ต่างประเทศกัน",
     definitionEn: "Financial transactions where the payer and the recipient are based in different countries.",
-    example: "FinTech apps are drastically cutting transaction fees on cross-border payments."
+    example: "FinTech apps are drastically cutting transaction fees on cross-border payments.",
+    codeExample: "// Code example for Cross-Border Payment\nconsole.log('Cross-Border Payment');"
   },
 
   // --- Data & AI Analytics ---
@@ -260,7 +282,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "ชุดข้อมูลขนาดใหญ่และซับซ้อนเกินกว่าที่เครื่องมือประมวลผลข้อมูลทั่วไปจะจัดการได้ (3V: Volume, Velocity, Variety)",
     definitionEn: "Extremely large and complex data sets that cannot be managed by traditional data-processing software.",
-    example: "E-commerce giants analyze Big Data to personalize product recommendations in real-time."
+    example: "E-commerce giants analyze Big Data to personalize product recommendations in real-time.",
+    codeExample: "// Apache Spark Large Dataset Transformation\nconst df = spark.read.parquet('s3://bigdata-lake/transactions/');\nconst summary = df.groupBy('country').sum('amount');"
   },
   {
     id: 24,
@@ -269,7 +292,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "สาขาของ AI ที่ทำให้คอมพิวเตอร์สามารถเรียนรู้และพัฒนาความแม่นยำจากข้อมูลได้ด้วยตนเอง",
     definitionEn: "A branch of artificial intelligence focused on building applications that learn from data and improve over time without being explicitly programmed.",
-    example: "Machine learning algorithms detect fraudulent transactions within milliseconds."
+    example: "Machine learning algorithms detect fraudulent transactions within milliseconds.",
+    codeExample: "# Python Scikit-Learn Model Training\nfrom sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\npredictions = model.predict(X_test)"
   },
   {
     id: 25,
@@ -278,7 +302,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "การนำข้อมูลในอดีต สถิติ และ AI มาวิเคราะห์เพื่อคาดการณ์แนวโน้มและพฤติกรรมในอนาคต",
     definitionEn: "The practice of using historical data, statistical algorithms, and ML techniques to identify the likelihood of future outcomes.",
-    example: "Retailers use predictive analytics to forecast seasonal inventory demands."
+    example: "Retailers use predictive analytics to forecast seasonal inventory demands.",
+    codeExample: "// Customer Lifetime Revenue Forecast\nfunction predictNextMonthRevenue(pastTrend, seasonFactor) {\n  return pastTrend.reduce((a, b) => a + b, 0) * seasonFactor;\n}"
   },
   {
     id: 26,
@@ -287,7 +312,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "กลยุทธ์และเทคโนโลยีที่ใช้ในการวิเคราะห์ข้อมูลธุรกิจเพื่อช่วยในการตัดสินใจเชิงกลยุทธ์",
     definitionEn: "Strategies and technologies used by enterprises for the data analysis and visualization of business information.",
-    example: "Interactive BI dashboards allow executives to monitor sales KPIs in real time."
+    example: "Interactive BI dashboards allow executives to monitor sales KPIs in real time.",
+    codeExample: "-- SQL Query for Executive KPI Dashboard\nSELECT \n  DATE_TRUNC('month', order_date) AS month,\n  SUM(total_revenue) AS monthly_rev,\n  COUNT(DISTINCT customer_id) AS active_users\nFROM orders\nGROUP BY 1 ORDER BY 1 DESC;"
   },
   {
     id: 27,
@@ -296,7 +322,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "การให้บริการทรัพยากรคอมพิวเตอร์ (เซิร์ฟเวอร์, สตอเรจ, ฐานข้อมูล) ผ่านระบบอินเทอร์เน็ตตามการใช้งานจริง",
     definitionEn: "The delivery of computing services—including servers, storage, databases, and software—over the cloud (Internet).",
-    example: "Migrating to cloud computing eliminated our company's on-premise hardware maintenance costs."
+    example: "Migrating to cloud computing eliminated our company's on-premise hardware maintenance costs.",
+    codeExample: "// Code example for Cloud Computing\nconsole.log('Cloud Computing');"
   },
   {
     id: 28,
@@ -306,7 +333,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "เทคโนโลยี AI ที่ช่วยให้คอมพิวเตอร์สามารถเข้าใจ ตีความ และประมวลผลภาษามนุษย์ได้",
     definitionEn: "A field of AI enabling computers to understand, interpret, and generate human language naturally.",
-    example: "Customer service chatbots use NLP to understand user queries and respond accurately."
+    example: "Customer service chatbots use NLP to understand user queries and respond accurately.",
+    codeExample: "# HuggingFace Sentiment Analysis Pipeline\nfrom transformers import pipeline\nclassifier = pipeline('sentiment-analysis')\nresult = classifier('ระบบใช้งานง่ายมาก บริการรวดเร็ว!')"
   },
   {
     id: 29,
@@ -315,7 +343,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "กระบวนการขุดค้นและสกัดหารูปแบบหรือความรู้ที่ซ่อนอยู่ในฐานข้อมูลขนาดใหญ่",
     definitionEn: "The process of uncovering patterns, anomalies, and correlations within large data sets to predict outcomes.",
-    example: "Supermarkets use data mining to find which products are frequently bought together."
+    example: "Supermarkets use data mining to find which products are frequently bought together.",
+    codeExample: "# Association Rule Mining (Apriori Algorithm)\nfrom mlxtend.frequent_patterns import apriori, association_rules\nfrequent_itemsets = apriori(basket_df, min_support=0.05, use_colnames=True)\nrules = association_rules(frequent_itemsets, metric='lift', min_threshold=1.2)"
   },
   {
     id: 30,
@@ -324,7 +353,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "ชุดคำสั่งหรือขั้นตอนวิธีการแก้ปัญหาที่เป็นลำดับขั้นตอนชัดเจนที่คอมพิวเตอร์ปฏิบัติตาม",
     definitionEn: "A finite sequence of well-defined instructions or steps typically used to solve a specific problem or perform a computation.",
-    example: "The recommendation algorithm on TikTok keeps users engaged with tailored video feeds."
+    example: "The recommendation algorithm on TikTok keeps users engaged with tailored video feeds.",
+    codeExample: "// Code example for Algorithm\nconsole.log('Algorithm');"
   },
   {
     id: 31,
@@ -333,7 +363,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "แหล่งจัดเก็บข้อมูลรวมขนาดใหญ่ที่สามารถเก็บข้อมูลได้ทั้งแบบมีโครงสร้างและไม่มีโครงสร้าง",
     definitionEn: "A centralized repository that allows you to store all your structured and unstructured data at any scale.",
-    example: "Raw user telemetry data is poured directly into the company's data lake for later modeling."
+    example: "Raw user telemetry data is poured directly into the company's data lake for later modeling.",
+    codeExample: "-- Querying AWS S3 Data Lake via Athena / Presto\nSELECT customer_id, event_name \nFROM \"analytics_lake\".\"app_events\"\nWHERE event_date = CURRENT_DATE\nLIMIT 100;"
   },
   {
     id: 32,
@@ -342,7 +373,8 @@ const VOCAB_DATABASE = [
     category: "data_ai",
     definitionTh: "ปัญญาประดิษฐ์ที่สามารถสร้างสรรค์เนื้อหาใหม่ๆ ได้ เช่น ข้อความ รูปภาพ โค้ด หรือวิดีโอ",
     definitionEn: "Artificial intelligence systems capable of generating novel text, images, synthetic media, or code based on prompts.",
-    example: "Marketing teams use Generative AI to brainstorm campaign copy and product mockups."
+    example: "Marketing teams use Generative AI to brainstorm campaign copy and product mockups.",
+    codeExample: "// OpenAI API Chat Completion Request\nconst completion = await openai.chat.completions.create({\n  model: 'gpt-4o',\n  messages: [{ role: 'user', content: 'ช่วยสรุปรายงานการตลาด' }]\n});"
   },
 
   // --- Startup & Strategy ---
@@ -354,7 +386,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "ผลิตภัณฑ์เวอร์ชันแรกที่มีฟีเจอร์น้อยที่สุดเท่าที่จำเป็นเพื่อใช้ทดสอบกับตลาดจริง",
     definitionEn: "A basic version of a new product that allows a team to collect the maximum amount of validated customer learning with the least effort.",
-    example: "We launched our MVP within 4 weeks to test user demand before investing in complex features."
+    example: "We launched our MVP within 4 weeks to test user demand before investing in complex features.",
+    codeExample: "<!-- Minimal Viable Product landing page form -->\n<form onsubmit=\"collectWaitlistEmail(event)\">\n  <input type=\"email\" placeholder=\"กรอกอีเมลเพื่อทดลองใช้เวอร์ชันแรก\" required>\n  <button type=\"submit\">เข้าร่วม Early Access 🚀</button>\n</form>"
   },
   {
     id: 34,
@@ -363,7 +396,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "ความสามารถของระบบหรือธุรกิจในการรองรับการเติบโตและยอดผู้ใช้ที่เพิ่มขึ้นอย่างมหาศาลโดยไม่สะดุด",
     definitionEn: "The measure of a system's or business's ability to increase total capacity and handle growing workload seamlessly.",
-    example: "Cloud architecture gives digital businesses superior scalability compared to traditional servers."
+    example: "Cloud architecture gives digital businesses superior scalability compared to traditional servers.",
+    codeExample: "// Code example for Scalability\nconsole.log('Scalability');"
   },
   {
     id: 35,
@@ -372,7 +406,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "การเปลี่ยนทิศทางหรือโมเดลธุรกิจหลักอย่างมีกลยุทธ์หลังจากพบว่าแนวทางเดิมไม่ตอบโจทย์ตลาด",
     definitionEn: "A structured course correction designed to test a new fundamental hypothesis about the product, business model, or engine of growth.",
-    example: "YouTube started as a video dating site before making a successful pivot to a public video-sharing platform."
+    example: "YouTube started as a video dating site before making a successful pivot to a public video-sharing platform.",
+    codeExample: "// Strategy Pivot Direction Log\nconst companyStrategy = {\n  before: 'B2C Fitness Subscription App',\n  afterPivot: 'B2B Corporate Wellness SaaS Platform'\n};"
   },
   {
     id: 36,
@@ -381,7 +416,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "การสร้างและขยายธุรกิจด้วยเงินทุนตนเองและผลกำไรจากกิจการโดยไม่พึ่งพานักลงทุนภายนอก",
     definitionEn: "Building a company from the ground up using personal savings and current revenue without external venture funding.",
-    example: "By bootstrapping, the founders retained 100% equity and full creative freedom."
+    example: "By bootstrapping, the founders retained 100% equity and full creative freedom.",
+    codeExample: "// Self-funded Bootstrapping Revenue Reinvestment\nfunction reinvestProfits(monthlyProfit) {\n  return {\n    productDev: monthlyProfit * 0.5,\n    marketing: monthlyProfit * 0.3,\n    cashReserve: monthlyProfit * 0.2\n  };\n}"
   },
   {
     id: 37,
@@ -390,7 +426,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "ชุดสไลด์นำเสนอแผนธุรกิจและศักยภาพของโปรเจกต์ที่กระชับเพื่อดึงดูดนักลงทุน",
     definitionEn: "A brief presentation used to provide investors with an overview of your business plan, products, and growth traction.",
-    example: "A compelling 10-slide pitch deck was key to securing our seed round investment."
+    example: "A compelling 10-slide pitch deck was key to securing our seed round investment.",
+    codeExample: "<!-- Presentation Pitch Slide Data -->\nconst pitchStructure = [\n  'Problem', 'Solution', 'Market Size',\n  'Product Demo', 'Traction', 'Business Model', 'Ask'\n];"
   },
   {
     id: 38,
@@ -399,7 +436,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "กระบวนการแปลงสินค้า บริการ หรือการเข้าชมของผู้ใช้ให้กลายเป็นรายได้ทางการเงิน",
     definitionEn: "The process of converting non-revenue generating assets or visitors into financial revenue.",
-    example: "Freemium gaming apps use in-app purchases and ads for successful monetization."
+    example: "Freemium gaming apps use in-app purchases and ads for successful monetization.",
+    codeExample: "// Code example for Monetization\nconsole.log('Monetization');"
   },
   {
     id: 39,
@@ -408,7 +446,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "การเปลี่ยนแปลงครั้งใหญ่ในอุตสาหกรรมอันเนื่องมาจากเทคโนโลยีและโมเดลธุรกิจดิจิทัลใหม่ๆ",
     definitionEn: "The transformation that occurs when new digital technologies and business models affect the value proposition of existing goods and services.",
-    example: "Streaming platforms caused digital disruption to traditional cable television networks."
+    example: "Streaming platforms caused digital disruption to traditional cable television networks.",
+    codeExample: "// Code example for Digital Disruption\nconsole.log('Digital Disruption');"
   },
   {
     id: 40,
@@ -417,7 +456,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "เงินทุนร่วมลงทุนจากสถาบันการเงินที่จัดหาให้กับสตาร์ทอัพที่มีศักยภาพการเติบโตสูงเพื่อแลกกับหุ้น",
     definitionEn: "Financing that investors provide to startup companies and small businesses that are believed to have long-term growth potential.",
-    example: "Securing Series A venture capital accelerated their expansion into Southeast Asia."
+    example: "Securing Series A venture capital accelerated their expansion into Southeast Asia.",
+    codeExample: "// Series A Term Sheet Allocation\nconst investment = 3000000; // $3M\nconst preMoneyValuation = 12000000; // $12M\nconst vcEquityShare = (investment / (preMoneyValuation + investment)) * 100; // 20%"
   },
   {
     id: 41,
@@ -426,7 +466,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "สภาวะที่ผลิตภัณฑ์สามารถตอบโจทย์ความต้องการของกลุ่มเป้าหมายในตลาดได้อย่างแท้จริงและเกิดการบอกต่อ",
     definitionEn: "The degree to which a product satisfies a strong market demand and generates widespread organic adoption.",
-    example: "Reaching product-market fit is the number one milestone before scaling marketing budgets."
+    example: "Reaching product-market fit is the number one milestone before scaling marketing budgets.",
+    codeExample: "// PMF Survey: Sean Ellis Benchmark\nconst disappointedUsers = surveyResponses.filter(r => r === 'Very Disappointed').length;\nconst pmfScore = (disappointedUsers / totalResponses) * 100;\nconst hasPMF = pmfScore >= 40;"
   },
   {
     id: 42,
@@ -435,7 +476,8 @@ const VOCAB_DATABASE = [
     category: "startup",
     definitionTh: "บริษัทสตาร์ทอัพที่ยังไม่ได้เข้าตลาดหลักทรัพย์แต่มีมูลค่าประเมินทางธุรกิจเกิน 1,000 ล้านดอลลาร์สหรัฐ",
     definitionEn: "A privately held startup company valued at over $1 billion.",
-    example: "Tech startups aspire to achieve unicorn status by disrupting traditional markets."
+    example: "Tech startups aspire to achieve unicorn status by disrupting traditional markets.",
+    codeExample: "// Startup Valuation Status\nconst startupValuation = 1200000000; // $1.2B\nconst isUnicorn = startupValuation >= 1000000000;\nconsole.log(`Is Unicorn: ${isUnicorn}`); // true"
   },
 
   // --- Cybersecurity & Cloud ---
@@ -447,7 +489,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "การยืนยันตัวตนแบบสองขั้นตอนเพื่อเพิ่มความปลอดภัยในการเข้าใช้งานระบบ",
     definitionEn: "A security process in which a user provides two different authentication factors to verify themselves.",
-    example: "Enabling 2FA via authenticator apps protects your account even if passwords leak."
+    example: "Enabling 2FA via authenticator apps protects your account even if passwords leak.",
+    codeExample: "// Two-Factor Authentication TOTP Validation\nconst isValid = speakeasy.totp.verify({\n  secret: user.twoFactorSecret,\n  encoding: 'base32',\n  token: req.body.totpCode,\n  window: 1\n});"
   },
   {
     id: 44,
@@ -456,7 +499,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "การหลอกลวงทางอินเทอร์เน็ตโดยปลอมแปลงเป็นบุคคลหรือองค์กรที่น่าเชื่อถือเพื่อขโมยข้อมูลสำคัญ",
     definitionEn: "A fraudulent attempt to obtain sensitive information like usernames, passwords, and card details by disguising as a trustworthy entity.",
-    example: "Employee training helps staff spot phishing emails with fake login links."
+    example: "Employee training helps staff spot phishing emails with fake login links.",
+    codeExample: "<!-- Anti-Phishing Security Verification Header -->\n<div class=\"security-banner\">\n  ⚠️ โปรดสังเกต URL ต้องเป็น https://regent.ac.th เท่านั้นก่อนล็อกอิน\n</div>"
   },
   {
     id: 45,
@@ -465,7 +509,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "การเข้ารหัสข้อมูลให้อยู่ในรูปที่บุคคลที่ไม่ได้รับอนุญาตไม่สามารถอ่านหรือทำความเข้าใจได้",
     definitionEn: "The process of converting information or data into a code, especially to prevent unauthorized access.",
-    example: "End-to-end encryption ensures that only the sender and recipient can read the messages."
+    example: "End-to-end encryption ensures that only the sender and recipient can read the messages.",
+    codeExample: "// AES-256 GCM Data Encryption in Node.js\nconst cipher = crypto.createCipheriv('aes-256-gcm', key, iv);\nlet encrypted = cipher.update(sensitiveData, 'utf8', 'hex');\nencrypted += cipher.final('hex');\nconst authTag = cipher.getAuthTag().toString('hex');"
   },
   {
     id: 46,
@@ -475,7 +520,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "รูปแบบการให้บริการซอฟต์แวร์ผ่านระบบคลาวด์บนอินเทอร์เน็ตโดยจ่ายค่าบริการเป็นรายเดือน/รายปี",
     definitionEn: "A software licensing and delivery model in which software is centrally hosted and accessed via a web browser.",
-    example: "Google Workspace, Canva, and Slack are widely used SaaS platforms."
+    example: "Google Workspace, Canva, and Slack are widely used SaaS platforms.",
+    codeExample: "// Multi-tenant SaaS Subscription Middleware\napp.use((req, res, next) => {\n  const tenant = getTenantFromSubdomain(req.headers.host);\n  if (!tenant.hasActiveSubscription) {\n    return res.status(402).json({ error: 'Subscription required' });\n  }\n  req.tenant = tenant;\n  next();\n});"
   },
   {
     id: 47,
@@ -485,7 +531,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล กฎหมายที่คุ้มครองสิทธิ์และความเป็นส่วนตัวของเจ้าของข้อมูล",
     definitionEn: "Legislation that governs the collection, use, and disclosure of personal data by organizations.",
-    example: "Websites must show cookie consent banners to comply with PDPA regulations."
+    example: "Websites must show cookie consent banners to comply with PDPA regulations.",
+    codeExample: "<!-- PDPA Cookie Consent Banner -->\n<div id=\"cookie-banner\" class=\"pdpa-banner\">\n  <p>เว็บไซต์นี้ใช้คุกกี้เพื่อมอบประสบการณ์การใช้งานที่ดีที่สุด</p>\n  <button onclick=\"acceptPDPACookies()\">ยินยอมทั้งหมด</button>\n</div>"
   },
   {
     id: 48,
@@ -494,7 +541,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "แนวคิดความปลอดภัยไซเบอร์ที่ไม่ไว้วางใจผู้ใช้หรืออุปกรณ์ใดๆ แม้ว่าจะอยู่ภายในเครือข่ายองค์กรก็ตาม",
     definitionEn: "A security framework requiring all users to be authenticated, authorized, and continuously validated before being granted access.",
-    example: "Under Zero Trust architecture, every device must re-authenticate across internal company networks."
+    example: "Under Zero Trust architecture, every device must re-authenticate across internal company networks.",
+    codeExample: "// Zero Trust Identity & Device Verification\nasync function authorizeRequest(req) {\n  const user = await verifyMFA(req.token);\n  const isCompliantDevice = await checkDevicePosture(req.deviceId);\n  return user && isCompliantDevice;\n}"
   },
   {
     id: 49,
@@ -503,7 +551,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "การทดสอบเจาะระบบโดยจำลองการโจมตีจากแฮกเกอร์เพื่อหาช่องโหว่และจุดอ่อนด้านความปลอดภัย",
     definitionEn: "An authorized simulated cyberattack on a computer system, performed to evaluate the security of the system.",
-    example: "Banks conduct annual penetration testing to patch vulnerabilities before attackers discover them."
+    example: "Banks conduct annual penetration testing to patch vulnerabilities before attackers discover them.",
+    codeExample: "# Penetration Testing Vulnerability Scan Output\n$ nmap -sV -sC --script vuln target-api.com\nPORT    STATE SERVICE VERSION\n443/tcp open  ssl/http nginx 1.24.0\n|_ssl-enum-ciphers: TLS 1.3 Strong Ciphers"
   },
   {
     id: 50,
@@ -512,7 +561,8 @@ const VOCAB_DATABASE = [
     category: "security",
     definitionTh: "ระบบรักษาความปลอดภัยเครือข่ายที่คอยตรวจสอบและคัดกรองทราฟฟิกเข้า-ออกตามกฎเกณฑ์ที่กำหนด",
     definitionEn: "A network security device that monitors and filters incoming and outgoing network traffic based on predetermined security rules.",
-    example: "Enterprise firewalls block unauthorized incoming connections and malware attempts."
+    example: "Enterprise firewalls block unauthorized incoming connections and malware attempts.",
+    codeExample: "# Web Application Firewall (WAF) Rule\nSecRule REQUEST_URI \"@rx (union|select|insert|drop).*from\"\n  \"id:1001,phase:2,deny,status:403,log,msg:'SQL Injection Attempt Detected'\""
   }
 ];
 

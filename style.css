@@ -1310,3 +1310,79 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Leaderboard Filter Dropdown & Single-Line Stage Cells */
+.lb-filter-dropdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(12, 18, 42, 0.9);
+  border: 1.5px solid rgba(0, 240, 255, 0.35);
+  border-radius: 12px;
+  padding: 0.3rem 0.65rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.lb-filter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--blox-cyan);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  user-select: none;
+}
+
+.lb-select-control {
+  background: #19254c;
+  border: 1.5px solid #314275;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 2rem 0.35rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300f0ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+  background-size: 14px;
+  min-width: 195px;
+}
+
+.lb-select-control:hover {
+  border-color: var(--blox-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.25);
+}
+
+.lb-select-control:focus {
+  border-color: var(--blox-cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+.lb-select-control option {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 0.45rem;
+}
+
+.lb-stage-col,
+.lb-stage-cell {
+  white-space: nowrap !important;
+  min-width: 180px;
+}
+
+.lb-stage-badge {
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}

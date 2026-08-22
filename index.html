@@ -875,9 +875,68 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.8rem;
-      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
+    }
+
+    .lb-filter-dropdown-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(12, 18, 42, 0.9);
+      border: 1.5px solid rgba(0, 240, 255, 0.35);
+      border-radius: 12px;
+      padding: 0.3rem 0.65rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .lb-filter-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--blox-cyan);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      user-select: none;
+    }
+
+    .lb-select-control {
+      background: #19254c;
+      border: 1.5px solid #314275;
+      color: #ffffff;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.35rem 2rem 0.35rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300f0ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.55rem center;
+      background-size: 14px;
+      min-width: 195px;
+    }
+
+    .lb-select-control:hover {
+      border-color: var(--blox-cyan);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.25);
+    }
+
+    .lb-select-control:focus {
+      border-color: var(--blox-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .lb-select-control option {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 500;
+      padding: 0.45rem;
     }
 
     .filter-time-group {
@@ -897,6 +956,8 @@
       font-weight: 600;
       font-size: 0.82rem;
       cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
     .filter-time-btn.active {
@@ -929,6 +990,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      white-space: nowrap;
     }
 
     .lb-table td {
@@ -940,44 +1002,21 @@
       background: rgba(0, 240, 255, 0.06);
     }
 
-    .lb-stage-col {
-      min-width: 160px;
-      width: 175px;
-      white-space: nowrap;
+    .lb-stage-col,
+    .lb-stage-cell {
+      white-space: nowrap !important;
+      min-width: 180px;
     }
 
-    .leaderboard-stage-tabs {
-      display: flex;
-      gap: 0.4rem;
-      overflow-x: auto;
-      margin-bottom: 0.8rem;
-      padding-bottom: 0.2rem;
-      scrollbar-width: thin;
+    .lb-stage-badge {
+      white-space: nowrap !important;
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
     }
-
-    .stage-tab-btn {
-      background: rgba(20, 29, 64, 0.85);
-      border: 1.5px solid rgba(0, 240, 255, 0.25);
-      color: #94a3b8;
-      font-family: var(--font-ui);
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-    }
-
-    .stage-tab-btn:hover {
-      color: #fff;
-      border-color: var(--blox-cyan);
-      background: rgba(0, 240, 255, 0.15);
-    }
-
-    .stage-tab-btn.active {
-      color: #000;
-      background: var(--blox-cyan);
       border-color: var(--blox-cyan);
       font-weight: 700;
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
@@ -1998,40 +2037,47 @@
            VIEW 3: LEADERBOARD (Top Ranks with Stage & Time Filters)
            ==================================================================== -->
       <div class="view-screen" id="view-leaderboard">
-        <div class="leaderboard-filters-bar" style="display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between; align-items: center;">
-          <div style="font-family: var(--font-blox-title); font-size: 1.3rem; color: var(--blox-yellow);">
-            🏆 ตารางอันดับยอดฝีมือ (TOP LEADERBOARD)
+        <div class="leaderboard-filters-bar">
+          <div style="font-family: var(--font-blox-title); font-size: 1.3rem; color: var(--blox-yellow); display: flex; align-items: center; gap: 0.45rem;">
+            <span>🏆</span> ตารางอันดับยอดฝีมือ (TOP LEADERBOARD)
           </div>
-          <div class="filter-time-group">
-            <button class="filter-time-btn active" id="lb-filter-today" onclick="App.filterLeaderboardTime('today')">📅 วันนี้</button>
-            <button class="filter-time-btn" id="lb-filter-7days" onclick="App.filterLeaderboardTime('7days')">⚡ 7 วัน</button>
-            <button class="filter-time-btn" id="lb-filter-30days" onclick="App.filterLeaderboardTime('30days')">🌟 30 วัน</button>
-            <button class="filter-time-btn" id="lb-filter-all" onclick="App.filterLeaderboardTime('all')">♾️ ทั้งหมด</button>
-          </div>
-        </div>
 
-        <!-- Leaderboard Stage Filter Tabs -->
-        <div class="leaderboard-stage-tabs">
-          <button class="stage-tab-btn active" id="lb-stage-all" onclick="App.filterLeaderboardStage('all')">🌐 ทุกด่าน (All Stages)</button>
-          <button class="stage-tab-btn" id="lb-stage-1" onclick="App.filterLeaderboardStage(1)">1. HTML Structure</button>
-          <button class="stage-tab-btn" id="lb-stage-2" onclick="App.filterLeaderboardStage(2)">2. CSS Styling</button>
-          <button class="stage-tab-btn" id="lb-stage-3" onclick="App.filterLeaderboardStage(3)">3. JS Logic</button>
-          <button class="stage-tab-btn" id="lb-stage-4" onclick="App.filterLeaderboardStage(4)">4. Server & Cloud</button>
-          <button class="stage-tab-btn" id="lb-stage-5" onclick="App.filterLeaderboardStage(5)">🌟 5. Boss Quest</button>
-          <button class="stage-tab-btn" id="lb-stage-6" onclick="App.filterLeaderboardStage(6)">⌨️ 6. Typing (All)</button>
-          <button class="stage-tab-btn" id="lb-stage-6-html" onclick="App.filterLeaderboardStage('6-html')">⌨️ 6-1. HTML Tags</button>
-          <button class="stage-tab-btn" id="lb-stage-6-css" onclick="App.filterLeaderboardStage('6-css')">⌨️ 6-2. CSS Props</button>
+          <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+            <!-- Stage / Category Dropdown Filter -->
+            <div class="lb-filter-dropdown-wrap">
+              <label for="lb-stage-select" class="lb-filter-label">🎯 ด่าน / หมวดหมู่:</label>
+              <select id="lb-stage-select" class="lb-select-control" onchange="App.filterLeaderboardStage(this.value)">
+                <option value="all">🌐 ทุกด่าน (All Stages)</option>
+                <option value="1">🌐 1. HTML Structure</option>
+                <option value="2">🎨 2. CSS Styling</option>
+                <option value="3">⚡ 3. JS Logic</option>
+                <option value="4">☁️ 4. Server & Cloud</option>
+                <option value="5">🌟 5. Boss Quest</option>
+                <option value="6">⌨️ 6. Typing Quest (All)</option>
+                <option value="6-html">⌨️ 6-1. HTML Tags Typing</option>
+                <option value="6-css">⌨️ 6-2. CSS Props Typing</option>
+              </select>
+            </div>
+
+            <!-- Time Filter Group -->
+            <div class="filter-time-group">
+              <button class="filter-time-btn active" id="lb-filter-today" onclick="App.filterLeaderboardTime('today')">📅 วันนี้</button>
+              <button class="filter-time-btn" id="lb-filter-7days" onclick="App.filterLeaderboardTime('7days')">⚡ 7 วัน</button>
+              <button class="filter-time-btn" id="lb-filter-30days" onclick="App.filterLeaderboardTime('30days')">🌟 30 วัน</button>
+              <button class="filter-time-btn" id="lb-filter-all" onclick="App.filterLeaderboardTime('all')">♾️ ทั้งหมด</button>
+            </div>
+          </div>
         </div>
 
         <div class="leaderboard-table-wrap">
           <table class="lb-table">
             <thead>
               <tr>
-                <th style="width: 70px;">อันดับ</th>
+                <th style="width: 70px; text-align: center;">อันดับ</th>
                 <th>รหัสนักเรียน</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th>ระดับชั้น</th>
-                <th class="lb-stage-col">ด่าน</th>
+                <th class="lb-stage-col">ด่าน / หมวดหมู่</th>
                 <th>คะแนน (🪙)</th>
                 <th>ความแม่นยำ</th>
                 <th style="min-width: 140px;">วันที่ & เวลา</th>
@@ -5816,11 +5862,11 @@
           const accVal = Math.min(Math.max(Number(s.accuracy !== undefined ? s.accuracy : (s.percentage !== undefined ? s.percentage : 100)), 0), 100);
 
           tr.innerHTML = `
-            <td style="font-weight: 800; color: ${idx < 3 ? 'var(--blox-yellow)' : '#fff'};">${trophy}</td>
+            <td style="font-weight: 800; text-align: center; color: ${idx < 3 ? 'var(--blox-yellow)' : '#fff'};">${trophy}</td>
             <td style="font-family: var(--font-code); color: var(--blox-cyan);">${s.student_id || '-'}</td>
             <td style="font-weight: 600;">${s.student_name || 'Robloxian'}</td>
             <td>${gradeVal}</td>
-            <td><span class="nav-brand-badge">${stageVal}</span></td>
+            <td class="lb-stage-cell"><span class="nav-brand-badge lb-stage-badge">${stageVal}</span></td>
             <td style="font-family: var(--font-blox-title); color: var(--blox-yellow);">${scoreVal.toLocaleString()} 🪙</td>
             <td style="font-weight: 700; color: var(--blox-green);">${accVal}%</td>
             <td style="color: #94a3b8; font-size: 0.78rem; font-family: var(--font-code); white-space: nowrap;">${dateStr}</td>
@@ -5848,9 +5894,10 @@
       }
 
       filterLeaderboardStage(stageFilter) {
-        document.querySelectorAll('.stage-tab-btn').forEach(b => b.classList.remove('active'));
-        const btn = document.getElementById(`lb-stage-${stageFilter}`);
-        if (btn) btn.classList.add('active');
+        const select = document.getElementById('lb-stage-select');
+        if (select && select.value !== String(stageFilter)) {
+          select.value = String(stageFilter);
+        }
         this.currentLbStageFilter = stageFilter;
         this.applyLeaderboardFilters();
       }
